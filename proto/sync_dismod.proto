@@ -1,0 +1,39 @@
+// Fitxer d'estructures per a sincronitxar el mòdul DISMOD.
+syntax = "proto3";
+
+package proto;
+
+import "timestamp.proto";
+
+option go_package = "./";
+// Emprempta digital de DisDsmV.
+message GbDsmVFingerPrint {
+ int32 last_dsmv_id = 1;
+}
+
+// Emprempta digital de DisDisease.
+message GbDiseaseFingerPrint {
+ int32                    last_disease_id = 1;
+  Timestamp last_disease_update = 2;
+}
+
+// Emprempta digital de DisPhase.
+message GbPhaseFingerPrint {
+ int32                    last_phase_id = 1;
+  Timestamp last_phase_update = 2;
+}
+
+// Emprempta digital de DisGoal.
+message GbGoalFingerPrint {
+ int32                    last_goal_id = 1;
+  Timestamp last_goal_update = 2;
+}
+
+// Emprempta digital del mòdul DISMOD.
+message GbSyncDisMod {
+ int32                        finger_id = 1;
+  optional GbDsmVFingerPrint    dis_dsm_v = 2;
+  optional GbDiseaseFingerPrint dis_disease = 3;
+  optional GbPhaseFingerPrint   dis_phase = 4;
+  optional GbGoalFingerPrint    dis_goal = 5;
+}

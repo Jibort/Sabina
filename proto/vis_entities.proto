@@ -1,0 +1,21 @@
+// Fitxer de definició proto per a les entitats del Mòdul DGNMOD.
+syntax = "proto3";
+
+package proto;
+
+import "a_user/usrmod/usr_entities.proto";
+import "d_admin/vismod/vis_enumerations.proto";
+import "timestamp.proto";
+
+option go_package = "./";
+
+// Definició d'una visita de pacient.
+message VisVisit {
+  a_user.usrmod.BaseEntity base_entity = 1;
+  a_user.usrmod.UsrUser therapist = 2;
+  a_user.usrmod.UsrUser patient = 3;
+  bool first_visit = 4;
+  optional Timestamp date_time = 5;
+  d_admin.vismod.VisVisitType visit_type = 6;
+  d_admin.vismod.VisVisitState visit_state = 7;
+}

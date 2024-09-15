@@ -1,0 +1,27 @@
+// Fitxer d'estructures per a sincronitxar el mòdul MATMOD.
+syntax = "proto3";
+
+package proto;
+
+import "timestamp.proto";
+
+option go_package = "./";
+
+// Emprempta digital de MatPhaseMaterial.
+message GbPhaseMaterialFingerPrint {
+ int32 last_phase_material_id = 1;
+  Timestamp last_phase_material_update = 2;
+}
+
+// Emprempta digital de MatMaterial.
+message GbMaterialFingerPrint {
+ int32                    last_material_id = 1;
+  Timestamp last_material_update = 2;
+}
+
+// Emprempta digital del mòdul MATMOD.
+message GbSyncMatMod {
+ int32                              finger_id = 1;
+  optional GbPhaseMaterialFingerPrint mat_phase_material = 2;
+  optional GbMaterialFingerPrint      mat_material = 3;
+}

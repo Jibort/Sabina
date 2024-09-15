@@ -1,0 +1,19 @@
+// Fitxer d'estructures per a sincronitxar el mòdul TSKMOD.
+syntax = "proto3";
+
+package proto;
+
+import "timestamp.proto";
+
+option go_package = "./";
+// Emprempta digital de TskTask.
+message GbTaskFingerPrint {
+ int32 last_task_id = 1;
+  Timestamp last_task_update = 2;
+}
+
+// Emprempta digital del mòdul TSKMOD.
+message GbSyncTskMod {
+ int32                     finger_id = 1;
+  optional GbTaskFingerPrint tst_test_category = 2;
+}

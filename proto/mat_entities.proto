@@ -1,0 +1,28 @@
+// Fitxer de definició proto per a les entitats del Mòdul DGNMOD.
+syntax = "proto3";
+
+package proto;
+
+import "a_user/usrmod/usr_entities.proto";
+import "b_definitions/resmod/res_entities.proto";
+import "b_definitions/resmod/res_enumerations.proto";
+import "e_localization/locmod/loc_entities.proto";
+
+option go_package = "./";
+// Definició de material auxiliar.
+message MatMaterial {
+  a_user.usrmod.BaseEntity              base_entity = 1;
+  e_localization.locmod.string          name = 2;
+  optional e_localization.locmod.string desc_key = 3;
+  b_definitions.resmod.ResResource      resource = 4;
+  b_definitions.resmod.ResResourceType  resource_type = 5;
+  e_localization.locmod.string          containt = 6;
+  string                                link = 7;
+}
+
+// Relació entre el material auxiliar i les fases de les malalties.
+message MatPhaseMaterial {
+  a_user.usrmod.BaseEntity              base_entity = 1;
+  b_definitions.resmod.ResPhaseResource phase = 2;
+  a_user.usrmod.UsrUser                 patient = 3;
+}

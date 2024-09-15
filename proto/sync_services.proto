@@ -1,0 +1,19 @@
+// Fitxer de definició proto pels serveis de sincronització.
+syntax = "proto3";
+
+package proto;
+
+import "emo_entities.proto";
+import public "sync_emomod.proto";
+import public "sync_locmod.proto";
+import public "sync_usrmod.proto";
+
+option go_package = "./";
+
+service SyncService {
+  // Petició de sincronització del mòdul EMOMOD.
+  rpc CheckEmoMod(GbSyncEmoMod) returns (EmoModuleLists) {}
+
+  // Petició de traducció.
+  rpc TranslateIt(PrtDownloadTranslation) returns (PrtTranslation) {}
+}

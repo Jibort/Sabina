@@ -1,0 +1,26 @@
+// Fitxer de definició de les enumeracions del mòdul DGNMOD.
+syntax = "proto3";
+
+package proto;
+
+option go_package = "./";
+
+// Estats d'un diagnòstic.
+enum DgnDiagnosisState {
+  DGN_DIAGNOSIS_STATE_UNSPECIFIED = 0;
+  DGN_DIAGNOSIS_STATE_STABLISHED = 1;
+  DGN_DIAGNOSIS_STATE_ABANDONED = 2;
+  DGN_DIAGNOSIS_STATE_CANCELLED = 4;
+  DGN_DIAGNOSIS_STATE_HEALED = 5;
+  DGN_DIAGNOSIS_STATE_CHRONIC = 6;
+}
+
+// Estats de la phase d'un diagnostic.
+enum DgnDiagnosisPhaseState {
+  DGN_DIAGNOSIS_PHASE_STATE_UNSPECIFIED = 0;
+  DGN_DIAGNOSIS_PHASE_STATE_STABLISHED = 1;
+  DGN_DIAGNOSIS_PHASE_STATE_ABANDONED = 2;
+  DGN_DIAGNOSIS_PHASE_STATE_CANCELLED = 4;
+  DGN_DIAGNOSIS_PHASE_STATE_HEALED = 5;
+  DGN_DIAGNOSIS_PHASE_STATE_CHRONIC = 6;
+}

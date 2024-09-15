@@ -1,0 +1,41 @@
+// Fitxer de definició proto per a les entitats del Mòdul DGNMOD.
+syntax = "proto3";
+
+package proto;
+
+import "a_user/usrmod/usr_entities.proto";
+import "b_definitions/dismod/dis_entities.proto";
+import "c_working/dgnmod/dgn_enumerations.proto";
+import "d_admin/vismod/vis_entities.proto";
+
+option go_package = "./";
+
+// Definició del diagnosis per a un pacient.
+message DgnDiagnosis {
+  a_user.usrmod.BaseEntity           base_entity = 1;
+  b_definitions.dismod.DisDisease    disease = 2;
+  a_user.usrmod.UsrUser              therapist = 3;
+  c_working.dgnmod.DgnDiagnosisState diagnosis_state = 4;
+  optional string                    annotations = 5;
+}
+
+// Definició d'una fase d'una patologia.
+message DgnDiagnosisPhase {
+  a_user.usrmod.BaseEntity                base_entity = 1;
+  DgnDiagnosis                            diagnosis = 2;
+  b_definitions.dismod.DisPhase           disease_phase = 3;
+  d_admin.vismod.VisVisit                 visit = 4;
+  c_working.dgnmod.DgnDiagnosisPhaseState state = 5;
+  optional DgnAchievement                 relapse = 6;
+  optional string                         annotations = 7;
+}
+
+// Definició d'un objectiu d'una fase d'una patologia.
+message DgnAchievement {
+  a_user.usrmod.BaseEntity                base_entity = 1;
+  b_definitions.dismod.DisGoal            goal = 2;
+  DgnDiagnosisPhase                       phase = 3;
+  c_working.dgnmod.DgnDiagnosisPhaseState state = 4;
+  optional DgnAchievement                 relapse = 5;
+  optional string                         annotations = 6;
+}

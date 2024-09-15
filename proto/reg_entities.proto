@@ -1,0 +1,33 @@
+// Fitxer de definició proto per a les entitats del Mòdul REGMOD.
+syntax = "proto3";
+
+package proto;
+
+import "a_user/usrmod/usr_entities.proto";
+import "b_definitions/emomod/emo_entities.proto";
+import "b_definitions/tckmod/tck_entities.proto";
+import "c_working/regmod/reg_enumerations.proto";
+import "e_localization/lstmod/lst_entities.proto";
+import "timestamp.proto";
+
+option go_package = "./";
+// Taula de seguiment complimentada pel pacient.
+message RegRegister {
+  a_user.usrmod.BaseEntity          base_entity = 1;
+  b_definitions.tckmod.TckTracking  tracking = 2;
+  a_user.usrmod.UsrUser             patient = 3;
+  optional Timestamp                first_date = 4;
+  optional Timestamp                last_date = 5;
+  c_working.regmod.RegRegisterState state = 6;
+}
+
+// Contingut de les columnes de les taules de seguiment.
+message RegRegisterColumn {
+  a_user.usrmod.BaseEntity                       base_entity = 1;
+  RegRegister                                    register = 2;
+  b_definitions.tckmod.TckTrackingColumn         column = 3;
+  optional e_localization.lstmod.LstOptionEntrty option = 4;
+  optional b_definitions.emomod.EmoEmotion       emotion = 5;
+  optional b_definitions.emomod.EmoMood          mood = 6;
+  optional string                                value = 7;
+}

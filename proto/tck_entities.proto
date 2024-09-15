@@ -1,0 +1,40 @@
+// Fitxer de definició proto per a les entitats del Mòdul TCKMOD.
+syntax = "proto3";
+
+package proto;
+
+import "dis_entities.proto";
+import "loc_entities.proto";
+import "lst_entities.proto";
+import "tck_enumerations.proto";
+import "usr_entities.proto";
+
+option go_package = "./";
+
+// Definició d'una taula de seguiment.
+message TckTracking {
+  BaseEntity           base_entity = 1;
+  string               name_key = 2;
+  optional string      desc_key = 3;
+  int32                version = 4;
+  UsrUser              therapist = 5;
+  optional TckTracking root = 6;
+}
+
+// Relació entre una taula de seguiment i una fase.
+message TckPhaseTracking {
+  BaseEntity  base_entity = 1;
+  DisPhase    phase = 2;
+  TckTracking tracking = 3;
+}
+
+// Definició d'una columna de taula de seguiment.
+message TckTrackingColumn {
+  BaseEntity             base_entity = 1;
+  TckTracking            tracking = 2;
+  optional LstOptionList list = 3;
+  string                 title_key = 4;
+  TckTrackingColumnType  track_column_type = 5;
+  bool                   mandatory = 6;
+  bool                   custom = 7;
+}

@@ -1,0 +1,19 @@
+// Fitxer d'estructures per a sincronitxar el mòdul VISMOD.
+syntax = "proto3";
+
+package proto;
+
+import "timestamp.proto";
+
+option go_package = "./";
+// Emprempta digital de VisVisit.
+message GbVisitFingerPrint {
+ int32 last_visit_id = 1;
+  Timestamp last_visit_update = 2;
+}
+
+// Emprempta digital del mòdul VISMOD.
+message GbSyncVisMod {
+ int32                      finger_id = 1;
+  optional GbVisitFingerPrint tst_visit_category = 2;
+}

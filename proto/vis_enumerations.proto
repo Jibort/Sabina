@@ -1,0 +1,21 @@
+// Fitxer de definició de les enumeracions del mòdul RESMOD.
+syntax = "proto3";
+
+package proto;
+
+option go_package = "./";
+// Tipus d'usuari del projecte.
+enum VisVisitState {
+  VIS_VISIT_STATE_UNSPECIFIED = 0;
+  VIS_VISIT_STATE_CONCERTED = 1;
+  VIS_VISIT_STATE_FINISHED = 2;
+  VIS_VISIT_STATE_CANCELED = 4;
+  VIS_VISIT_STATE_NULL = 5;
+}
+
+// Tipus d'usuari del projecte.
+enum VisVisitType {
+  VIS_VISIT_TYPE_UNSPECIFIED = 0;
+  VIS_VISIT_TYPE_IN_PERSON = 1;
+  VIS_VISIT_TYPE_ONLINE = 2;
+}

@@ -1,0 +1,33 @@
+// Fitxer d'estructures per a sincronitxar el mòdul TSTMOD.
+syntax = "proto3";
+
+package proto;
+
+import "timestamp.proto";
+
+option go_package = "./";
+// Emprempta digital de TstTestCategory.
+message GbTestCategoryFingerPrint {
+ int32 last_test_category_id = 1;
+  Timestamp last_test_category_update = 2;
+}
+
+// Emprempta digital de TstTest.
+message GbTestFingerPrint {
+ int32 last_test_id = 1;
+  Timestamp last_test_update = 2;
+}
+
+// Emprempta digital de TstQuestion.
+message GbQuestionFingerPrint {
+ int32                    last_question_id = 1;
+  Timestamp last_question_update = 2;
+}
+
+// Emprempta digital del mòdul TSTMOD.
+message GbSyncTstMod {
+ int32                             finger_id = 1;
+  optional GbTestCategoryFingerPrint tst_test_category = 2;
+  optional GbTestFingerPrint         tst_test = 3;
+  optional GbQuestionFingerPrint     tst_question = 4;
+}

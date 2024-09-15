@@ -1,0 +1,29 @@
+// Fitxer de definició de les estructures proto GLOBALs. 
+syntax = "proto3";
+
+package proto;
+import "enumerations.proto";
+
+option go_package = "./";
+
+// Representació d'un error amb codi i missatge opcional.
+message GbError {
+  GbErrorCode code = 1;
+  optional string message = 2;
+}
+
+// Representació d'una resposta de 'rebut' amb codi i missatge d'error.
+message GbRespAcknoledge {
+  optional GbError error = 1;
+}
+
+
+// Representació de la cerca pel seu identificador únic.
+message GbReqtInstanceById {
+  int32 id = 1;
+}
+
+// Representació de la cerca d'instàncies d'entitat per una cadena de caràcters.
+message GbReqtInstanceByString {
+  string str = 1;
+}

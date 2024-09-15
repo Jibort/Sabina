@@ -1,0 +1,37 @@
+// Fitxer de definició proto pel fluxes de dades del Mòdul USRMOD.
+syntax = "proto3";
+
+package proto;
+
+
+import "loc_entities.proto";
+import "timestamp.proto";
+import "usr_entities.proto";
+import "usr_enumerations.proto";
+
+option go_package = "./";
+
+// Flux de petició per a un nou usuari.
+message UsrFlowCreateUser {
+  int32              created_by = 1;
+  UsrUserType        user_type = 2;
+  uint64             permissions = 3;
+  string             alias = 4;
+  optional UsrUser   therapist = 5;
+  optional Timestamp birth_date = 6;
+  string             def_lang = 7;
+}
+
+// Flux de petició d'actualització d'un usuari.
+message UsrFlowUpdateUser {
+  int32                 updated_by = 1;
+  int32                 user_id = 2;
+  optional uint64       permissions = 3;
+  optional string       alias = 4;
+  optional bytes        certificate = 5;
+  optional UsrUserState state = 6;
+  optional UsrUser      therapist = 7;
+  optional UsrDevice    last_device = 8;
+  optional Timestamp    birth_date = 9;
+  optional string       def_lang = 10;
+}

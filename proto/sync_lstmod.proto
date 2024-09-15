@@ -1,0 +1,33 @@
+// Fitxer d'estructures per a sincronitxar el mòdul LSTMOD.
+syntax = "proto3";
+
+package proto;
+
+import "timestamp.proto";
+
+option go_package = "./";
+// Emprempta digital de LstListCategory
+message GbListCategoryFingerPrint {
+  int32     last_list_category_id = 1;
+  Timestamp last_list_category_update = 2;
+}
+
+// Emprempta digital de LstOptionList.
+message GbOptionListFingerPrint {
+  int32     last_option_list_tracking_id = 1;
+  Timestamp last_option_list_tracking_update = 2;
+}
+
+// Emprempta digital de LstOptionEntry.
+message GbOptionEntryFingerPrint {
+  int32     last_option_entry_column_id = 1;
+  Timestamp last_option_entry_column_update = 2;
+}
+
+// Emprempta digital del mòdul LSTMOD.
+message GbSyncLstMod {
+  int32                              finger_id = 1;
+  optional GbListCategoryFingerPrint lst_list_category = 2;
+  optional GbOptionListFingerPrint   lst_option_list_tracking = 3;
+  optional GbOptionEntryFingerPrint  lst_option_entry_column = 4;
+}

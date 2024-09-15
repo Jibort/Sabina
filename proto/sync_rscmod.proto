@@ -1,0 +1,26 @@
+// Fitxer d'estructures per a sincronitxar el mòdul RSCMOD.
+syntax = "proto3";
+
+package proto;
+
+import "timestamp.proto";
+
+option go_package = "./";
+// Emprempta digital de ResPhaseResource.
+message GbPhaseResourceFingerPrint {
+ int32 last_phase_resource_id = 1;
+  Timestamp last_disease_update = 2;
+}
+
+// Emprempta digital de ResResource.
+message GbResourceFingerPrint {
+ int32                    last_resource_id = 1;
+  Timestamp last_resource_update = 2;
+}
+
+// Emprempta digital del mòdul RSCMOD.
+message GbSyncRscMod {
+ int32                              finger_id = 1;
+  optional GbResourceFingerPrint      rsc_resource = 2;
+  optional GbPhaseResourceFingerPrint rsc_phase_resource = 3;
+}

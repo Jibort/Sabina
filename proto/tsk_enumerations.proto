@@ -1,0 +1,22 @@
+// Fitxer de definició de les enumeracions del mòdul TSKMOD.
+syntax = "proto3";
+
+package proto;
+
+option go_package = "./";
+// Tipus de tasques.
+enum TskTaskType {
+  TSK_TASK_TYPE_UNSPECIFIED = 0;
+  TSK_TASK_TYPE_TEST = 1;
+  TSK_TASK_TYPE_REGISTER = 2;
+  TSK_TASK_TYPE_RESOURCE = 3;
+  TSK_TASK_TYPE_CUSTOM = 4;
+}
+
+// Estat de les tasques.
+enum TskTaskState {
+  TSK_TASK_STATE_UNSPECIFIED = 0;
+  TSK_TASK_STATE_ASSIGNED = 1;
+  TSK_TASK_STATE_FINISHED = 2;
+  TSK_TASK_STATE_STATIC = 3;
+}

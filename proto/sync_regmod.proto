@@ -1,0 +1,26 @@
+// Fitxer d'estructures per a sincronitxar el mòdul REGMOD.
+syntax = "proto3";
+
+package proto;
+
+import "timestamp.proto";
+
+option go_package = "./";
+// Emprempta digital de Register.
+message GbRegisterFingerPrint {
+ int32 last_register_id = 1;
+  Timestamp last_register_update = 2;
+}
+
+// Emprempta digital de Register.
+message GbRegisterColumnFingerPrint {
+ int32 last_register_column_id = 1;
+  Timestamp last_register_column_update = 2;
+}
+
+// Emprempta digital del mòdul REGMOD.
+message GbSyncRegMod {
+ int32                               finger_id = 1;
+  optional GbRegisterFingerPrint       reg_register = 2;
+  optional GbRegisterColumnFingerPrint reg_register_column = 3;
+}

@@ -1,0 +1,45 @@
+// Representació dels dispositius d'usuari.
+// createdAt: 24/09/10 dm. JIQ
+
+syntax = "proto3";
+
+package proto;
+
+import "base_entity.proto";
+
+option go_package = "./";
+
+// Tipus dels dispositius d'usuari.
+enum UsrDeviceType {
+  USR_DEVICE_TYPE_DEVICE_TYPE_UNSPECIFIED = 0;
+  USR_DEVICE_TYPE_ANDROID_MOBILE = 1;
+  USR_DEVICE_TYPE_ANDROID_TABLET = 2;
+  USR_DEVICE_TYPE_IOS_MOBILE = 3;
+  USR_DEVICE_TYPE_IOS_TABLET = 4;
+  USR_DEVICE_TYPE_WINDOWS = 5;
+  USR_DEVICE_TYPE_MACOS = 6;
+  USR_DEVICE_TYPE_LINUX = 7;
+}
+
+// Estats dels dispositius d'usuari.
+enum UsrDeviceState {
+  USR_DEVICE_STATE_UNSPECIFIED = 0;
+  USR_DEVICE_STATE_ENABLED = 1;
+  USR_DEVICE_STATE_DISABLED = 2;
+}
+
+// Representació dels dispositius d'usuari.
+message UsrDevice {
+  BaseEntity      base_entity = 1;
+  UsrDeviceType   type = 2;
+  UsrDeviceState  state = 3;
+  optional string token = 4;
+  uint32          owner = 5;
+}
+
+// Representació d'una llista de dispositius.
+message UsrDevicesList {
+  repeated UsrDevice elms = 1;
+}
+
+

@@ -1,0 +1,26 @@
+// Històric del dispositius de l'usuari.
+// createdAt: 24/09/10 dm. JIQ
+
+syntax = "proto3";
+
+package proto;
+
+import "base_entity.proto";
+import "timestamp.proto";
+import "usrmod/usr_device.proto";
+
+option go_package = "./";
+
+// Representació de l'històric de tokens Firebase.
+message UsrFcmHistory {
+  BaseEntity base_entity = 1;
+  string     token = 2;
+  UsrDevice  device = 3;
+  optional   Timestamp since = 4;
+  bool       last_one = 5;
+}
+
+// Representació d'una llista de tokens d'un dispositiu.
+message UsrFcmTokenaList {
+  repeated UsrFcmHistory elms = 1;
+}

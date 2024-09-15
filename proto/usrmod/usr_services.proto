@@ -1,0 +1,22 @@
+// Fitxer de definició proto pels serveis del mòdul USRMOD.
+syntax = "proto3";
+
+package proto;
+
+import "global.proto";
+import "usr_entities.proto";
+import "usr_flows.proto";
+import "usr_requests.proto";
+
+option go_package = "./";
+
+service UsrService {
+  // Petició per a que el servidor crei un nou usuari.
+  rpc CreateNewUser(UsrFlowCreateUser) returns (UsrUser) {}
+
+  // Petició per a modificar les dades d'un usuari.
+  rpc UpdateUser(UsrFlowUpdateUser) returns (UsrUser) {}
+
+  rpc FindUserById(GbReqtInstanceById) returns (UsrUser) {}
+  rpc UserAction(UsrReqtUserAction) returns (UsrRespUserAction) {}
+}

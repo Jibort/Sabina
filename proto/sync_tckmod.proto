@@ -1,0 +1,33 @@
+// Fitxer d'estructures per a sincronitxar el mòdul TCKMOD.
+syntax = "proto3";
+
+package proto;
+
+import "timestamp.proto";
+
+option go_package = "./";
+// Emprempta digital de TckTracking.
+message GbTrackingFingerPrint {
+ int32 last_tracking_id = 1;
+  Timestamp last_tracking_update = 2;
+}
+
+// Emprempta digital de TckPhaseTracking.
+message GbPhaseTrackingFingerPrint {
+ int32                    last_phase_tracking_id = 1;
+  Timestamp last_phase_tracking_update = 2;
+}
+
+// Emprempta digital de ResTrackingColumn.
+message GbTrackingColumnFingerPrint {
+ int32                    last_tracking_column_id = 1;
+  Timestamp last_tracking_column_update = 2;
+}
+
+// Emprempta digital del mòdul TCKMOD.
+message GbSyncTckMod {
+ int32                               finger_id = 1;
+  optional GbTrackingFingerPrint       dis_tracking = 2;
+  optional GbPhaseTrackingFingerPrint  dis_phase_tracking = 3;
+  optional GbTrackingColumnFingerPrint dis_tracking_column = 4;
+}

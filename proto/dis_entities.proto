@@ -1,0 +1,42 @@
+// Fitxer de definició proto per a les entitats del Mòdul DISMOD.
+syntax = "proto3";
+
+package proto;
+
+import "usr_entities.proto";
+
+option go_package = "./";
+
+// Codis de les patologies segons el DSM-V.
+message DisDsmV {
+  int32  id = 1;
+  string name = 2;
+  string icd10 = 3;
+}
+
+// Definició d'una patologia segons un terapeuta.
+message DisDisease {
+  BaseEntity      base_entity = 1;
+  string          name_key = 2;
+  optional string desc_key = 3;
+  DisDsmV         dsmv = 4;
+  UsrUser         theraphist = 5;
+}
+
+// Definició d'una fase d'una patologia.
+message DisPhase {
+  BaseEntity      base_entity = 1;
+  int32           idx = 2;
+  string          name_key = 3;
+  optional string desc_key = 5;
+  DisDisease      disease = 4;
+}
+
+// Definició d'un objectiu de la fase d'una patologia.
+message DisGoal {
+  BaseEntity      base_entity = 1;
+  int32           idx = 2;
+  string          name_key = 3;
+  optional string desc_key = 5;
+  DisPhase        phase = 4;
+}

@@ -1,0 +1,37 @@
+// Fitxer de definició de les enumeracions proto GLOBALs. 
+syntax = "proto3";
+
+package proto;
+
+option go_package = "./";
+
+// Enumeració dels errors generals que poden aparèixer.
+enum GbErrorCode {
+  GB_ERROR_CODE_UNSPECIFIED = 0;
+  GB_ERROR_CODE_SUCCESS = 1;
+  GB_ERROR_CODE_CUSTOM = 2;
+  GB_ERROR_CODE_UNKNOWN = 3;
+  GB_ERROR_CODE_INTERNAL_SERVER_ERROR = 4;
+  GB_ERROR_CODE_SERVICE_UNAVAILABLE = 5;
+  GB_ERROR_CODE_SQL_ERROR = 6;
+}
+
+// Enumeració de les accions sobre instàncies d'entitat.
+enum GbEntityAction {
+  GB_ENTITY_ACTION_UNSPECIFIED = 0;
+  GB_ENTITY_ACTION_CREATE  = 1;
+  GB_ENTITY_ACTION_MODIFY  = 2;
+  GB_ENTITY_ACTION_FIND    = 3;
+  GB_ENTITY_ACTION_SYNC    = 4;
+  GB_ENTITY_ACTION_LOCK    = 5;
+  GB_ENTITY_ACTION_DELETE  = 6;
+}
+
+// Tipus d'acció de sincronització cap al backend.
+enum GbSyncAction {
+  GB_SYNC_ACTION_SYNC_UNSPECIFIED = 0;
+  GB_SYNC_ACTION_SYNC_CREATE  = 1;
+  GB_SYNC_ACTION_SYNC_UPDATE  = 2;
+  GB_SYNC_ACTION_SYNC_DELETE  = 3;
+}
+  

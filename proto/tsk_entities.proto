@@ -1,0 +1,27 @@
+// Fitxer de definició proto per a les entitats del Mòdul TSKMOD.
+syntax = "proto3";
+
+package proto;
+
+import "a_user/usrmod/usr_entities.proto";
+import "c_working/matmod/mat_entities.proto";
+import "c_working/regmod/reg_entities.proto";
+import "c_working/resmod/res_entities.proto";
+import "d_admin/tskmod/tsk_enumerations.proto";
+import "timestamp.proto";
+
+option go_package = "./";
+// Definició de les tasques pels pacients.
+message TskTask {
+  a_user.usrmod.BaseEntity                 base_entity = 1;
+  a_user.usrmod.UsrUser                    therapist = 2;
+  a_user.usrmod.UsrUser                    patient = 3;
+  d_admin.tskmod.TskTaskType               task_type = 4;
+  d_admin.tskmod.TskTaskState              task_state = 5;
+  string                                   task = 6;
+  optional c_working.resmod.ResPatientTest test = 7;
+  optional c_working.regmod.RegRegister    tracking = 8;
+  optional c_working.matmod.MatMaterial    material = 9;
+  optional Timestamp                       start_date = 10;
+  optional Timestamp                       end_date = 11;
+}

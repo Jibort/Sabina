@@ -1,0 +1,14 @@
+// Fitxer de definició de les enumeracions del mòdul REGMOD.
+syntax = "proto3";
+
+package proto;
+option go_package = "./";
+// Estats d'un diagnòstic.
+enum RegRegisterState {
+  REG_REGISTER_STATE_UNSPECIFIED = 0;
+  REG_REGISTER_STATE_STABLISHED = 1;
+  REG_REGISTER_STATE_ABANDONED = 2;
+  REG_REGISTER_STATE_CANCELLED = 4;
+  REG_REGISTER_STATE_HEALED = 5;
+  REG_REGISTER_STATE_CHRONIC = 6;
+}

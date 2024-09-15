@@ -1,0 +1,23 @@
+// Fitxer de definició proto per a les entitats del Mòdul NFTMOD.
+syntax = "proto3";
+
+package proto;
+
+import "a_user/usrmod/usr_entities.proto";
+import "c_working/matmod/mat_entities.proto";
+import "c_working/regmod/reg_entities.proto";
+import "c_working/resmod/res_entities.proto";
+import "d_admin/ntfmod/ntf_enumerations.proto";
+
+option go_package = "./";
+// Definició de les notificacions pels pacients.
+message NtfNotification {
+  a_user.usrmod.BaseEntity                 base_entity = 1;
+  a_user.usrmod.UsrUser                    user = 2;
+  string                                   notification = 3;
+  d_admin.ntfmod.NtfNotificationType       notification_type = 4;
+  d_admin.ntfmod.NtfNotificationState      notification_state = 5;
+  optional c_working.resmod.ResPatientTest test = 6;
+  optional c_working.regmod.RegRegister    tracking = 7;
+  optional c_working.matmod.MatMaterial    material = 8;
+}

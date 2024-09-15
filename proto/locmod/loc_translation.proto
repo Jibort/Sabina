@@ -1,0 +1,21 @@
+// Representació de la traducció en 'es', 'ca', 'en', 'fr', 'pt' de texts.
+// createdAt: 24/08/11 dg. JIQ
+
+syntax = "proto3";
+
+package proto;
+
+option go_package = "./";
+
+// Traduccions de les claus de text-
+message LocTranslation {
+  string text_key = 1;    // Clau a traduir.
+  string locale_id = 2;   // Idioma de la traducció.
+  string literal = 3;     // Text traduït.
+  int    iteration = 4;   // Iteració de la traducció.
+  bool   is_new = 5;      // Indica si la traducció és nova.
+  bool   is_updated = 6;  // Indica si la traducció ha estat actualitzada.
+  bool   is_deleted = 7;  // Indica si la traducció ha estat eliminada.
+}
+
+

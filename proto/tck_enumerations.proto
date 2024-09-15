@@ -1,0 +1,17 @@
+// Fitxer de definició de les enumeracions del mòdul RESMOD.
+syntax = "proto3";
+
+package proto;
+
+option go_package = "./";
+// Tipus d'usuari del projecte.
+enum TckTrackingColumnType {
+  TCK_TRACKING_COLUMN_TYPE_UNSPECIFIED = 0;
+  TCK_TRACKING_COLUMN_TYPE_PLANE_TEXT = 1;
+  TCK_TRACKING_COLUMN_TYPE_BOOLEAN = 2;
+  TCK_TRACKING_COLUMN_TYPE_OPTION_LIST = 4;
+  TCK_TRACKING_COLUMN_TYPE_EMOTION = 5;
+  TCK_TRACKING_COLUMN_TYPE_MOOD = 6;
+  TCK_TRACKING_COLUMN_TYPE_DATE = 7;
+  TCK_TRACKING_COLUMN_TYPE_DATE_TIME = 8;
+}

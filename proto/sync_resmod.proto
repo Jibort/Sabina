@@ -1,0 +1,26 @@
+// Fitxer d'estructures per a sincronitxar el mòdul RESMOD.
+syntax = "proto3";
+
+package proto;
+
+import "timestamp.proto";
+
+option go_package = "./";
+// Emprempta digital de RscPatientTest.
+message GbPatientTestFingerPrint {
+  int32     last_patient_test_id = 1;
+  Timestamp last_patient_test_update = 2;
+}
+
+// Emprempta digital de RscAnswer.
+message GbAnswerFingerPrint {
+  int32     last_answer_id = 1;
+  Timestamp last_answer_update1 = 2;
+}
+
+// Emprempta digital del mòdul RESMOD.
+message GbSyncResMod {
+  int32                             finger_id = 1;
+  optional GbPatientTestFingerPrint tst_test_category = 2;
+  optional GbAnswerFingerPrint      tst_test = 3;
+}

@@ -1,0 +1,34 @@
+// Fitxer de definició proto per crida i resposta del mòdul USRMOD.
+syntax = "proto3";
+
+package proto;
+
+import "enumerations.proto";
+import "global.proto";
+import "usr_entities.proto";
+
+option go_package = "./";
+
+// Petició per a la creació/modificació/eliminació d'un usuari.
+message UsrReqtUserAction {
+  GbEntityAction action = 1;
+  UsrUser user = 2;
+}
+// Resposta a la creació/modificació/eliminació d'un usuari.
+message UsrRespUserAction {
+  UsrUser user = 1;
+  optional GbError error = 2;
+}
+
+// Petició de sincronització de les dades d'un usuari.
+message UsrReqtSyncUser {
+  UsrUser user = 1;
+  GbSyncAction sync = 2;
+}
+
+// Resposta a la petició de sincronització de les dades d'un usuari.
+message UsrRespSyncUser {
+  UsrUser user = 1;
+  optional GbError error = 2;
+}
+

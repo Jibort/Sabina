@@ -1,0 +1,19 @@
+// Fitxer d'estructures per a sincronitxar el mòdul VISMOD.
+syntax = "proto3";
+
+package proto;
+
+import "timestamp.proto";
+
+option go_package = "./";
+// Emprempta digital de NtfNotification.
+message GbNotificationFingerPrint {
+  int32     last_notification_id = 1;
+  Timestamp last_notification_update = 2;
+}
+
+// Emprempta digital del mòdul NTFMOD.
+message GbSyncNtfMod {
+  int32                              finger_id = 1;
+  optional GbNotificationFingerPrint ntf_notification = 2;
+}

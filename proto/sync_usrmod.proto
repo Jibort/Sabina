@@ -1,0 +1,33 @@
+// Fitxer d'estructures per a sincronitxar el mòdul USRMOD.
+syntax = "proto3";
+
+package proto;
+
+import "timestamp.proto";
+
+option go_package = "./";
+// Emprempta digital d'UsrUser.
+message GbUserFingerPrint {
+  int32     last_user_id = 1;
+  Timestamp last_user_update = 2;
+}
+
+// Emprempta digital d'UsrDevice.
+message GbDeviceFingerPrint {
+  int32     last_device_id = 1;
+  Timestamp last_device_update = 2;
+}
+
+// Emprempta digital d'UsrFcmHistory.
+message GbFcmHistoryFingerPrint {
+  int32     last_fcmhistory_id = 1;
+  Timestamp last_fcmhistory_update = 2;
+}
+
+// Emprempta digital del mòdul USRMOD.
+message GbSyncUsrMod {
+  int32                            finger_id = 1;
+  optional GbUserFingerPrint       usr_user = 2;
+  optional GbDeviceFingerPrint     usr_device = 3;
+  optional GbFcmHistoryFingerPrint usr_fcmhistory = 4;
+}

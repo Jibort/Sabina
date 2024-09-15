@@ -1,0 +1,13 @@
+// Fitxer de definició proto pel domini 'User'.
+syntax = "proto3";
+
+package proto;
+
+import "loc_requests.proto";
+
+option go_package = "./";
+
+service LanguageService {
+  rpc Translate(LocReqtTranslate)
+    returns (LocRespTranslate) {} 
+}

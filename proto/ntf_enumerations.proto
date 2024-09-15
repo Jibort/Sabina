@@ -1,0 +1,22 @@
+// Fitxer de definició de les enumeracions del mòdul TSKMOD.
+syntax = "proto3";
+
+package proto;
+
+option go_package = "./";
+// Tipus de tasques.
+enum NtfNotificationType {
+  NTF_NOTIFICATION_TYPE_UNSPECIFIED = 0;
+  NTF_NOTIFICATION_TYPE_RISK_ABANDONMENT = 1;
+  NTF_NOTIFICATION_TYPE_VISIT_24H = 2;
+  NTF_NOTIFICATION_TYPE_VISIT_1H = 3;
+  NTF_NOTIFICATION_TYPE_NEW_TASK = 4;
+  NTF_NOTIFICATION_TYPE_CUSTOM = 5;
+}
+
+// Estat de les tasques.
+enum NtfNotificationState {
+  NTF_NOTIFICATION_STATE_UNSPECIFIED = 0;
+  NTF_NOTIFICATION_STATE_RECEIVED = 1;
+  NTF_NOTIFICATION_STATE_READED = 2;
+}

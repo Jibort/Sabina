@@ -1,0 +1,45 @@
+// Fitxer d'estructures per a sincronitxar el model de dades.
+syntax = "proto3";
+
+package proto;
+
+import "sync_dgnmod.proto";
+import "sync_dismod.proto";
+import "sync_emomod.proto";
+import "sync_locmod.proto";
+import "sync_lstmod.proto";
+import "sync_ntfmod.proto";
+import "sync_regmod.proto";
+import "sync_resmod.proto";
+import "sync_rscmod.proto";
+import "sync_tckmod.proto";
+import "sync_tskmod.proto";
+import "sync_tstmod.proto";
+import "sync_usrmod.proto";
+import "sync_vismod.proto";
+
+option go_package = "./";
+// Emprempta digital del model de dades.
+message GbSyncDataModel {
+  int32                 user_id = 1;
+  optional GbSyncUsrMod usr_mod = 2;
+  optional GbSyncDisMod dis_mod = 3;
+  optional GbSyncRscMod rsc_mod = 4;
+  optional GbSyncTckMod tck_mod = 5;
+  optional GbSyncTstMod tst_mod = 6;
+  optional GbSyncEmoMod emo_mod = 7;
+  optional GbSyncDgnMod dgn_mod = 8;
+  optional GbSyncRegMod reg_mod = 9;
+  optional GbSyncResMod res_mod = 10;
+  optional GbSyncTskMod tsk_mod = 11;
+  optional GbSyncVisMod vis_mod = 12;
+  optional GbSyncNtfMod ntf_mod = 13;
+  optional GbSyncLstMod lst_mod = 14;
+  optional GbSyncLocMod loc_mod = 15;
+}
+
+// Emprempta digital del mòdul EMOMOD.
+message GbSyncEmoModel {
+  int32                 user_id_emo = 1;
+  optional GbSyncEmoMod emo_sync = 2;
+}

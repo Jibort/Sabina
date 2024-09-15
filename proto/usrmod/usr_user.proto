@@ -1,0 +1,49 @@
+// Representació d'un usuari de l'aplicació.
+// createdAt: 24/09/10 dm. JIQ
+
+syntax = "proto3";
+
+package proto;
+
+import "base_entity.proto";
+import "timestamp.proto";
+
+option go_package = "./";
+
+// Tipus d'usuari del projecte.
+enum UsrUserType {
+  USR_USER_TYPE_UNSPECIFIED = 0;
+  USR_USER_TYPE_ROOT = 1;
+  USR_USER_TYPE_ADMIN = 2;
+  USR_USER_TYPE_PATIENT = 3;
+  USR_USER_TYPE_THERAPIST = 4;
+}
+
+// Tipus d'usuari del projecte.
+enum UsrUserState {
+  USR_USER_STATE_USER_UNSPECIFIED = 0;
+  USR_USER_STATE_USER_BUILDING = 1;
+  USR_USER_STATE_USER_ACTIVE = 2;
+  USR_USER_STATE_USER_LOCKED = 3;
+}
+
+// Representació d'un usuari.
+message UsrUser {
+  BaseEntity         base_entity = 1;
+  UsrUserType        user_type = 2;
+  UsrUserState       state = 3;
+  uint64             permissions = 4;
+  string             alias = 5;
+  optional bytes     certificate = 6;
+  optional Timestamp birth_date = 7;
+  optional uint64    first_key = 8;
+  optional Timestamp first_conn_at = 9;
+  string             locale = 10;
+  optional uint32    therapist_id = 11;
+  optional uint32    device_id = 12;
+}
+
+// Representació d'una llista d'usuaris.
+message UsrUsersList {
+  repeated UsrUser elms = 1;
+}
