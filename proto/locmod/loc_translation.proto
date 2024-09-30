@@ -1,4 +1,4 @@
-// Representació de la traducció en 'es', 'ca', 'en', 'fr', 'pt' de texts.
+// Representació de la traducció en 'es', 'ca', 'en', 'fr' i 'pt' de texts.
 // createdAt: 24/08/11 dg. JIQ
 
 syntax = "proto3";
@@ -7,15 +7,16 @@ package proto;
 
 option go_package = "./";
 
-// Traduccions de les claus de text-
+// Traduccions de les claus de text.
 message LocTranslation {
-  string text_key = 1;    // Clau a traduir.
+  optional string id = 1;
   string locale_id = 2;   // Idioma de la traducció.
-  string literal = 3;     // Text traduït.
-  int    iteration = 4;   // Iteració de la traducció.
-  bool   is_new = 5;      // Indica si la traducció és nova.
-  bool   is_updated = 6;  // Indica si la traducció ha estat actualitzada.
-  bool   is_deleted = 7;  // Indica si la traducció ha estat eliminada.
+  string text_key = 3;    // Clau a traduir.
+  string literal = 4;     // Text traduït.
+  int    iteration = 5;   // Iteració de la traducció.
+  bool   is_new = 6;      // Indica si la traducció és nova.
+  bool   is_updated = 7;  // Indica si la traducció ha estat actualitzada.
+  bool   is_deleted = 8;  // Indica si la traducció ha estat eliminada.
 }
 
 

@@ -22,8 +22,15 @@ class UsrFcmHistory extends ModelEntity {
   bool _lastOne = false;
 
   // CONSTRUCTORS ---------------------
-  UsrFcmHistory({
-    required super.pCore,
+  UsrFcmHistory({required super.pLocalId,
+      required super.pId,
+      required super.pCreatedBy,
+      required super.pCreatedAt,
+      required super.pUpdatedBy,
+      required super.pUpdatedAt,
+      super.pIsNew,
+      super.pIsUpdated,
+      super.pIsDeleted,
     String? pToken,
     UsrDevice? pDevice,
     DateTime? pSince,
@@ -37,7 +44,16 @@ class UsrFcmHistory extends ModelEntity {
   }
 
   UsrFcmHistory.empty()
-      : this(pCore: CoreEntity.empty(), pToken: null, pSince: null, pDevice: null);
+      : this(
+            pLocalId: null,
+            pId: null,
+            pCreatedBy: null,
+            pCreatedAt: null,
+            pUpdatedBy: null,
+            pUpdatedAt: null,
+            pIsNew: true,
+            pIsUpdated: false,
+            pIsDeleted: false, pToken: null, pSince: null, pDevice: null);
 
   UsrFcmHistory.byMap(Map<String, dynamic> pMap) : super.byMap(pMap) {
     _fcmToken = pMap[fldToken];
@@ -65,13 +81,13 @@ class UsrFcmHistory extends ModelEntity {
           int? fkCreatedBy;
           try {
             fkCreatedBy = pArgs.first as int?;
-            core.createdBy = await dbs.byKey(pCtrl, UsrUser, pKey: fkCreatedBy);
+            super.createdBy = await dbs.byKey(pCtrl, UsrUser, pKey: fkCreatedBy);
 
             Future<Exception?> stepU(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
               int? fkUpdatedBy;
               try {
                 fkUpdatedBy = pArgs.first as int?;
-                core.updatedBy = (isNotNull(fkUpdatedBy))
+                super.updatedBy = (isNotNull(fkUpdatedBy))
                     ? await dbs.byKey(pCtrl, UsrDevice, pKey: fkUpdatedBy)
                     : null;
               } on Exception catch (pExc) {
@@ -108,7 +124,7 @@ class UsrFcmHistory extends ModelEntity {
     }
     var old = fcmToken;
     _fcmToken = pToken;
-    core.isUpdated = !core.isNew && old != pToken;
+    super.isUpdated = !super.isNew && old != pToken;
   }
 
   UsrDevice? get device => _device;
@@ -116,21 +132,21 @@ class UsrFcmHistory extends ModelEntity {
     if (isNull(pDevice)) throw errorFieldNotNullable("$enUsrFcmHistory.set", fldDevice);
     var old = _device;
     _device = pDevice;
-    core.isUpdated = !core.isNew && old != _device;
+    super.isUpdated = !super.isNew && old != _device;
   }
 
   DateTime? get since => __since;
   set since(DateTime? pSince) {
     var old = __since;
     __since = pSince;
-    core.isUpdated = !core.isNew && old != __since;
+    super.isUpdated = !super.isNew && old != __since;
   }
 
   bool get lastOne => _lastOne;
   set lastOne(bool pLast) {
     var old = _lastOne;
     _lastOne = pLast;
-    core.isUpdated = !core.isNew && old != _lastOne;
+    super.isUpdated = !super.isNew && old != _lastOne;
   }
 
   // CONVERSION TO MAPs ---------------
@@ -149,7 +165,7 @@ class UsrFcmHistory extends ModelEntity {
       fldToken: _fcmToken,
       fldSince: dTimeToSql(__since),
       fldLastOne: _lastOne ? 1 : 0,
-      fldDevice: _device!.serverId,
+      fldDevice: _device!.id,
     });
 
   // STATICS --------------------------
@@ -166,9 +182,9 @@ class UsrFcmHistory extends ModelEntity {
       $standardHeader,
 
       $fldToken   $dbtTextNotNull UNIQUE,
+      $fldDevice  $dbtInt REFERENCES $tnUsrDevice($fldId),
       $fldSince   $dbtDateTimeNotNull,
-      $fldLastOne $dbtIntNotNull DEFAULT 0,
-      $fldDevice  $dbtInt REFERENCES $tnUsrDevice($fldId));
+      $fldLastOne $dbtIntNotNull DEFAULT 0);
   ''';
 
   static List<String> get stmtAuxCreate => [];
@@ -208,8 +224,7 @@ class UsrFcmHistory extends ModelEntity {
   // OVERRIDES ------------------------
   @override
   bool isCompleted() {
-    return (isNotNull(super.core.createdBy) &&
-        isNotNull(super.core.createdAt) &&
+    return (super.isCompleted() &&
         isNotNull(_fcmToken) &&
         isNotNull(_device));
   }

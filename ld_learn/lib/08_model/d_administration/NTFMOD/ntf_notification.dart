@@ -42,7 +42,15 @@ class NtfNotification extends ModelEntity {
 
   // CONSTRUCTORS ---------------------
   NtfNotification({
-    required super.pCore,
+    required super.pLocalId,
+    required super.pId,
+    required super.pCreatedBy,
+    required super.pCreatedAt,
+    required super.pUpdatedBy,
+    required super.pUpdatedAt,
+    super.pIsNew,
+    super.pIsUpdated,
+    super.pIsDeleted,
     UsrUser? pUser,
     NtfNotification? pNotification,
     NotificationType pType = NotificationType.unspecified,
@@ -54,7 +62,15 @@ class NtfNotification extends ModelEntity {
 
   NtfNotification.empty()
       : this(
-            pCore: CoreEntity.empty(),
+            pLocalId: null,
+            pId: null,
+            pCreatedBy: null,
+            pCreatedAt: null,
+            pUpdatedBy: null,
+            pUpdatedAt: null,
+            pIsNew: true,
+            pIsUpdated: false,
+            pIsDeleted: false,
             pUser: null,
             pNotification: null,
             pType: NotificationType.unspecified,
@@ -73,7 +89,8 @@ class NtfNotification extends ModelEntity {
     _resource = pMap[fldResource];
   }
 
-  NtfNotification.bySQLMap(BaseController<DeepDo> pCtrl, Map<String, dynamic> pMap)
+  NtfNotification.bySQLMap(
+      BaseController<DeepDo> pCtrl, Map<String, dynamic> pMap)
       : super.bySQLMap(NtfNotification, pMap) {
     var dbs = DatabaseService.to;
     Exception? exc;
@@ -88,22 +105,27 @@ class NtfNotification extends ModelEntity {
         _resource = await dbs.byKey(pCtrl, RscResource, pKey: pArgs.first);
 
         // Carreguem el test.
-        Future<Exception?> stTest(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
+        Future<Exception?> stTest(
+            FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
           try {
             _resource = await dbs.byKey(pCtrl, RscResource, pKey: pArgs.first);
 
             // Carreguem el registre.
-            Future<Exception?> stRegister(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
+            Future<Exception?> stRegister(
+                FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
               try {
-                _resource = await dbs.byKey(pCtrl, RscResource, pKey: pArgs.first);
+                _resource =
+                    await dbs.byKey(pCtrl, RscResource, pKey: pArgs.first);
 
                 // Carreguem el recurs.
-                Future<Exception?> stResource(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
+                Future<Exception?> stResource(
+                    FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
                   try {
-                    _resource = await dbs.byKey(pCtrl, RscResource, pKey: pArgs.first);
+                    _resource =
+                        await dbs.byKey(pCtrl, RscResource, pKey: pArgs.first);
 
                     // Carrega createdBy i updatedBy.
-                    super.core.completeStandard(pCtrl, pMap);
+                    super.completeStandard(pCtrl, pMap);
                   } on Exception catch (pExc) {
                     exc = pExc;
                   }
@@ -142,7 +164,7 @@ class NtfNotification extends ModelEntity {
     }
     var old = _user;
     _user = pUser;
-    core.isUpdated = (!core.isNew) && (old != _user);
+    super.isUpdated = (!super.isNew) && (old != _user);
   }
 
   String? get notification => _notification;
@@ -152,48 +174,50 @@ class NtfNotification extends ModelEntity {
     }
     var old = _notification;
     _notification = pNotification;
-    core.isUpdated = (!core.isNew) && (old != _notification);
+    super.isUpdated = (!super.isNew) && (old != _notification);
   }
 
   NotificationType get notificationType => _type;
   void setNotificationType(NotificationType pType) {
     if (isNull(pType)) {
-      throw errorFieldNotNullable("$enNtfNotification.set", fldNotificationType);
+      throw errorFieldNotNullable(
+          "$enNtfNotification.set", fldNotificationType);
     }
     var old = _type;
     _type = pType;
-    core.isUpdated = (!core.isNew) && (old != _type);
+    super.isUpdated = (!super.isNew) && (old != _type);
   }
 
   NotificationState get notificationState => _state;
   void setNotificationState(NotificationState pState) {
     if (isNull(pState)) {
-      throw errorFieldNotNullable("$enNtfNotification.set", fldNotificationState);
+      throw errorFieldNotNullable(
+          "$enNtfNotification.set", fldNotificationState);
     }
     var old = _state;
     _state = pState;
-    core.isUpdated = (!core.isNew) && (old != _state);
+    super.isUpdated = (!super.isNew) && (old != _state);
   }
 
   TstTest? get test => _test;
   void setTest(TstTest? pTest) {
     var old = _test;
     _test = pTest;
-    core.isUpdated = (!core.isNew) && (old != _test);
+    super.isUpdated = (!super.isNew) && (old != _test);
   }
 
   RegRegister? get register => _register;
   void setRegister(RegRegister? pRegister) {
     var old = _register;
     _register = pRegister;
-    core.isUpdated = (!core.isNew) && (old != _register);
+    super.isUpdated = (!super.isNew) && (old != _register);
   }
 
   RscResource? get resource => _resource;
   void setResource(RscResource? pResource) {
     var old = _resource;
     _resource = pResource;
-    core.isUpdated = (!core.isNew) && (old != _resource);
+    super.isUpdated = (!super.isNew) && (old != _resource);
   }
 
   // CONVERSION TO MAPs ---------------
@@ -212,13 +236,13 @@ class NtfNotification extends ModelEntity {
   @override
   Map<String, dynamic> toSQLMap() => super.toSQLMap()
     ..addAll({
-      fldUser: _user!.serverId,
+      fldUser: _user!.id,
       fldNotification: _notification,
       fldNotificationType: _type.id,
       fldNotificationState: _state.id,
-      fldTest: _test?.serverId,
-      fldRegister: _register?.serverId,
-      fldResource: _resource?.serverId,
+      fldTest: _test?.id,
+      fldRegister: _register?.id,
+      fldResource: _resource?.id,
     });
 
   // STATICS --------------------------
@@ -292,8 +316,7 @@ class NtfNotification extends ModelEntity {
   // OVERRIDES ------------------------
   @override
   bool isCompleted() {
-    return (isNotNull(super.core.createdBy) &&
-        isNotNull(super.core.createdAt) &&
+    return (super.isCompleted() &&
         isNotNull(_user) &&
         isNotNull(_notification) &&
         isNotNull(_type) &&
@@ -342,7 +365,8 @@ NotificationType dyn2NotificationType(dynamic pType) {
     case int value:
       return notificationTypeById(value);
     default:
-      throw errorUnknownType("NotificationType.set", fldNotificationType, pType.runtimeType);
+      throw errorUnknownType(
+          "NotificationType.set", fldNotificationType, pType.runtimeType);
   }
 }
 
@@ -382,6 +406,7 @@ NotificationState dyn2NotificationState(dynamic pType) {
     case int value:
       return notificationStateById(value);
     default:
-      throw errorUnknownType("NotificationState.set", fldNotificationState, pType.runtimeType);
+      throw errorUnknownType(
+          "NotificationState.set", fldNotificationState, pType.runtimeType);
   }
 }

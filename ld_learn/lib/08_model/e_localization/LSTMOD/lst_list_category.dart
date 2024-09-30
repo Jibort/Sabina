@@ -22,7 +22,15 @@ class LstListCategory extends ModelEntity {
 
   // CONSTRUCTORS ---------------------
   LstListCategory(
-      {required super.pCore,
+      {required super.pLocalId,
+    required super.pId,
+    required super.pCreatedBy,
+    required super.pCreatedAt,
+    required super.pUpdatedBy,
+    required super.pUpdatedAt,
+    super.pIsNew,
+    super.pIsUpdated,
+    super.pIsDeleted,
       String? pNameKey,
       String? pName,
       String? pDescKey,
@@ -37,7 +45,16 @@ class LstListCategory extends ModelEntity {
 
   LstListCategory.empty()
       : this(
-            pCore: CoreEntity.empty(),
+            
+            pLocalId: null,
+            pId: null,
+            pCreatedBy: null,
+            pCreatedAt: null,
+            pUpdatedBy: null,
+            pUpdatedAt: null,
+            pIsNew: true,
+            pIsUpdated: false,
+            pIsDeleted: false,
             pNameKey: null,
             pName: null,
             pDescKey: null,
@@ -75,7 +92,7 @@ class LstListCategory extends ModelEntity {
                 _parent = await dbs.byKey(pCtrl, LstListCategory, pKey: pArgs.first);
 
                 // Carrega createdBy i updatedBy.
-                super.core.completeStandard(pCtrl, pMap);
+                super.completeStandard(pCtrl, pMap);
               } on Exception catch (pExc) {
                 exc = pExc;
               }
@@ -109,7 +126,7 @@ class LstListCategory extends ModelEntity {
     var old = _nameKey;
     _nameKey = pNameKey;
     _name = pName;
-    core.isUpdated = (!core.isNew) && (old != _nameKey);
+    super.isUpdated = (!super.isNew) && (old != _nameKey);
   }
 
   String? get descKey => _descKey;
@@ -118,14 +135,14 @@ class LstListCategory extends ModelEntity {
     var old = _descKey;
     _descKey = pDescKey;
     _desc = pDesc;
-    core.isUpdated = (!core.isNew) && (old != _descKey);
+    super.isUpdated = (!super.isNew) && (old != _descKey);
   }
 
   LstListCategory? get parent => _parent;
   void setParent(LstListCategory? pParent) {
     var old = _parent;
     _parent = pParent;
-    core.isUpdated = (!core.isNew) && (old != _parent);
+    super.isUpdated = (!super.isNew) && (old != _parent);
   }
 
   // CONVERSION TO MAPs ---------------
@@ -144,7 +161,7 @@ class LstListCategory extends ModelEntity {
     ..addAll({
       fldNameKey: _nameKey,
       fldDescKey: _descKey,
-      fldParent: _parent?.serverId,
+      fldParent: _parent?.id,
     });
 
   // STATICS --------------------------
@@ -207,8 +224,7 @@ class LstListCategory extends ModelEntity {
   // OVERRIDES ------------------------
   @override
   bool isCompleted() {
-    return (isNotNull(super.core.createdBy) &&
-        isNotNull(super.core.createdAt) &&
+    return (super.isCompleted() &&
         isNotNull(_nameKey));
   }
 }

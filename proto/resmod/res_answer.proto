@@ -1,0 +1,27 @@
+// Fitxer de definició proto de les respostes als test d'avaluació.
+syntax = "proto3";
+
+package proto;
+
+import "emo_entities.proto";
+import "lst_entities.proto";
+import "timestamp.proto";
+import "tst_entities.proto";
+import "usr_entities.proto";
+
+option go_package = "./";
+
+// Resposta a les preguntes d'un test d'avaluació.
+message ResAnswer {
+  BaseEntity              base_entity = 1;
+  ResPatientTest          test = 2;
+  TstQuestion             question = 3;
+  optional string         answer = 4;
+  optional LstOptionEntry option = 5;
+  optional EmoEmotion     emotion = 6;
+  optional EmoMood        mood = 7;
+  optional Timestamp      completed_at = 8;
+  optional UsrUser        evaluated_by = 9;
+  optional Timestamp      evaluated_at = 10;
+  optional string         evaluation = 11;
+}

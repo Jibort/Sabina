@@ -35,7 +35,15 @@ class DgnDiagnosisPhase extends ModelEntity {
 
   // CONSTRUCTORS ---------------------
   DgnDiagnosisPhase(
-      {required super.pCore,
+      {required super.pLocalId,
+      required super.pId,
+      required super.pCreatedBy,
+      required super.pCreatedAt,
+      required super.pUpdatedBy,
+      required super.pUpdatedAt,
+      super.pIsNew,
+      super.pIsUpdated,
+      super.pIsDeleted,
       DgnDiagnosis? pDiagnosis,
       DisPhase? pPhase,
       VisVisit? pVisit,
@@ -52,7 +60,15 @@ class DgnDiagnosisPhase extends ModelEntity {
 
   DgnDiagnosisPhase.empty()
       : this(
-            pCore: CoreEntity.empty(),
+            pLocalId: null,
+            pId: null,
+            pCreatedBy: null,
+            pCreatedAt: null,
+            pUpdatedBy: null,
+            pUpdatedAt: null,
+            pIsNew: true,
+            pIsUpdated: false,
+            pIsDeleted: false,
             pDiagnosis: null,
             pPhase: null,
             pVisit: null,
@@ -98,7 +114,7 @@ class DgnDiagnosisPhase extends ModelEntity {
                     _relapse = await dbs.byKey(pCtrl, DgnDiagnosisPhase, pKey: pArgs.first);
 
                     // Carrega createdBy i updatedBy.
-                    super.core.completeStandard(pCtrl, pMap);
+                    super.completeStandard(pCtrl, pMap);
                   } on Exception catch (pExc) {
                     exc = pExc;
                   }
@@ -137,7 +153,7 @@ class DgnDiagnosisPhase extends ModelEntity {
     }
     var old = _diagnosis;
     _diagnosis = pDiagnosis;
-    core.isUpdated = (!core.isNew) && (old != _diagnosis);
+    super.isUpdated = (!super.isNew) && (old != _diagnosis);
   }
 
   DisPhase? get diseasePhase => _phase;
@@ -147,7 +163,7 @@ class DgnDiagnosisPhase extends ModelEntity {
     }
     var old = _phase;
     _phase = pPhase;
-    core.isUpdated = (!core.isNew) && (old != _phase);
+    super.isUpdated = (!super.isNew) && (old != _phase);
   }
 
   VisVisit? get visit => _visit;
@@ -157,28 +173,28 @@ class DgnDiagnosisPhase extends ModelEntity {
     }
     var old = _visit;
     _visit = pVisit;
-    core.isUpdated = (!core.isNew) && (old != _visit);
+    super.isUpdated = (!super.isNew) && (old != _visit);
   }
 
   DiagnosisPhaseState? get state => _state;
   void setState(DiagnosisPhaseState pState) {
     var old = _state;
     _state = pState;
-    core.isUpdated = (!core.isNew) && (old != _state);
+    super.isUpdated = (!super.isNew) && (old != _state);
   }
 
   DgnDiagnosisPhase? get relapse => _relapse;
   void setRelapse(DgnDiagnosisPhase? pRelapse) {
     var old = _relapse;
     _relapse = pRelapse;
-    core.isUpdated = (!core.isNew) && (old != _relapse);
+    super.isUpdated = (!super.isNew) && (old != _relapse);
   }
 
   String? get annotations => _annotations;
   void setAnnotations(String? pAnnotations) {
     var old = _annotations;
     _annotations = pAnnotations;
-    core.isUpdated = (!core.isNew) && (old != _annotations);
+    super.isUpdated = (!super.isNew) && (old != _annotations);
   }
 
   // CONVERSION TO MAPs ---------------
@@ -196,11 +212,11 @@ class DgnDiagnosisPhase extends ModelEntity {
   @override
   Map<String, dynamic> toSQLMap() => super.toSQLMap()
     ..addAll({
-      fldDiagnosis: _diagnosis!.serverId,
-      fldDiseasePhase: _phase!.serverId,
-      fldVisit: _visit!.serverId,
+      fldDiagnosis: _diagnosis!.id,
+      fldDiseasePhase: _phase!.id,
+      fldVisit: _visit!.id,
       fldDiagnosisPhaseState: _state.id,
-      fldRelapse: _relapse?.serverId,
+      fldRelapse: _relapse?.id,
       fldAnnotations: _annotations,
     });
 
@@ -273,8 +289,7 @@ class DgnDiagnosisPhase extends ModelEntity {
   // OVERRIDES ------------------------
   @override
   bool isCompleted() {
-    return (isNotNull(super.core.createdBy) &&
-        isNotNull(super.core.createdAt) &&
+    return (super.isCompleted() &&
         isNotNull(_diagnosis) &&
         isNotNull(_phase) &&
         isNotNull(_visit) &&

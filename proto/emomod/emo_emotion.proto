@@ -1,0 +1,31 @@
+// Fitxer de definició proto per l'entitat EmoEmotion.
+// createdAt: 24/09/23 dl. JIQ
+
+syntax = "proto3";
+
+package proto;
+
+import "global.proto";
+import "usr_entities.proto";
+
+option go_package = "./";
+
+// Definició d'una emoció.
+message EmoEmotion {
+  BaseEntity          base_entity = 1;
+  string              name_key = 2;
+  optional string     desc_key = 3;
+  optional EmoEmotion parent = 4;
+  int32               value = 5;
+}
+
+message EmoEmotions {
+  optional GbError    error = 1;
+  repeated EmoEmotion emotions = 2;
+}
+
+message EmoModuleLists {
+  optional GbError error = 1;
+  EmoMoods         moods = 2;
+  EmoEmotions      emotions = 3;
+}

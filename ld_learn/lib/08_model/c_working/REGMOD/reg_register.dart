@@ -32,7 +32,15 @@ class RegRegister extends ModelEntity {
 
   // CONSTRUCTORS ---------------------
   RegRegister(
-      {required super.pCore,
+      {required super.pLocalId,
+      required super.pId,
+      required super.pCreatedBy,
+      required super.pCreatedAt,
+      required super.pUpdatedBy,
+      required super.pUpdatedAt,
+      super.pIsNew,
+      super.pIsUpdated,
+      super.pIsDeleted,
       TckTracking? pTracking,
       UsrUser? pPatient,
       DateTime? pFirstDate,
@@ -46,8 +54,15 @@ class RegRegister extends ModelEntity {
   }
 
   RegRegister.empty()
-      : this(
-            pCore: CoreEntity.empty(),
+      : this(pLocalId: null,
+            pId: null,
+            pCreatedBy: null,
+            pCreatedAt: null,
+            pUpdatedBy: null,
+            pUpdatedAt: null,
+            pIsNew: true,
+            pIsUpdated: false,
+            pIsDeleted: false,
             pTracking: null,
             pPatient: null,
             pFirstDate: null,
@@ -82,7 +97,7 @@ class RegRegister extends ModelEntity {
             _patient = await dbs.byKey(pCtrl, UsrUser, pKey: pArgs.first);
 
             // Carrega createdBy i updatedBy.
-            super.core.completeStandard(pCtrl, pMap);
+            super.completeStandard(pCtrl, pMap);
           } on Exception catch (pExc) {
             exc = pExc;
           }
@@ -107,7 +122,7 @@ class RegRegister extends ModelEntity {
     }
     var old = _tracking;
     _tracking = pTracking;
-    core.isUpdated = (!core.isNew) && (old != _tracking);
+    super.isUpdated = (!super.isNew) && (old != _tracking);
   }
 
   UsrUser? get patient => _patient;
@@ -117,28 +132,28 @@ class RegRegister extends ModelEntity {
     }
     var old = _patient;
     _patient = pPatient;
-    core.isUpdated = (!core.isNew) && (old != _patient);
+    super.isUpdated = (!super.isNew) && (old != _patient);
   }
 
   DateTime? get firstDate => _firstDate;
   void setFirstDate(DateTime? pFirstDate) {
     var old = _firstDate;
     _firstDate = pFirstDate;
-    core.isUpdated = (!core.isNew) && (old != _firstDate);
+    super.isUpdated = (!super.isNew) && (old != _firstDate);
   }
 
   DateTime? get lastDate => _lastDate;
   void setLastDate(DateTime? pLastDate) {
     var old = _lastDate;
     _lastDate = pLastDate;
-    core.isUpdated = (!core.isNew) && (old != _lastDate);
+    super.isUpdated = (!super.isNew) && (old != _lastDate);
   }
 
   RegisterState get state => _state;
   void setState(RegisterState pState) {
     var old = _state;
     _state = pState;
-    core.isUpdated = (!core.isNew) && (old != _state);
+    super.isUpdated = (!super.isNew) && (old != _state);
   }
 
   // CONVERSION TO MAPs ---------------
@@ -155,8 +170,8 @@ class RegRegister extends ModelEntity {
   @override
   Map<String, dynamic> toSQLMap() => super.toSQLMap()
     ..addAll({
-      fldTracking: _tracking!.serverId,
-      fldPatient: _patient!.serverId,
+      fldTracking: _tracking!.id,
+      fldPatient: _patient!.id,
       fldFirstDate: dTimeToSql(_firstDate),
       fldLastDate: dTimeToSql(_lastDate),
       fldRegisterState: _state.id,
@@ -222,8 +237,7 @@ class RegRegister extends ModelEntity {
   // OVERRIDES ------------------------
   @override
   bool isCompleted() {
-    return (isNotNull(super.core.createdBy) &&
-        isNotNull(super.core.createdAt) &&
+    return (super.isCompleted() &&
         isNotNull(_tracking) &&
         isNotNull(_patient) &&
         isNotNull(_state));

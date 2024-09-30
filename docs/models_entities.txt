@@ -1,0 +1,70 @@
+Projecte Sabina
+---------------
+
+La següent llista declara tots els mòduls del projecte Sabina i les entitats que hi pertanyen.
+
+El paràmetre 'code' és el nom de l'entitat com a classe dart, com a tipus golang i com a missatge proto3.
+El paràmetre 'db' és el nom de la taula tant en la base de dades local SQLite com en la base de dades del servidor MariaDB.
+
+1. User Module (USRMOD): 
+   1.1. Entitat 'User': code=UsrUser, db=USER
+   1.2. Entitat 'Device': code=UsrDevice, db=DEVICE
+   1.3. Entitat 'FcmHistory': code=UsrFcmHistory, db=FCM_HISTORY
+
+2. Diseases Module (DISMOD):
+   2.1. Entitat 'Dsm-V': code=DisDsmV, db=DSM_V
+   2.2. Entitat 'Disease': code=DisDisease, db=DISEASE
+   2.3. Entitat 'Phase': code=DisPhase, db=PHASE
+   2.4. Entitat 'Goal': code=DisGoal, db=GOAL
+
+3. Resources Module (RSCMOD):
+   3.1. Entitat 'Resource': code=RscResource, db=RESOURCE
+   3.2. Entitat 'Phase Resource': code=RscPhaseResource, db=PHASE_RESOURCE
+
+4. Tracking Module (TCKMOD)
+   4.1. Entitat 'Tracking': code=TckTracking, db=TRACKING´
+   4.2. Entitat 'Phase Tracking': code=TckPhaseTracking, db=PHASE_TRACKING
+   4.3. Entitat 'Tracking Column': code=TckTrackingColumn, db=TRACKING_COLUMN
+
+5. Test Module (TSTMOD)
+   5.1. Entitat 'Test Category': code=TstTestCategory, db=TEST_CATEGORY
+   5.2. Entitat 'Test': code=TstTest, db=TEST
+   5.3. Entitat 'Question': code=TstQuestion, db=QUESTION
+
+6. Emotions Module (EMOMOD)
+   6.1. Entitat 'Mood': code=EmoMood, db=MOOD
+   6.2. Entitat 'Emotion': code=EmoEmotion, db=EMOTION
+
+7. Diagnosis Module (DGNMOD)
+   7.1. Entitat 'Diagnosis': code=DgnDiagnosis, db=DIAGNOSIS
+   7.2. Entitat 'Achievement': code=DgnAchievement, db=ACHIEVEMENT
+   7.3. Entitat 'Phase Diagnosis': code=DgnDiagnosisPhase, db=DIAGNOSIS_PHASE 
+
+8. Material Module (MATMOD)
+   8.1. Entitat 'Material': code=MatMaterial, db=MATERIAL
+   8.2. Entitat 'Phase Material': code=MatPhaseMaterial, db=PHASE_MATERIAL
+
+9. Register Module (REGMOD):
+   9.1. Entitat 'Register': code=RegRegister, db=REGISTER
+   9.2. Entitat 'Register Column': code=RegRegisterColumn, db=REGISTER_COLUMN
+
+10. Results Module (RESMOD):
+   10.1. Entitat 'Patient Test': code=ResPatientTest, db=PATIENT_TEST
+   10.2. Entitat 'Answer': code=ResAnswer, db=ANSWER
+
+11. Task Module (TSKMOD):
+   11.1. Entitat 'Task': code=TskTask, db=TASK_STATE
+
+12. Visit Module (VISMOD):
+   12.1. Entitat 'Visit': code=VisVisit, db=VISIT
+
+13. Notifications Module (NTFMOD):
+   13.1. Entitat 'Notification': code=NtfNotification, db=NOTIFICATION
+
+14. Option List Module (LSTMOD):
+   14.1. Entitat 'List Category': code=LstCategory, db=LIST_CATEGORY
+   14.2. Entitat 'Option List': code=LstOptionList, db=OPTION_LIST
+   14.3. Entitat 'Option Entry': code=LstOptionEntry, db=OPTION_ENTRY
+
+15. Localization Module (LOCMOD):
+   15.1. Entitat 'Translation': code=LocTranslation, db=TRANSLATION

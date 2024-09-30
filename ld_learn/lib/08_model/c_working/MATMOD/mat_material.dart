@@ -27,7 +27,15 @@ class MatMaterial extends ModelEntity {
 
   // CONSTRUCTORS ---------------------
   MatMaterial(
-      {required super.pCore,
+      {required super.pLocalId,
+      required super.pId,
+      required super.pCreatedBy,
+      required super.pCreatedAt,
+      required super.pUpdatedBy,
+      required super.pUpdatedAt,
+      super.pIsNew,
+      super.pIsUpdated,
+      super.pIsDeleted,
       String? pNameKey,
       String? pName,
       String? pDescKey,
@@ -50,7 +58,15 @@ class MatMaterial extends ModelEntity {
 
   MatMaterial.empty()
       : this(
-            pCore: CoreEntity.empty(),
+            pLocalId: null,
+            pId: null,
+            pCreatedBy: null,
+            pCreatedAt: null,
+            pUpdatedBy: null,
+            pUpdatedAt: null,
+            pIsNew: true,
+            pIsUpdated: false,
+            pIsDeleted: false,
             pNameKey: null,
             pName: null,
             pDescKey: null,
@@ -105,7 +121,7 @@ class MatMaterial extends ModelEntity {
                     _resource = await dbs.byKey(pCtrl, RscResource, pKey: pArgs.first);
 
                     // Carrega createdBy i updatedBy.
-                    super.core.completeStandard(pCtrl, pMap);
+                    super.completeStandard(pCtrl, pMap);
                   } on Exception catch (pExc) {
                     exc = pExc;
                   }
@@ -146,7 +162,7 @@ class MatMaterial extends ModelEntity {
     var old = _nameKey;
     _nameKey = pNameKey;
     _name = pName;
-    core.isUpdated = (!core.isNew) && (old != _nameKey);
+    super.isUpdated = (!super.isNew) && (old != _nameKey);
   }
 
   String? get descKey => _descKey;
@@ -158,7 +174,7 @@ class MatMaterial extends ModelEntity {
     var old = _descKey;
     _descKey = pDescKey;
     _desc = pDesc;
-    core.isUpdated = (!core.isNew) && (old != _descKey);
+    super.isUpdated = (!super.isNew) && (old != _descKey);
   }
 
   RscResource? get rscResource => _resource;
@@ -168,7 +184,7 @@ class MatMaterial extends ModelEntity {
     }
     var old = _resource;
     _resource = pResource;
-    core.isUpdated = (!core.isNew) && (old != _resource);
+    super.isUpdated = (!super.isNew) && (old != _resource);
   }
 
   ResourceType? get rscType => _type;
@@ -178,7 +194,7 @@ class MatMaterial extends ModelEntity {
     }
     var old = _type;
     _type = pType!;
-    core.isUpdated = (!core.isNew) && (old != _type);
+    super.isUpdated = (!super.isNew) && (old != _type);
   }
 
   String? get plainKey => _plainKey;
@@ -190,14 +206,14 @@ class MatMaterial extends ModelEntity {
     var old = _plainKey;
     _plainKey = pPlainKey;
     _plain = pPlain;
-    core.isUpdated = (!core.isNew) && (old != _plainKey);
+    super.isUpdated = (!super.isNew) && (old != _plainKey);
   }
 
   String? get link => _link;
   void setLink(String? pLink) {
     var old = _link;
     _link = pLink;
-    core.isUpdated = (!core.isNew) && (old != _link);
+    super.isUpdated = (!super.isNew) && (old != _link);
   }
 
   // CONVERSION TO MAPs ---------------
@@ -220,7 +236,7 @@ class MatMaterial extends ModelEntity {
     ..addAll({
       fldNameKey: _nameKey,
       fldDescKey: _descKey,
-      fldResource: _resource!.serverId,
+      fldResource: _resource!.id,
       fldResourceType: _type.id,
       fldPlainKey: _plainKey,
       fldLink: _link,
@@ -298,8 +314,7 @@ class MatMaterial extends ModelEntity {
   // OVERRIDES ------------------------
   @override
   bool isCompleted() {
-    return (isNotNull(super.core.createdBy) &&
-        isNotNull(super.core.createdAt) &&
+    return (super.isCompleted() &&
         isNotNull(_nameKey) &&
         isNotNull(_name) &&
         isNotNull(_resource) &&

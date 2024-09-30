@@ -1,5 +1,5 @@
-// Representació d'una entrada en el DsmV.
-// createdAt: 24/08/13 dt. JIQ
+// Fitxer de definició d'un test d'avaluació.
+// createdAt: 24/09/26 dj. JIQ
 
 // ignore_for_file: unnecessary_getters_setters
 
@@ -10,7 +10,7 @@ import 'package:ld_learn/08_model/a_user/index.dart';
 import 'package:ld_learn/08_model/b_definitions/index.dart';
 import 'package:ld_learn/09_tools/index.dart';
 
-// Representació d'una entrada en el DsmV.
+// Definició d'un test d'avaluació.
 class TstTest extends ModelEntity {
   static final _version = Version.parse("0.7.2");
   static Version get version => _version;
@@ -19,17 +19,26 @@ class TstTest extends ModelEntity {
   TstTestCategory? _category;
   String? _nameKey;
   String? _name;
-  String? _descKey;
-  String? _desc;
-  String? _instrKey;
-  String? _instr;
+  String? __descKey;
+  String? __desc;
+  String? __instrKey;
+  String? __instr;
   int _vers = 0;
-  UsrUser? _therapist;
   TstTest? _root;
+  UsrUser? _therapist;
+  
 
   // CONSTRUCTORS ---------------------
   TstTest(
-      {required super.pCore,
+      {required super.pLocalId,
+      required super.pId,
+      required super.pCreatedBy,
+      required super.pCreatedAt,
+      required super.pUpdatedBy,
+      required super.pUpdatedAt,
+      super.pIsNew,
+      super.pIsUpdated,
+      super.pIsDeleted,
       TstTestCategory? pCategory,
       String? pNameKey,
       String? pName,
@@ -43,10 +52,10 @@ class TstTest extends ModelEntity {
     _category = pCategory;
     _nameKey = pNameKey;
     _name = pName;
-    _descKey = pDescKey;
-    _desc = pDesc;
-    _instrKey = pInstrKey;
-    _instr = pInstr;
+    __descKey = pDescKey;
+    __desc = pDesc;
+    __instrKey = pInstrKey;
+    __instr = pInstr;
     _vers = pVers;
     _root = pRoot;
     _therapist = pTherapist;
@@ -54,7 +63,15 @@ class TstTest extends ModelEntity {
 
   TstTest.empty()
       : this(
-            pCore: CoreEntity.empty(),
+            pLocalId: null,
+            pId: null,
+            pCreatedBy: null,
+            pCreatedAt: null,
+            pUpdatedBy: null,
+            pUpdatedAt: null,
+            pIsNew: true,
+            pIsUpdated: false,
+            pIsDeleted: false,
             pCategory: null,
             pNameKey: null,
             pName: null,
@@ -70,10 +87,10 @@ class TstTest extends ModelEntity {
     _category = pMap[fldTestCategory];
     _nameKey = pMap[fldNameKey];
     _name = pMap[fldName];
-    _descKey = pMap[fldDescKey];
-    _desc = pMap[fldDesc];
-    _instrKey = pMap[fldInstrKey];
-    _instr = pMap[fldInstr];
+    __descKey = pMap[fldDescKey];
+    __desc = pMap[fldDesc];
+    __instrKey = pMap[fldInstrKey];
+    __instr = pMap[fldInstr];
     _vers = pMap[fldVersion];
     _root = pMap[fldRoot];
     _therapist = pMap[fldTherapist];
@@ -95,14 +112,14 @@ class TstTest extends ModelEntity {
         // Traduïm el desc key.
         Future<Exception?> stDesc(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
           try {
-            _descKey = pArgs.first;
-            _desc = await dbs.trans(pCtrl, pTKey: _descKey);
+            __descKey = pArgs.first;
+            __desc = await dbs.trans(pCtrl, pTKey: __descKey);
 
             // Traduïm el instr key.
             Future<Exception?> stInstr(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
               try {
-                _descKey = pArgs.first;
-                _desc = await dbs.trans(pCtrl, pTKey: _descKey);
+                __descKey = pArgs.first;
+                __desc = await dbs.trans(pCtrl, pTKey: __descKey);
 
                 // Obtenim el dsmV.
                 Future<Exception?> stRoot(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
@@ -116,7 +133,7 @@ class TstTest extends ModelEntity {
                         _therapist = await dbs.byKey(pCtrl, UsrUser, pKey: pArgs.first);
 
                         // Carrega createdBy i updatedBy.
-                        super.core.completeStandard(pCtrl, pMap);
+                        super.completeStandard(pCtrl, pMap);
                       } on Exception catch (pExc) {
                         exc = pExc;
                       }
@@ -164,25 +181,25 @@ class TstTest extends ModelEntity {
     var oldKey = _nameKey;
     _nameKey = pKey;
     _name = pName;
-    core.isUpdated = (!core.isNew) && (oldKey != _nameKey);
+    super.isUpdated = (!super.isNew) && (oldKey != _nameKey);
   }
 
-  String? get descKey => _descKey;
-  String? get desc => _desc;
+  String? get descKey => __descKey;
+  String? get desc => __desc;
   void setDesc(String? pKey, String? pDesc) {
-    var oldKey = _descKey;
-    _descKey = pKey;
-    _desc = pDesc;
-    core.isUpdated = (!core.isNew) && (oldKey != _descKey);
+    var oldKey = __descKey;
+    __descKey = pKey;
+    __desc = pDesc;
+    super.isUpdated = (!super.isNew) && (oldKey != __descKey);
   }
 
-  String? get instrKey => _instrKey;
-  String? get instr => _instr;
+  String? get instrKey => __instrKey;
+  String? get instr => __instr;
   void setInstr(String? pKey, String? pInstr) {
-    var oldKey = _descKey;
-    _instrKey = pKey;
-    _instr = pInstr;
-    core.isUpdated = (!core.isNew) && (oldKey != _instrKey);
+    var oldKey = __descKey;
+    __instrKey = pKey;
+    __instr = pInstr;
+    super.isUpdated = (!super.isNew) && (oldKey != __instrKey);
   }
 
   TstTestCategory? get category => _category;
@@ -192,21 +209,21 @@ class TstTest extends ModelEntity {
     }
     var old = _category;
     _category = pCategory;
-    core.isUpdated = (!core.isNew) && (old != _category);
+    super.isUpdated = (!super.isNew) && (old != _category);
   }
 
   int get vers => _vers;
   void setVers(int pVers) {
     var old = _vers;
     _vers = pVers;
-    core.isUpdated = (!core.isNew) && (old != _vers);
+    super.isUpdated = (!super.isNew) && (old != _vers);
   }
 
   TstTest? get root => _root;
   void setRoot(TstTest? pRoot) {
     var old = _root;
     _root = pRoot;
-    core.isUpdated = (!core.isNew) && (old != _root);
+    super.isUpdated = (!super.isNew) && (old != _root);
   }
 
   UsrUser? get therapist => _therapist;
@@ -216,7 +233,7 @@ class TstTest extends ModelEntity {
     }
     var old = _therapist;
     _therapist = pTherapist;
-    core.isUpdated = (!core.isNew) && (old != _therapist);
+    super.isUpdated = (!super.isNew) && (old != _therapist);
   }
 
   // _therapist = pTherapist;
@@ -227,10 +244,10 @@ class TstTest extends ModelEntity {
       fldTestCategory: _category,
       fldNameKey: _nameKey,
       fldName: _name,
-      fldDescKey: _descKey,
-      fldDesc: _desc,
-      fldInstrKey: _instrKey,
-      fldInstr: _instr,
+      fldDescKey: __descKey,
+      fldDesc: __desc,
+      fldInstrKey: __instrKey,
+      fldInstr: __instr,
       fldVersion: _vers,
       fldRoot: _root,
       fldTherapist: _therapist,
@@ -241,11 +258,11 @@ class TstTest extends ModelEntity {
     ..addAll({
       fldTestCategory: _category,
       fldNameKey: _nameKey,
-      fldDescKey: _descKey,
-      fldInstrKey: _instrKey,
+      fldDescKey: __descKey,
+      fldInstrKey: __instrKey,
       fldVersion: _vers,
-      fldRoot: _root?.serverId,
-      fldTherapist: _therapist!.serverId,
+      fldRoot: _root?.id,
+      fldTherapist: _therapist!.id,
     });
 
   // STATICS --------------------------
@@ -302,7 +319,7 @@ class TstTest extends ModelEntity {
 
       $fldTestCategory, $fldNameKey, $fldDescKey, $fldInstrKey,
       $fldVersion, $fldRoot, $fldTherapist)
-    VALUES (?, ?, ?, ?, ?,   ?, ?, ?, ?,  ?, ?, ?);
+    VALUES (?,?,?,?,?,  ?,?,?,?,  ?,?,?);
   ''';
 
   static String get stmtUpdate => '''
@@ -324,8 +341,7 @@ class TstTest extends ModelEntity {
   // OVERRIDES ------------------------
   @override
   bool isCompleted() {
-    return (isNotNull(super.core.createdBy) &&
-        isNotNull(super.core.createdAt) &&
+    return (super.isCompleted() &&
         isNotNull(_category) &&
         isNotNull(_nameKey) &&
         isNotNull(_therapist));

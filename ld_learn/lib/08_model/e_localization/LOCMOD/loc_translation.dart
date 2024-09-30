@@ -17,18 +17,28 @@ class LocTranslation extends ModelEntity {
   static Version get version => _version;
 
   // MEMBRES --------------------------
-  late String? _tKey;
-  late Locale _locale = localeES;
-  late String? _literal;
-  late int? _iteration;
+  int? __id;
+  String? _tKey;
+  Locale _locale = localeES;
+  String? _literal;
+  int? _iteration;
 
   // CONSTRUCTORS (stringAB)----------
   LocTranslation(
-      {required super.pCore,
+      {required super.pId,
+      super.pIsNew,
+      super.pIsUpdated,
+      super.pIsDeleted,
       String? pTKey,
       Locale pLocale = localeES,
       String? pLiteral,
-      int pIteration = 0}) {
+      int pIteration = 0})
+      : super(
+            pLocalId: null,
+            pCreatedBy: null,
+            pCreatedAt: null,
+            pUpdatedBy: null,
+            pUpdatedAt: null) {
     _tKey = pTKey;
     _locale = pLocale;
     _literal = pLiteral;
@@ -37,64 +47,75 @@ class LocTranslation extends ModelEntity {
 
   LocTranslation.empty()
       : this(
-            pCore: CoreEntity.empty(),
+            pId: null,
+            pIsNew: true,
+            pIsUpdated: false,
+            pIsDeleted: false,
             pTKey: null,
             pLocale: localeES,
             pLiteral: null,
             pIteration: 0);
 
   LocTranslation.byMap(Map<String, dynamic> pMap) : super.byMap(pMap) {
+    __id = pMap[fldId];
     _tKey = pMap[fldTextKey];
     _locale = pMap[fldLocale];
     _literal = pMap[fldLiteral];
     _iteration = pMap[fldIteration];
   }
 
-  LocTranslation.bySQLMap(BaseController<DeepDo> pCtrl, Map<String, dynamic> pMap)
+  LocTranslation.bySQLMap(
+      BaseController<DeepDo> pCtrl, Map<String, dynamic> pMap)
       : super.bySQLMap(LocTranslation, pMap) {
+    __id = pMap[fldId];
     _tKey = pMap[fldTextKey];
     _locale = Locale(pMap[fldLocaleCode]);
     _literal = pMap[fldLiteral];
     _iteration = pMap[fldIteration];
   }
 
-  // LocTranslation.byProto(prts.LocTranslation pProto, IncrFuture? pToDo)
-  //     : super.byProto(pProto, pToDo) {
-  //   locale = pProto.locale.toModel(pToDo);
-  //   textKey = pProto.textKey.toModel(pToDo);
-//
-  //   lang = locale!.lang;
-  //   literal = pProto.literal;
-  // }
-
   // GETTERS/SETTERS ------------------
+  @override
+  int? get id => __id;
+  @override
+  set id(int? pId) {
+    if (isNull(pId)) {
+      throw errorFieldNotNullable("$tnLocTranslation.set", fldId);
+    }
+    var old = __id;
+    __id = pId;
+    isUpdated = !isNew && old != __id;
+  }
+
   Locale get locale => _locale;
   set locale(dynamic pLoc) {
     var old = _locale;
     _locale = dyn2Locale(pLoc);
-    core.isUpdated = (!core.isNew) && (old != _locale);
+    super.isUpdated = (!super.isNew) && (old != _locale);
   }
 
   String get textKey => _tKey ?? unknownTextKey;
   set textKey(String pTKey) {
     var old = _tKey;
     _tKey = pTKey;
-    core.isUpdated = (!core.isNew) && (old != _tKey);
+    super.isUpdated = (!super.isNew) && (old != _tKey);
   }
 
   String get literal => _literal ?? textKey;
   set literal(String pLiteral) {
     var old = _literal;
     _literal = pLiteral;
-    core.isUpdated = (!core.isNew) && (old != _literal);
+    super.isUpdated = (!super.isNew) && (old != _literal);
   }
 
   int get iteration => _iteration ?? 0;
-  set iteration(int pNew) => _iteration = (pNew > iteration) ? pNew : _iteration;
+  set iteration(int pNew) =>
+      _iteration = (pNew > iteration) ? pNew : _iteration;
 
   // CONVERSION TO MAPs ---------------
   @override
   Map<String, dynamic> toMap() => {
+        fldId: __id,
         fldLocale: _locale,
         fldTextKey: _tKey,
         fldLiteral: _literal ?? textKey,
@@ -103,6 +124,7 @@ class LocTranslation extends ModelEntity {
 
   @override
   Map<String, dynamic> toSQLMap() => {
+        fldId: __id,
         fldLocaleCode: _locale.languageCode,
         fldTextKey: _tKey,
         fldLiteral: _literal,
@@ -119,6 +141,7 @@ class LocTranslation extends ModelEntity {
 
   static String get stmtCreateTable => '''
     CREATE TABLE     $tnLocTranslation (
+      $fldId         $dbtIntNotNullUnique,
       $fldLocaleCode $dbtTextNotNull,
       $fldTextKey    $dbtTextNotNull,
       $fldLiteral    $dbtTextNotNull,
@@ -133,25 +156,26 @@ class LocTranslation extends ModelEntity {
   static String get stmtSelect => '''
     SELECT $fldLiteral, $fldIteration
     FROM   $tnLocTranslation
-    WHERE  $fldLocaleCode = ?, $fldTextKey = ?;
+    WHERE  $fldTextKey = ? AND $fldLocaleCode = ?;
   ''';
 
   static String get stmtDelete => '''
     DELETE
     FROM  $tnLocTranslation
-    WHERE $fldLocaleCode = ?, $fldTextKey = ?;
+    WHERE $fldTextKey = ? AND $fldLocaleCode = ?;
   ''';
 
   static String get stmtInsert => '''
     INSERT
-    INTO $tnLocTranslation ($fldLocaleCode, $fldTextKey, $fldLiteral, $fldIteration)
-    VALUES (?, ?, ?, ?);
+    INTO $tnLocTranslation ($fldId, $fldTextKey, $fldLocaleCode, $fldLiteral, $fldIteration)
+    VALUES (?, ?, ?, ?, ?);
   ''';
 
   static String get stmtUpdate => '''
     UPDATE $tnLocTranslation
-    SET $fldLocaleCode = ?,
+    SET $fldId = ?,
         $fldTextKey = ?,
+        $fldLocaleCode = ?,
         $fldLiteral = ?,
         $fldIteration = ?
     WHERE $fldLocaleCode = ?, $fldTextKey = ?;
@@ -160,8 +184,7 @@ class LocTranslation extends ModelEntity {
   // OVERRIDES ------------------------
   @override
   bool isCompleted() {
-    return (isNotNull(super.core.createdBy) &&
-        isNotNull(super.core.createdAt) &&
+    return (super.isCompleted() &&
         isNotNull(_tKey) &&
         isNotNull(_tKey) &&
         isNotNull(_literal));

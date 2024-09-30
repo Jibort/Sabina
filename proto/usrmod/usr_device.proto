@@ -33,8 +33,9 @@ message UsrDevice {
   BaseEntity      base_entity = 1;
   UsrDeviceType   type = 2;
   UsrDeviceState  state = 3;
-  optional string token = 4;
-  uint32          owner = 5;
+  optional string desc_key = 4;
+  string          token = 5;
+  uint32          owner = 6;
 }
 
 // Representació d'una llista de dispositius.

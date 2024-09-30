@@ -1,0 +1,18 @@
+// Fitxer de definició proto per l'entitat LstOptionList.
+syntax = "proto3";
+
+package proto;
+
+import "usr_entities.proto";
+
+option go_package = "./";
+
+// Definició d'una llista d'opcions.
+message LstOptionList {
+  BaseEntity      base_entity = 1;
+  string          name_key = 2;
+  optional string desc_key = 3;
+  LstListCategory category = 4;
+  bool            alpha = 5;
+}
+

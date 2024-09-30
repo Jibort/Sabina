@@ -24,8 +24,15 @@ class DisDisease extends ModelEntity {
   UsrUser? _therapist;
 
   // CONSTRUCTORS ---------------------
-  DisDisease({
-    required super.pCore,
+  DisDisease({required super.pLocalId,
+      required super.pId,
+      required super.pCreatedBy,
+      required super.pCreatedAt,
+      required super.pUpdatedBy,
+      required super.pUpdatedAt,
+      super.pIsNew,
+      super.pIsUpdated,
+      super.pIsDeleted,
     String? pNameKey,
     String? pName,
     String? pDescKey,
@@ -43,7 +50,15 @@ class DisDisease extends ModelEntity {
 
   DisDisease.empty()
       : this(
-          pCore: CoreEntity.empty(),
+            pLocalId: null,
+            pId: null,
+            pCreatedBy: null,
+            pCreatedAt: null,
+            pUpdatedBy: null,
+            pUpdatedAt: null,
+            pIsNew: true,
+            pIsUpdated: false,
+            pIsDeleted: false,
           pNameKey: null,
           pName: null,
           pDescKey: null,
@@ -91,7 +106,7 @@ class DisDisease extends ModelEntity {
                     _therapist = await dbs.byKey(pCtrl, UsrUser, pKey: fkId!);
 
                     // Carrega createdBy i updatedBy.
-                    super.core.completeStandard(pCtrl, pMap);
+                    super.completeStandard(pCtrl, pMap);
                   } on Exception catch (pExc) {
                     exc = pExc;
                   }
@@ -132,7 +147,7 @@ class DisDisease extends ModelEntity {
     var oldKey = _nameKey;
     _nameKey = pKey;
     _name = pName;
-    core.isUpdated = (!core.isNew) && (oldKey != _nameKey);
+    super.isUpdated = (!super.isNew) && (oldKey != _nameKey);
   }
 
   String? get descKey => _descKey;
@@ -141,7 +156,7 @@ class DisDisease extends ModelEntity {
     var oldKey = _descKey;
     _descKey = pKey;
     _desc = pDesc;
-    core.isUpdated = (!core.isNew) && (oldKey != _descKey);
+    super.isUpdated = (!super.isNew) && (oldKey != _descKey);
   }
 
   DisDsmV? get dsmV => _dsmV;
@@ -151,7 +166,7 @@ class DisDisease extends ModelEntity {
     }
     var oldDsmV = _dsmV;
     _dsmV = pDsmV;
-    core.isUpdated = (!core.isNew) && (oldDsmV != _dsmV);
+    super.isUpdated = (!super.isNew) && (oldDsmV != _dsmV);
   }
 
   UsrUser? get therapist => _therapist;
@@ -161,7 +176,7 @@ class DisDisease extends ModelEntity {
     }
     var oldTherapist = _therapist;
     _therapist = pTherapist;
-    core.isUpdated = (!core.isNew) && (oldTherapist != _therapist);
+    super.isUpdated = (!super.isNew) && (oldTherapist != _therapist);
   }
 
   // CONVERSION TO MAPs ---------------
@@ -181,8 +196,8 @@ class DisDisease extends ModelEntity {
     ..addAll({
       fldNameKey: _nameKey,
       fldDescKey: _descKey,
-      fldDsmV: _dsmV!.serverId,
-      fldTherapist: _therapist!.serverId,
+      fldDsmV: _dsmV!.id,
+      fldTherapist: _therapist!.id,
     });
 
   // STATICS --------------------------
@@ -245,8 +260,7 @@ class DisDisease extends ModelEntity {
   // OVERRIDES ------------------------
   @override
   bool isCompleted() {
-    return (isNotNull(super.core.createdBy) &&
-        isNotNull(super.core.createdAt) &&
+    return (super.isCompleted() &&
         isNotNull(_nameKey) &&
         isNotNull(_descKey) &&
         isNotNull(_dsmV) &&

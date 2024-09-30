@@ -256,6 +256,7 @@ const String fldTherapist = "THERAPIST_ID";
 const String fldTracking = "TRACKING_ID";
 const String fldTrackingColumn = "TRACKING_COLUMN_ID";
 const String fldTest = "TEST_ID";
+const String fldPatientTest = "PATIENT_TEST_ID";
 const String fldTestCategory = "TEST_CATEGORY_ID";
 const String fldDiagnosis = "DIAGNOSIS_ID";
 const String fldDiagnosisPhase = "DIAGNOSIS_PHASE_ID";

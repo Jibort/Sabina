@@ -26,7 +26,15 @@ class RegRegisterColumn extends ModelEntity {
 
   // CONSTRUCTORS ---------------------
   RegRegisterColumn(
-      {required super.pCore,
+      {required super.pLocalId,
+      required super.pId,
+      required super.pCreatedBy,
+      required super.pCreatedAt,
+      required super.pUpdatedBy,
+      required super.pUpdatedAt,
+      super.pIsNew,
+      super.pIsUpdated,
+      super.pIsDeleted,
       RegRegister? pRegister,
       TckTrackingColumn? pColumn,
       LstOptionEntry? pOption,
@@ -43,7 +51,15 @@ class RegRegisterColumn extends ModelEntity {
 
   RegRegisterColumn.empty()
       : this(
-            pCore: CoreEntity.empty(),
+            pLocalId: null,
+            pId: null,
+            pCreatedBy: null,
+            pCreatedAt: null,
+            pUpdatedBy: null,
+            pUpdatedAt: null,
+            pIsNew: true,
+            pIsUpdated: false,
+            pIsDeleted: false,
             pRegister: null,
             pColumn: null,
             pOption: null,
@@ -93,7 +109,7 @@ class RegRegisterColumn extends ModelEntity {
                         _mood = await dbs.byKey(pCtrl, EmoMood, pKey: pArgs.first);
 
                         // Carrega createdBy i updatedBy.
-                        super.core.completeStandard(pCtrl, pMap);
+                        super.completeStandard(pCtrl, pMap);
                       } on Exception catch (pExc) {
                         exc = pExc;
                       }
@@ -139,7 +155,7 @@ class RegRegisterColumn extends ModelEntity {
     }
     var old = _register;
     _register = pRegister;
-    core.isUpdated = (!core.isNew) && (old != _register);
+    super.isUpdated = (!super.isNew) && (old != _register);
   }
 
   TckTrackingColumn? get trackingColumn => _column;
@@ -149,35 +165,35 @@ class RegRegisterColumn extends ModelEntity {
     }
     var old = _column;
     _column = pColumn;
-    core.isUpdated = (!core.isNew) && (old != _column);
+    super.isUpdated = (!super.isNew) && (old != _column);
   }
 
   LstOptionEntry? get optionEntry => _option;
   void setOptionEntry(LstOptionEntry? pOption) {
     var old = _option;
     _option = pOption;
-    core.isUpdated = (!core.isNew) && (old != _option);
+    super.isUpdated = (!super.isNew) && (old != _option);
   }
 
   EmoEmotion? get emotion => _emotion;
   void setEmotion(EmoEmotion? pEmotion) {
     var old = _emotion;
     _emotion = pEmotion;
-    core.isUpdated = (!core.isNew) && (old != _emotion);
+    super.isUpdated = (!super.isNew) && (old != _emotion);
   }
 
   EmoMood? get mood => _mood;
   void setMood(EmoMood? pMood) {
     var old = _mood;
     _mood = pMood;
-    core.isUpdated = (!core.isNew) && (old != _mood);
+    super.isUpdated = (!super.isNew) && (old != _mood);
   }
 
   String? get value => _value;
   void setValue(String? pValue) {
     var old = _value;
     _value = pValue;
-    core.isUpdated = (!core.isNew) && (old != _value);
+    super.isUpdated = (!super.isNew) && (old != _value);
   }
 
   // CONVERSION TO MAPs ---------------
@@ -195,11 +211,11 @@ class RegRegisterColumn extends ModelEntity {
   @override
   Map<String, dynamic> toSQLMap() => super.toSQLMap()
     ..addAll({
-      fldRegister: _register!.serverId,
-      fldTrackingColumn: _column!.serverId,
-      fldOptionEntry: _option?.serverId,
-      fldEmotion: _emotion?.serverId,
-      fldMood: _mood?.serverId,
+      fldRegister: _register!.id,
+      fldTrackingColumn: _column!.id,
+      fldOptionEntry: _option?.id,
+      fldEmotion: _emotion?.id,
+      fldMood: _mood?.id,
       fldValue: _value,
     });
 
@@ -271,8 +287,7 @@ class RegRegisterColumn extends ModelEntity {
   // OVERRIDES ------------------------
   @override
   bool isCompleted() {
-    return (isNotNull(super.core.createdBy) &&
-        isNotNull(super.core.createdAt) &&
+    return (super.isCompleted() &&
         isNotNull(_register));
   }
 }

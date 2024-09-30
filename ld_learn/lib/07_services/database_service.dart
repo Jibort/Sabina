@@ -5,7 +5,7 @@
 
 import 'package:ld_learn/01_ui/load_steps.dart';
 import 'package:ld_learn/01_ui/widgets/index.dart';
-import 'package:ld_learn/04_Connections/conn_control.dart';
+import 'package:ld_learn/04_connections/conn_control.dart';
 import 'package:ld_learn/06_storage/index.dart';
 import 'package:ld_learn/07_services/database_cache_service.dart';
 import 'package:ld_learn/08_model/a_user/index.dart';
@@ -41,10 +41,7 @@ class DatabaseService {
       {required dynamic pKey, String? pKeyB}) async {
     if (pType is! ModelEntity) throw errorNoModelEntityType("DatabaseService.byKey()", pType);
     if (isNull(pKey)) return null;
-    // {
-    //   throw errorArgumentNotNullable("DatabaseService.byKey()", "'dynamic pKey'");
-    // }
-
+    
     T? inst = DbCacheService.to.byTypeKey(pType, pId: pKey, pIdB: pKeyB) as T?;
 
     if (isNull(inst)) {
@@ -71,7 +68,7 @@ class DatabaseService {
       {required dynamic pKey, String? pKeyB, int pDeep = 0}) async {
     T? inst;
 
-    var instKey = EntityKey.asKey(pType, pKey, pKeyB);
+    var instKey = ModelEntity.keyByType(pType, pKey, pKeyB);
     var loadStep =
         LoadStep(pIdx: "MEntity.load.01", pTitle: "Carrega de la instància '$instKey' i depen");
 
@@ -320,8 +317,8 @@ class DatabaseService {
     _executeAux(pDb, sqlCreate, sqlAuxs);
 
     // TAULA 'MATERIAL_PHASE'
-    sqlCreate = MatPhaseMaterial.stmtCreateTable;
-    sqlAuxs = MatPhaseMaterial.stmtAuxCreate;
+    sqlCreate = MatMaterialPhase.stmtCreateTable;
+    sqlAuxs = MatMaterialPhase.stmtAuxCreate;
     _executeAux(pDb, sqlCreate, sqlAuxs);
 
     // REGMOD

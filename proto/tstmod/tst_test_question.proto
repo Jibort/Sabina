@@ -1,0 +1,32 @@
+// Fitxer de definició proto de les preguntes d'un test d'avaluació.
+// createdAt: 24/09/26 dj. JIQ
+
+syntax = "proto3";
+
+package proto;
+
+option go_package = "./";
+
+// Tipus de pregunta de tests d'avaluació.
+enum TstTestQuestionType {
+  TST_TEST_QUESTION_TYPE_UNSPECIFIED = 0;
+  TST_TEST_QUESTION_TYPE_PLAIN_TEXT = 1;
+  TST_TEST_QUESTION_TYPE_BOOLEAN = 2;
+  TST_TEST_QUESTION_TYPE_OPTION_LIST = 4;
+  TST_TEST_QUESTION_TYPE_EMOTION = 5;
+  TST_TEST_QUESTION_TYPE_MOOD = 6;
+  TST_TEST_QUESTION_TYPE_DATE = 7;
+  TST_TEST_QUESTION_TYPE_DATE_TIME = 8;
+}
+
+// Definició d'una pregunta de Test.
+message TstQuestion {
+  BaseEntity           base_entity = 1;
+  TstTest              test = 2;
+  TstTestQuestionType  test_question_type = 3;
+  optional TstQuestion block = 4;
+  string               question = 5;
+  optional string      help = 6;
+  bool                 mandatory = 7;
+  bool                 custom = 8;
+}

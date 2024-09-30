@@ -24,7 +24,15 @@ class DisPhase extends ModelEntity {
 
   // CONSTRUCTORS ---------------------
   DisPhase(
-      {required super.pCore,
+      {required super.pLocalId,
+      required super.pId,
+      required super.pCreatedBy,
+      required super.pCreatedAt,
+      required super.pUpdatedBy,
+      required super.pUpdatedAt,
+      super.pIsNew,
+      super.pIsUpdated,
+      super.pIsDeleted,
       int? pIdx,
       String? pNameKey,
       String? pName,
@@ -41,7 +49,15 @@ class DisPhase extends ModelEntity {
 
   DisPhase.empty()
       : this(
-            pCore: CoreEntity.empty(),
+            pLocalId: null,
+            pId: null,
+            pCreatedBy: null,
+            pCreatedAt: null,
+            pUpdatedBy: null,
+            pUpdatedAt: null,
+            pIsNew: true,
+            pIsUpdated: false,
+            pIsDeleted: false,
             pNameKey: null,
             pName: null,
             pDescKey: null,
@@ -72,17 +88,20 @@ class DisPhase extends ModelEntity {
         _name = await dbs.trans(pCtrl, pTKey: pArgs.first);
 
         // Traduïm el desc key.
-        Future<Exception?> stDesc(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
+        Future<Exception?> stDesc(
+            FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
           try {
             _desc = await dbs.trans(pCtrl, pTKey: pArgs.first);
 
             // Obtenim la malaltia.
-            Future<Exception?> stDisease(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
+            Future<Exception?> stDisease(
+                FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
               try {
-                _disease = await dbs.byKey(pCtrl, DisDisease, pKey: pArgs.first);
+                _disease =
+                    await dbs.byKey(pCtrl, DisDisease, pKey: pArgs.first);
 
                 // Carrega createdBy i updatedBy.
-                super.core.completeStandard(pCtrl, pMap);
+                super.completeStandard(pCtrl, pMap);
               } on Exception catch (pExc) {
                 exc = pExc;
               }
@@ -114,7 +133,7 @@ class DisPhase extends ModelEntity {
     }
     var old = _idx;
     _idx = pIdx;
-    core.isUpdated = (!core.isNew) && (old != _idx);
+    super.isUpdated = (!super.isNew) && (old != _idx);
   }
 
   String? get nameKey => _nameKey;
@@ -126,7 +145,7 @@ class DisPhase extends ModelEntity {
     var oldKey = _nameKey;
     _nameKey = pNameKey;
     _name = pName;
-    core.isUpdated = (!core.isNew) && (oldKey != _nameKey);
+    super.isUpdated = (!super.isNew) && (oldKey != _nameKey);
   }
 
   String? get descKey => _descKey;
@@ -135,14 +154,14 @@ class DisPhase extends ModelEntity {
     var oldKey = _descKey;
     _descKey = pKey;
     _desc = pDesc;
-    core.isUpdated = (!core.isNew) && (oldKey != _descKey);
+    super.isUpdated = (!super.isNew) && (oldKey != _descKey);
   }
 
   DisDisease? get disease => _disease;
   void setDisease(DisDisease? pDisease) {
     var oldDisease = _disease;
     _disease = pDisease;
-    core.isUpdated = (!core.isNew) && (oldDisease != _disease);
+    super.isUpdated = (!super.isNew) && (oldDisease != _disease);
   }
 
   // CONVERSION TO MAPs ---------------
@@ -163,7 +182,7 @@ class DisPhase extends ModelEntity {
       fldIdx: _idx,
       fldNameKey: _nameKey,
       fldDescKey: _descKey,
-      fldDisease: _disease!.serverId,
+      fldDisease: _disease!.id,
     });
 
   // STATICS --------------------------
@@ -225,8 +244,7 @@ class DisPhase extends ModelEntity {
   // OVERRIDES ------------------------
   @override
   bool isCompleted() {
-    return (isNotNull(super.core.createdBy) &&
-        isNotNull(super.core.createdAt) &&
+    return (super.isCompleted() &&
         isNotNull(_idx) &&
         isNotNull(_nameKey) &&
         isNotNull(_descKey) &&

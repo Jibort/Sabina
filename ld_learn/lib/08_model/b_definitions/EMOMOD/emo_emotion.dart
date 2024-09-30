@@ -16,14 +16,22 @@ class EmoEmotion extends ModelEntity {
   // MEMBRES --------------------------
   String? _nameKey;
   String? _name;
-  String? _descKey;
-  String? _desc;
-  EmoEmotion? _parent;
+  String? __descKey;
+  String? __desc;
+  EmoEmotion? __parent;
   int? _value;
 
   // CONSTRUCTORS ---------------------
   EmoEmotion(
-      {required super.pCore,
+      {required super.pLocalId,
+      required super.pId,
+      required super.pCreatedBy,
+      required super.pCreatedAt,
+      required super.pUpdatedBy,
+      required super.pUpdatedAt,
+      super.pIsNew,
+      super.pIsUpdated,
+      super.pIsDeleted,
       String? pNameKey,
       String? pName,
       String? pDescKey,
@@ -32,15 +40,23 @@ class EmoEmotion extends ModelEntity {
       int? pValue}) {
     _nameKey = pNameKey;
     _name = pName;
-    _descKey = pDescKey;
-    _desc = pDesc;
-    _parent = pParent;
+    __descKey = pDescKey;
+    __desc = pDesc;
+    __parent = pParent;
     _value = pValue;
   }
 
   EmoEmotion.empty()
       : this(
-            pCore: CoreEntity.empty(),
+            pLocalId: null,
+            pId: null,
+            pCreatedBy: null,
+            pCreatedAt: null,
+            pUpdatedBy: null,
+            pUpdatedAt: null,
+            pIsNew: true,
+            pIsUpdated: false,
+            pIsDeleted: false,
             pNameKey: null,
             pName: null,
             pDescKey: null,
@@ -51,9 +67,9 @@ class EmoEmotion extends ModelEntity {
   EmoEmotion.byMap(Map<String, dynamic> pMap) : super.byMap(pMap) {
     _nameKey = pMap[fldNameKey] as String?;
     _name = pMap[fldName] as String?;
-    _descKey = pMap[fldDescKey] as String?;
-    _desc = pMap[fldDesc] as String?;
-    _parent = pMap[fldParent] as EmoEmotion?;
+    __descKey = pMap[fldDescKey] as String?;
+    __desc = pMap[fldDesc] as String?;
+    __parent = pMap[fldParent] as EmoEmotion?;
     _value = pMap[fldValue] as int?;
   }
 
@@ -73,16 +89,16 @@ class EmoEmotion extends ModelEntity {
         // Traduïm la descripció de l'emoció.
         Future<Exception?> stepDesc(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
           try {
-            _descKey = pArgs.first;
-            _desc = await dbs.trans(pCtrl, pTKey: _descKey);
+            __descKey = pArgs.first;
+            __desc = await dbs.trans(pCtrl, pTKey: __descKey);
 
             // Carreguem l'l'emoció pare, si existeix.
             Future<Exception?> stepParent(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
               try {
-                _parent = await dbs.byKey(pCtrl, EmoEmotion, pKey: pArgs.first);
+                __parent = await dbs.byKey(pCtrl, EmoEmotion, pKey: pArgs.first);
 
                 // Carrega createdBy i updatedBy.
-                super.core.completeStandard(pCtrl, pMap);
+                super.completeStandard(pCtrl, pMap);
               } on Exception catch (pExc) {
                 exc = pExc;
               }
@@ -112,21 +128,21 @@ class EmoEmotion extends ModelEntity {
     if (isNull(pName)) throw errorFieldNotNullable("$enEmoEmotion.set", fldName);
     var old = _name;
     _name = pName;
-    core.isUpdated = (!core.isNew) && (old != _name);
+    super.isUpdated = (!super.isNew) && (old != _name);
   }
 
-  String? get description => _desc;
+  String? get description => __desc;
   set description(String? pDesc) {
-    var old = _desc;
-    _desc = pDesc;
-    core.isUpdated = (!core.isNew) && (old != _desc);
+    var old = __desc;
+    __desc = pDesc;
+    super.isUpdated = (!super.isNew) && (old != __desc);
   }
 
-  EmoEmotion? get parent => _parent;
+  EmoEmotion? get parent => __parent;
   set parent(EmoEmotion? pParent) {
-    var old = _parent;
-    _parent = pParent;
-    core.isUpdated = (!core.isNew) && (old != _parent);
+    var old = __parent;
+    __parent = pParent;
+    super.isUpdated = (!super.isNew) && (old != __parent);
   }
 
   int? get value => _value;
@@ -136,7 +152,7 @@ class EmoEmotion extends ModelEntity {
     }
     var old = _value;
     _value = pValue;
-    core.isUpdated = (!core.isNew) && (old != _value);
+    super.isUpdated = (!super.isNew) && (old != _value);
   }
 
   // CONVERSION TO MAPs ---------------
@@ -145,9 +161,9 @@ class EmoEmotion extends ModelEntity {
     ..addAll({
       fldNameKey: _nameKey,
       fldName: _name,
-      fldDescKey: _descKey,
-      fldDesc: _desc,
-      fldParent: _parent,
+      fldDescKey: __descKey,
+      fldDesc: __desc,
+      fldParent: __parent,
       fldValue: _value,
     });
 
@@ -155,8 +171,8 @@ class EmoEmotion extends ModelEntity {
   Map<String, dynamic> toSQLMap() => super.toSQLMap()
     ..addAll({
       fldNameKey: _nameKey,
-      fldDescKey: _descKey,
-      fldParent: _parent?.serverId,
+      fldDescKey: __descKey,
+      fldParent: __parent?.id,
       fldValue: _value,
     });
 
@@ -217,8 +233,7 @@ class EmoEmotion extends ModelEntity {
   // OVERRIDES ------------------------
   @override
   bool isCompleted() {
-    return (isNotNull(super.core.createdBy) &&
-        isNotNull(super.core.createdAt) &&
+    return (super.isCompleted() &&
         isNotNull(_nameKey) &&
         isNotNull(_value));
   }

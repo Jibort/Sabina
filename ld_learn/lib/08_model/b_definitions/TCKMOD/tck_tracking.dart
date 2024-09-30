@@ -25,7 +25,15 @@ class TckTracking extends ModelEntity {
 
   // CONSTRUCTORS ---------------------
   TckTracking({
-    required super.pCore,
+    required super.pLocalId,
+    required super.pId,
+    required super.pCreatedBy,
+    required super.pCreatedAt,
+    required super.pUpdatedBy,
+    required super.pUpdatedAt,
+    super.pIsNew,
+    super.pIsUpdated,
+    super.pIsDeleted,
     String? pNameKey,
     String? pName,
     String? pDescKey,
@@ -45,7 +53,15 @@ class TckTracking extends ModelEntity {
 
   TckTracking.empty()
       : this(
-            pCore: CoreEntity.empty(),
+            pLocalId: null,
+            pId: null,
+            pCreatedBy: null,
+            pCreatedAt: null,
+            pUpdatedBy: null,
+            pUpdatedAt: null,
+            pIsNew: true,
+            pIsUpdated: false,
+            pIsDeleted: false,
             pNameKey: null,
             pName: null,
             pDescKey: null,
@@ -78,23 +94,27 @@ class TckTracking extends ModelEntity {
         _name = await dbs.trans(pCtrl, pTKey: _nameKey);
 
         // Traduïm el desc key.
-        Future<Exception?> stDesc(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
+        Future<Exception?> stDesc(
+            FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
           try {
             _descKey = pArgs.first;
             _desc = await dbs.trans(pCtrl, pTKey: _descKey);
 
             // Carreguem el terapeuta.
-            Future<Exception?> stTherapist(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
+            Future<Exception?> stTherapist(
+                FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
               try {
                 _therapist = await dbs.byKey(pCtrl, UsrUser, pKey: pArgs.first);
 
                 // Carreguem l'arrel.
-                Future<Exception?> stRoot(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
+                Future<Exception?> stRoot(
+                    FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
                   try {
-                    _root = await dbs.byKey(pCtrl, TckTracking, pKey: pArgs.first);
+                    _root =
+                        await dbs.byKey(pCtrl, TckTracking, pKey: pArgs.first);
 
                     // Carrega createdBy i updatedBy.
-                    super.core.completeStandard(pCtrl, pMap);
+                    super.completeStandard(pCtrl, pMap);
                   } on Exception catch (pExc) {
                     exc = pExc;
                   }
@@ -135,7 +155,7 @@ class TckTracking extends ModelEntity {
     var oldKey = _nameKey;
     _nameKey = pKey;
     _name = pName;
-    core.isUpdated = (!core.isNew) && (oldKey != _nameKey);
+    super.isUpdated = (!super.isNew) && (oldKey != _nameKey);
   }
 
   String? get descKey => _descKey;
@@ -144,14 +164,14 @@ class TckTracking extends ModelEntity {
     var oldKey = _descKey;
     _descKey = pKey;
     _desc = pDesc;
-    core.isUpdated = (!core.isNew) && (oldKey != _descKey);
+    super.isUpdated = (!super.isNew) && (oldKey != _descKey);
   }
 
   int get vers => _vers;
   void setVers(int pVers) {
     var old = _vers;
     _vers = pVers;
-    core.isUpdated = (!core.isNew) && (old != _vers);
+    super.isUpdated = (!super.isNew) && (old != _vers);
   }
 
   UsrUser? get theraphist => _therapist;
@@ -161,14 +181,14 @@ class TckTracking extends ModelEntity {
     }
     var oldTherapist = _therapist;
     _therapist = pTherapist;
-    core.isUpdated = (!core.isNew) && (oldTherapist != _therapist);
+    super.isUpdated = (!super.isNew) && (oldTherapist != _therapist);
   }
 
   TckTracking? get root => _root;
   void setRoot(TckTracking? pTracking) {
     var oldRoot = _root;
     _root = pTracking;
-    core.isUpdated = (!core.isNew) && (oldRoot != _root);
+    super.isUpdated = (!super.isNew) && (oldRoot != _root);
   }
 
   // CONVERSION TO MAPs ---------------
@@ -190,8 +210,8 @@ class TckTracking extends ModelEntity {
       fldNameKey: _nameKey,
       fldDescKey: _descKey,
       fldVersion: _vers,
-      fldTherapist: _therapist!.serverId,
-      fldRoot: _root!.serverId,
+      fldTherapist: _therapist!.id,
+      fldRoot: _root!.id,
     });
 
   // STATICS --------------------------
@@ -261,8 +281,7 @@ class TckTracking extends ModelEntity {
   // OVERRIDES ------------------------
   @override
   bool isCompleted() {
-    return (isNotNull(super.core.createdBy) &&
-        isNotNull(super.core.createdAt) &&
+    return (super.isCompleted() &&
         isNotNull(_nameKey) &&
         isNotNull(_therapist));
   }

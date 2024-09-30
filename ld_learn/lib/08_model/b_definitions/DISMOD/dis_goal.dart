@@ -24,7 +24,15 @@ class DisGoal extends ModelEntity {
 
   // CONSTRUCTORS ---------------------
   DisGoal(
-      {required super.pCore,
+      {required super.pLocalId,
+      required super.pId,
+      required super.pCreatedBy,
+      required super.pCreatedAt,
+      required super.pUpdatedBy,
+      required super.pUpdatedAt,
+      super.pIsNew,
+      super.pIsUpdated,
+      super.pIsDeleted,
       int? pIdx,
       String? pNameKey,
       String? pName,
@@ -41,7 +49,15 @@ class DisGoal extends ModelEntity {
 
   DisGoal.empty()
       : this(
-            pCore: CoreEntity.empty(),
+            pLocalId: null,
+            pId: null,
+            pCreatedBy: null,
+            pCreatedAt: null,
+            pUpdatedBy: null,
+            pUpdatedAt: null,
+            pIsNew: true,
+            pIsUpdated: false,
+            pIsDeleted: false,
             pNameKey: null,
             pName: null,
             pDescKey: null,
@@ -82,7 +98,7 @@ class DisGoal extends ModelEntity {
                 _phase = await dbs.byKey(pCtrl, DisPhase, pKey: pArgs.first);
 
                 // Carrega createdBy i updatedBy.
-                super.core.completeStandard(pCtrl, pMap);
+                super.completeStandard(pCtrl, pMap);
               } on Exception catch (pExc) {
                 exc = pExc;
               }
@@ -114,7 +130,7 @@ class DisGoal extends ModelEntity {
     }
     var old = _idx;
     _idx = pIdx;
-    core.isUpdated = (!core.isNew) && (old != _idx);
+    super.isUpdated = (!super.isNew) && (old != _idx);
   }
 
   String? get nameKey => _nameKey;
@@ -126,7 +142,7 @@ class DisGoal extends ModelEntity {
     var oldKey = _nameKey;
     _nameKey = pKey;
     _name = pName;
-    core.isUpdated = (!core.isNew) && (oldKey != _nameKey);
+    super.isUpdated = (!super.isNew) && (oldKey != _nameKey);
   }
 
   String? get descKey => _descKey;
@@ -135,7 +151,7 @@ class DisGoal extends ModelEntity {
     var oldKey = _descKey;
     _descKey = pKey;
     _desc = pDesc;
-    core.isUpdated = (!core.isNew) && (oldKey != _descKey);
+    super.isUpdated = (!super.isNew) && (oldKey != _descKey);
   }
 
   DisPhase? get phase => _phase;
@@ -145,7 +161,7 @@ class DisGoal extends ModelEntity {
     }
     var oldPhase = _phase;
     _phase = pPhase;
-    core.isUpdated = (!core.isNew) && (oldPhase != _phase);
+    super.isUpdated = (!super.isNew) && (oldPhase != _phase);
   }
 
   // CONVERSION TO MAPs ---------------
@@ -166,7 +182,7 @@ class DisGoal extends ModelEntity {
       fldIdx: _idx,
       fldNameKey: _nameKey,
       fldDescKey: _descKey,
-      fldDiseasePhase: _phase!.serverId,
+      fldDiseasePhase: _phase!.id,
     });
 
   // STATICS --------------------------
@@ -229,8 +245,7 @@ class DisGoal extends ModelEntity {
   // OVERRIDES ------------------------
   @override
   bool isCompleted() {
-    return (isNotNull(super.core.createdBy) &&
-        isNotNull(super.core.createdAt) &&
+    return (super.isCompleted() &&
         isNotNull(_idx) &&
         isNotNull(_nameKey) &&
         isNotNull(_descKey) &&

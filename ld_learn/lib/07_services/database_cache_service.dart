@@ -21,7 +21,7 @@ class DbCacheService<T extends ModelEntity> {
 
   // CERQUES i SALVAT -----------------
   T? byTypeKey(Type pType, {required dynamic pId, String? pIdB}) {
-    return byKey(ModelEntity.asKey(pType, pId, pIdB));
+    return byKey(ModelEntity.keyByType(pType, pId, pIdB));
   }
 
   T? byKey(String pKey) {
@@ -37,7 +37,7 @@ class DbCacheService<T extends ModelEntity> {
         var ltrans = pInst as LocTranslation;
         sid = "~${ltrans.textKey}|${ltrans.locale.languageCode}~";
       default:
-        sid = "${pInst.core.localId}";
+        sid = "${pInst.localId}";
     }
     instances["$tname:$sid"] = pInst;
   }

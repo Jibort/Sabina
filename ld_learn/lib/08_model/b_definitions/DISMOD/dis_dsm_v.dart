@@ -17,12 +17,26 @@ class DisDsmV extends ModelEntity {
   late String? _icd10;
 
   // CONSTRUCTORS ---------------------
-  DisDsmV({required super.pCore, String? pName, String? pIcd10}) {
+  DisDsmV(
+      {String? pName,
+      String? pIcd10}): super(
+            pLocalId: null,
+            pId: null,
+            pCreatedBy: null,
+            pCreatedAt: null,
+            pUpdatedBy: null,
+            pUpdatedAt: null,
+            pIsNew: true,
+            pIsUpdated: false,
+            pIsDeleted: false) {
     _name = pName;
     _icd10 = pIcd10;
   }
 
-  DisDsmV.empty() : this(pCore: CoreEntity.empty(), pName: null, pIcd10: null);
+  DisDsmV.empty()
+      : this(
+            pName: null,
+            pIcd10: null);
 
   DisDsmV.byMap(Map<String, dynamic> pMap) : super.byMap(pMap) {
     _name = pMap[fldName];
@@ -41,7 +55,7 @@ class DisDsmV extends ModelEntity {
     if (isNull(pName)) throw errorFieldNotNullable("$enDisDsmV.set", fldName);
     var old = _name;
     _name = pName;
-    core.isUpdated = (!core.isNew) && (old != _name);
+    super.isUpdated = (!super.isNew) && (old != _name);
   }
 
   String? get icd10 => _icd10;
@@ -49,7 +63,7 @@ class DisDsmV extends ModelEntity {
     if (isNull(pIcd10)) throw errorFieldNotNullable("$enDisDsmV.set", fldIcd10);
     var old = _icd10;
     _icd10 = pIcd10;
-    core.isUpdated = (!core.isNew) && (old != _icd10);
+    super.isUpdated = (!super.isNew) && (old != _icd10);
   }
 
   // CONVERSION TO MAPs ---------------

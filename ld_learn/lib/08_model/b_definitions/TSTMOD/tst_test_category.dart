@@ -1,5 +1,5 @@
-// Representació d'una entrada en el DsmV.
-// createdAt: 24/08/13 dt. JIQ
+// Fitxer de definició de les categories dels tests.
+// createdAt: 24/09/26 dj. JIQ
 
 // ignore_for_file: unnecessary_getters_setters
 
@@ -8,7 +8,7 @@ import 'package:ld_learn/06_storage/index.dart';
 import 'package:ld_learn/07_services/index.dart';
 import 'package:ld_learn/09_tools/index.dart';
 
-// Representació d'una entrada en el DsmV.
+// Definició de les categories dels tests.
 class TstTestCategory extends ModelEntity {
   static final _version = Version.parse("0.7.2");
   static Version get version => _version;
@@ -22,7 +22,15 @@ class TstTestCategory extends ModelEntity {
 
   // CONSTRUCTORS ---------------------
   TstTestCategory(
-      {required super.pCore,
+      {required super.pLocalId,
+      required super.pId,
+      required super.pCreatedBy,
+      required super.pCreatedAt,
+      required super.pUpdatedBy,
+      required super.pUpdatedAt,
+      super.pIsNew,
+      super.pIsUpdated,
+      super.pIsDeleted,
       String? pTitleKey,
       String? pTitle,
       String? pDescKey,
@@ -37,7 +45,15 @@ class TstTestCategory extends ModelEntity {
 
   TstTestCategory.empty()
       : this(
-            pCore: CoreEntity.empty(),
+            pLocalId: null,
+            pId: null,
+            pCreatedBy: null,
+            pCreatedAt: null,
+            pUpdatedBy: null,
+            pUpdatedAt: null,
+            pIsNew: true,
+            pIsUpdated: false,
+            pIsDeleted: false,
             pTitleKey: null,
             pTitle: null,
             pDescKey: null,
@@ -51,7 +67,8 @@ class TstTestCategory extends ModelEntity {
     _parent = pMap[fldParent];
   }
 
-  TstTestCategory.bySQLMap(BaseController<DeepDo> pCtrl, Map<String, dynamic> pMap)
+  TstTestCategory.bySQLMap(
+      BaseController<DeepDo> pCtrl, Map<String, dynamic> pMap)
       : super.bySQLMap(TstTestCategory, pMap) {
     var dbs = DatabaseService.to;
     Exception? exc;
@@ -63,18 +80,21 @@ class TstTestCategory extends ModelEntity {
         _title = await dbs.trans(pCtrl, pTKey: _titleKey);
 
         // Traduïm el desc key.
-        Future<Exception?> stDesc(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
+        Future<Exception?> stDesc(
+            FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
           try {
             _descKey = pArgs.first;
             _desc = await dbs.trans(pCtrl, pTKey: _descKey);
 
             // Obtenim la categoria pare.
-            Future<Exception?> stParent(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
+            Future<Exception?> stParent(
+                FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
               try {
-                _parent = await dbs.byKey(pCtrl, TstTestCategory, pKey: pArgs.first);
+                _parent =
+                    await dbs.byKey(pCtrl, TstTestCategory, pKey: pArgs.first);
 
                 // Carrega createdBy i updatedBy.
-                super.core.completeStandard(pCtrl, pMap);
+                super.completeStandard(pCtrl, pMap);
               } on Exception catch (pExc) {
                 exc = pExc;
               }
@@ -108,7 +128,7 @@ class TstTestCategory extends ModelEntity {
     var oldKey = _titleKey;
     _titleKey = pKey;
     _title = pTitle;
-    core.isUpdated = (!core.isNew) && (oldKey != _titleKey);
+    super.isUpdated = (!super.isNew) && (oldKey != _titleKey);
   }
 
   String? get descKey => _descKey;
@@ -117,14 +137,14 @@ class TstTestCategory extends ModelEntity {
     var oldKey = _descKey;
     _descKey = pKey;
     _desc = pDesc;
-    core.isUpdated = (!core.isNew) && (oldKey != _descKey);
+    super.isUpdated = (!super.isNew) && (oldKey != _descKey);
   }
 
   TstTestCategory? get parent => _parent;
   void setParent(TstTestCategory? pParent) {
     var oldParent = _parent;
     _parent = pParent;
-    core.isUpdated = (!core.isNew) && (oldParent != _parent);
+    super.isUpdated = (!super.isNew) && (oldParent != _parent);
   }
 
   // CONVERSION TO MAPs ---------------
@@ -143,7 +163,7 @@ class TstTestCategory extends ModelEntity {
     ..addAll({
       fldTitleKey: _titleKey,
       fldDescKey: _descKey,
-      fldParent: _parent?.serverId,
+      fldParent: _parent?.id,
     });
 
   // STATICS --------------------------
@@ -199,8 +219,7 @@ class TstTestCategory extends ModelEntity {
   // OVERRIDES ------------------------
   @override
   bool isCompleted() {
-    return (isNotNull(super.core.createdBy) &&
-        isNotNull(super.core.createdAt) &&
+    return (super.isCompleted() &&
         isNotNull(_titleKey));
   }
 }

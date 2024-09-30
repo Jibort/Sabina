@@ -37,34 +37,55 @@ class UsrDevice extends ModelEntity {
   // MEMBRES --------------------------
   DeviceType _devType = DeviceType.unspecified;
   DeviceState _devState = DeviceState.unspecified;
-  String? __token;
+  String? __desc;
+  String? _token;
   UsrUser? _owner;
 
   // CONSTRUCTORS ---------------------
   UsrDevice(
-      {required super.pCore,
+      {required super.pLocalId,
+      required super.pId,
+      required super.pCreatedBy,
+      required super.pCreatedAt,
+      required super.pUpdatedBy,
+      required super.pUpdatedAt,
+      super.pIsNew,
+      super.pIsUpdated,
+      super.pIsDeleted,
       DeviceType pDevType = DeviceType.unspecified,
       DeviceState pDevState = DeviceState.unspecified,
+      String? pDesc,
       String? pToken,
       UsrUser? pOwner}) {
     _devType = pDevType;
     _devState = pDevState;
-    __token = pToken;
+    _token = pToken;
+    __desc = pDesc;
     _owner = pOwner;
   }
 
   UsrDevice.empty()
       : this(
-            pCore: CoreEntity.empty(),
+            pLocalId: null,
+            pId: null,
+            pCreatedBy: null,
+            pCreatedAt: null,
+            pUpdatedBy: null,
+            pUpdatedAt: null,
+            pIsNew: true,
+            pIsUpdated: false,
+            pIsDeleted: false,
             pDevType: DeviceType.unspecified,
             pDevState: DeviceState.unspecified,
+            pDesc: null,
             pToken: null,
             pOwner: null);
 
   UsrDevice.byMap(Map<String, dynamic> pMap) : super.byMap(pMap) {
     _devType = deviceTypeById(pMap[fldDeviceType]);
     _devState = deviceStateById(pMap[fldDeviceState]);
-    __token = pMap[fldToken];
+    __desc = pMap[fldDesc];
+    _token = pMap[fldToken];
     _owner = pMap[fldOwner];
   }
 
@@ -75,15 +96,17 @@ class UsrDevice extends ModelEntity {
 
     _devType = deviceTypeById(pMap[fldDeviceType]);
     _devState = deviceStateById(pMap[fldDeviceState]);
-    __token = pMap[fldToken];
+    __desc = pMap[fldDesc];
+    _token = pMap[fldToken];
 
     // Carreguem el propietari del dispositiu.
-    Future<Exception?> stepOwner(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
+    Future<Exception?> stepOwner(
+        FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
       try {
         _owner = await dbs.byKey(pCtrl, UsrUser, pKey: pArgs.first);
 
         // Carrega createdBy i updatedBy.
-        super.core.completeStandard(pCtrl, pMap);
+        completeStandard(pCtrl, pMap);
       } on Exception catch (pExc) {
         exc = pExc;
       }
@@ -101,7 +124,7 @@ class UsrDevice extends ModelEntity {
     }
     var old = _devType;
     _devType = dyn2DeviceType(pType);
-    core.isUpdated = (!core.isNew) && (old != _devType);
+    isUpdated = (!isNew) && (old != _devType);
   }
 
   DeviceState? get devState => _devState;
@@ -111,22 +134,34 @@ class UsrDevice extends ModelEntity {
     }
     var old = _devState;
     _devState = dyn2DeviceState(pState);
-    core.isUpdated = (!core.isNew) && (old != _devState);
+    isUpdated = (!isNew) && (old != _devState);
   }
 
-  String? get token => __token;
+  String? get token => _token;
   set token(String? pToken) {
-    var old = __token;
-    __token = pToken;
-    core.isUpdated = (!core.isNew) && (old != __token);
+    if (isNull(pToken)) {
+      throw errorFieldNotNullable("$enUsrDevice.set", fldToken);
+    }
+    var old = _token;
+    _token = pToken;
+    isUpdated = (!isNew) && (old != _token);
+  }
+
+  String? get desc => __desc;
+  void setDesc(String? pDesc) {
+    var old = __desc;
+    __desc = pDesc;
+    super.isUpdated = (!super.isNew) && (old != __desc);
   }
 
   UsrUser? get owner => _owner;
   set owner(UsrUser? pOwner) {
-    if (isNull(pOwner)) throw errorFieldNotNullable("$enUsrDevice.set", fldOwner);
+    if (isNull(pOwner)) {
+      throw errorFieldNotNullable("$enUsrDevice.set", fldOwner);
+    }
     var old = _owner;
     _owner = pOwner;
-    core.isUpdated = (!core.isNew) && (old != _owner);
+    isUpdated = (!isNew) && (old != _owner);
   }
 
   // CONVERSION TO MAPs ---------------
@@ -135,7 +170,8 @@ class UsrDevice extends ModelEntity {
     ..addAll({
       fldDeviceType: _devType,
       fldDeviceState: _devState,
-      fldToken: __token,
+      fldDesc: __desc,
+      fldToken: _token,
       fldOwner: _owner,
     });
 
@@ -144,8 +180,8 @@ class UsrDevice extends ModelEntity {
     ..addAll({
       fldDeviceType: _devType.id,
       fldDeviceState: _devState.id,
-      fldToken: __token,
-      fldOwner: _owner!.core.id,
+      fldToken: _token,
+      fldOwner: _owner!.id,
     });
 
   // STATICS --------------------------
@@ -155,6 +191,7 @@ class UsrDevice extends ModelEntity {
         fldDeviceState,
         fldPermissions,
         fldToken,
+        fldDesc,
         fldOwner,
       ];
 
@@ -164,7 +201,9 @@ class UsrDevice extends ModelEntity {
 
       $fldDeviceType  $dbtIntNotNull,
       $fldDeviceState $dbtIntNotNull,
-      $fldToken       $dbtText UNIQUE,
+      $fldDescKey     $dbtText,
+      $fldToken       $dbtTextNotNull UNIQUE,
+      $fldDesc        $dbtText,
       $fldOwner       $dbtIntNotNull REFERENCES $tnUsrUser($fldId));
   ''';
 
@@ -190,7 +229,7 @@ class UsrDevice extends ModelEntity {
     SELECT $fldIdLocal, $fldId, $fldCreatedBy, $fldCreatedAt, 
            $fldUpdatedBy, $fldUpdatedAt,
 
-           $fldDeviceType, $fldDeviceState, $fldToken, $fldOwner
+           $fldDeviceType, $fldDeviceState, $fldDesc, $fldToken, $fldOwner
     FROM   $tnUsrDevice
     WHERE  $fldId = ?;
   ''';
@@ -204,8 +243,8 @@ class UsrDevice extends ModelEntity {
     INSERT INTO $tnUsrDevice (
       $fldId, $fldCreatedBy, $fldCreatedAt, $fldUpdatedBy, $fldUpdatedAt,
 
-      $fldDeviceType, $fldDeviceState, $fldToken, $fldOwner)
-    VALUES (?, ?, ?, ?, ?,   ?, ?, ?, ?);
+      $fldDeviceType, $fldDeviceState, $fldDesc, $fldToken, $fldOwner)
+    VALUES (?,?,?,?,?,   ?,?,?,?,?s);
   ''';
 
   static String get stmtUpdate => '''
@@ -215,18 +254,18 @@ class UsrDevice extends ModelEntity {
         $fldUpdatedBy = ?,  $fldUpdatedAt = ?,
 
         $fldDeviceType = ?, $fldDeviceState = ?,
-        $fldToken = ?,      $fldOwner = ?
+        $fldDesc = ?,       $fldToken = ?,
+        $fldOwner = ?
     WHERE $fldIdLocal = ?;  
   ''';
 
   // OVERRIDES ------------------------
   @override
   bool isCompleted() {
-    return (isNotNull(super.core.createdBy) &&
-        isNotNull(super.core.createdAt) &&
+    return (super.isCompleted() &&
         isNotNull(_devType) &&
         isNotNull(_devState) &&
-        isNotNull(__token) &&
+        isNotNull(_token) &&
         isNotNull(_owner));
   }
 }
@@ -288,7 +327,8 @@ DeviceType dyn2DeviceType(dynamic pType) {
     case int value:
       return deviceTypeById(value);
     default:
-      throw errorUnknownType("DeviceType.set", fldDeviceType, pType.runtimeType);
+      throw errorUnknownType(
+          "DeviceType.set", fldDeviceType, pType.runtimeType);
   }
 }
 
@@ -330,6 +370,7 @@ DeviceState dyn2DeviceState(dynamic pState) {
     case int value:
       return deviceStateById(value);
     default:
-      throw errorUnknownType("DeviceState.set", fldDeviceState, pState.runtimeType);
+      throw errorUnknownType(
+          "DeviceState.set", fldDeviceState, pState.runtimeType);
   }
 }

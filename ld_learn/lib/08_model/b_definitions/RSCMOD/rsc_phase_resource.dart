@@ -21,14 +21,37 @@ class RscPhaseResource extends ModelEntity {
 
   // CONSTRUCTORS ---------------------
   RscPhaseResource(
-      {required super.pCore, DisDisease? pDisease, DisPhase? pPhase, RscResource? pResource}) {
+      {required super.pLocalId,
+      required super.pId,
+      required super.pCreatedBy,
+      required super.pCreatedAt,
+      required super.pUpdatedBy,
+      required super.pUpdatedAt,
+      super.pIsNew,
+      super.pIsUpdated,
+      super.pIsDeleted,
+      DisDisease? pDisease,
+      DisPhase? pPhase,
+      RscResource? pResource}) {
     _disease = pDisease;
     _phase = pPhase;
     _resource = pResource;
   }
 
   RscPhaseResource.empty()
-      : this(pCore: CoreEntity.empty(), pDisease: null, pPhase: null, pResource: null);
+      : this(
+            pLocalId: null,
+            pId: null,
+            pCreatedBy: null,
+            pCreatedAt: null,
+            pUpdatedBy: null,
+            pUpdatedAt: null,
+            pIsNew: true,
+            pIsUpdated: false,
+            pIsDeleted: false,
+            pDisease: null,
+            pPhase: null,
+            pResource: null);
 
   RscPhaseResource.byMap(Map<String, dynamic> pMap) : super.byMap(pMap) {
     _disease = pMap[fldDisease];
@@ -36,28 +59,33 @@ class RscPhaseResource extends ModelEntity {
     _resource = pMap[fldResource];
   }
 
-  RscPhaseResource.bySQLMap(BaseController<DeepDo> pCtrl, Map<String, dynamic> pMap)
+  RscPhaseResource.bySQLMap(
+      BaseController<DeepDo> pCtrl, Map<String, dynamic> pMap)
       : super.bySQLMap(RscPhaseResource, pMap) {
     var dbs = DatabaseService.to;
     Exception? exc;
 
     // Obtenim la malaltia.
-    Future<Exception?> stDisease(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
+    Future<Exception?> stDisease(
+        FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
       try {
         _disease = await dbs.byKey(pCtrl, DisDisease, pKey: pArgs.first);
 
         // Obtenim la fase.
-        Future<Exception?> stPhase(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
+        Future<Exception?> stPhase(
+            FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
           try {
             _phase = await dbs.byKey(pCtrl, DisPhase, pKey: pArgs.first);
 
             // Obtenim el recurs.
-            Future<Exception?> stResource(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
+            Future<Exception?> stResource(
+                FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
               try {
-                _resource = await dbs.byKey(pCtrl, RscResource, pKey: pArgs.first);
+                _resource =
+                    await dbs.byKey(pCtrl, RscResource, pKey: pArgs.first);
 
                 // Carrega createdBy i updatedBy.
-                super.core.completeStandard(pCtrl, pMap);
+                super.completeStandard(pCtrl, pMap);
               } on Exception catch (pExc) {
                 exc = pExc;
               }
@@ -89,14 +117,14 @@ class RscPhaseResource extends ModelEntity {
     }
     var old = _disease;
     _disease = pDis;
-    core.isUpdated = (!core.isNew) && (old != _disease);
+    super.isUpdated = (!super.isNew) && (old != _disease);
   }
 
   DisPhase? get phase => _phase;
   void setPhase(DisPhase? pPhase) {
     var old = _phase;
     _phase = pPhase;
-    core.isUpdated = (!core.isNew) && (old != _phase);
+    super.isUpdated = (!super.isNew) && (old != _phase);
   }
 
   RscResource? get resource => _resource;
@@ -106,7 +134,7 @@ class RscPhaseResource extends ModelEntity {
     }
     var old = _resource;
     _resource = pResource;
-    core.isUpdated = (!core.isNew) && (old != _resource);
+    super.isUpdated = (!super.isNew) && (old != _resource);
   }
 
   // CONVERSION TO MAPs ---------------
@@ -121,9 +149,9 @@ class RscPhaseResource extends ModelEntity {
   @override
   Map<String, dynamic> toSQLMap() => super.toSQLMap()
     ..addAll({
-      fldDisease: _disease!.serverId,
-      fldDiseasePhase: _phase!.serverId,
-      fldResource: _resource!.serverId,
+      fldDisease: _disease!.id,
+      fldDiseasePhase: _phase!.id,
+      fldResource: _resource!.id,
     });
 
   // STATICS --------------------------
@@ -183,8 +211,7 @@ class RscPhaseResource extends ModelEntity {
   // OVERRIDES ------------------------
   @override
   bool isCompleted() {
-    return (isNotNull(super.core.createdBy) &&
-        isNotNull(super.core.createdAt) &&
+    return (super.isCompleted() &&
         isNotNull(_disease) &&
         isNotNull(_resource));
   }

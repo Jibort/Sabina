@@ -9,17 +9,17 @@ import 'package:ld_learn/08_model/b_definitions/index.dart';
 import 'package:ld_learn/08_model/e_localization/LOCMOD/loc_translation.dart';
 import 'package:ld_learn/09_tools/index.dart';
 
-enum EntityKeyType {
+enum EntityKeyTypeB {
   unknown,
   standard,
   stringA,
   stringAB,
 }
 
-extension MainTableFields on EntityKeyType {
+extension MainTableFields on EntityKeyTypeB {
   List<String> get mainFields {
     switch (this) {
-      case EntityKeyType.standard:
+      case EntityKeyTypeB.standard:
         return <String>[
           fldIdLocal,
           fldId,
@@ -28,7 +28,7 @@ extension MainTableFields on EntityKeyType {
           fldUpdatedBy,
           fldUpdatedAt,
         ];
-      case EntityKeyType.stringA:
+      case EntityKeyTypeB.stringA:
         return <String>[
           fldIdLocal,
           fldId,
@@ -37,7 +37,7 @@ extension MainTableFields on EntityKeyType {
           fldUpdatedBy,
           fldUpdatedAt,
         ];
-      case EntityKeyType.stringAB:
+      case EntityKeyTypeB.stringAB:
         return <String>[
           fldIdLocal,
           fldId,
@@ -48,7 +48,7 @@ extension MainTableFields on EntityKeyType {
           fldUpdatedAt,
         ];
       default:
-        throw errorUnknownEntityKeyType("EntityKeyType.mainFields", this);
+        throw "qweqweqweqweqw·";
     }
   }
 }

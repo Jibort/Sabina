@@ -1,0 +1,18 @@
+// Fitxer de definició proto de les categories dels tests.
+// createdAt: 24/09/26 dj. JIQ
+
+syntax = "proto3";
+
+package proto;
+
+import "usr_user.proto";
+
+option go_package = "./";
+
+// Definició de les catergories de tests.
+message TstTestCategory {
+  BaseEntity               base_entity = 1;
+  string                   title_key = 2;
+  optional string          desc_key = 3;
+  optional TstTestCategory parent = 4;
+}

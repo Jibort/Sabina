@@ -34,7 +34,15 @@ class DgnAchievement extends ModelEntity {
 
   // CONSTRUCTORS ---------------------
   DgnAchievement(
-      {required super.pCore,
+      {required super.pLocalId,
+      required super.pId,
+      required super.pCreatedBy,
+      required super.pCreatedAt,
+      required super.pUpdatedBy,
+      required super.pUpdatedAt,
+      super.pIsNew,
+      super.pIsUpdated,
+      super.pIsDeleted,
       DisGoal? pGoal,
       DgnDiagnosisPhase? pPhase,
       AchievementState pState = AchievementState.unspecified,
@@ -49,7 +57,15 @@ class DgnAchievement extends ModelEntity {
 
   DgnAchievement.empty()
       : this(
-            pCore: CoreEntity.empty(),
+            pLocalId: null,
+            pId: null,
+            pCreatedBy: null,
+            pCreatedAt: null,
+            pUpdatedBy: null,
+            pUpdatedAt: null,
+            pIsNew: true,
+            pIsUpdated: false,
+            pIsDeleted: false,
             pGoal: null,
             pPhase: null,
             pState: AchievementState.unspecified,
@@ -64,7 +80,8 @@ class DgnAchievement extends ModelEntity {
     _annotations = pMap[fldAnnotations];
   }
 
-  DgnAchievement.bySQLMap(BaseController<DeepDo> pCtrl, Map<String, dynamic> pMap)
+  DgnAchievement.bySQLMap(
+      BaseController<DeepDo> pCtrl, Map<String, dynamic> pMap)
       : super.bySQLMap(DgnAchievement, pMap) {
     var dbs = DatabaseService.to;
     Exception? exc;
@@ -78,17 +95,21 @@ class DgnAchievement extends ModelEntity {
         _goal = await dbs.byKey(pCtrl, DisGoal, pKey: pArgs.first);
 
         // Carreguem la fase de la diagnosi on s'assoleix la fita.
-        Future<Exception?> stPhase(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
+        Future<Exception?> stPhase(
+            FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
           try {
-            _phase = await dbs.byKey(pCtrl, DgnDiagnosisPhase, pKey: pArgs.first);
+            _phase =
+                await dbs.byKey(pCtrl, DgnDiagnosisPhase, pKey: pArgs.first);
 
             // Carreguem la fita recaiguda, si existeix.
-            Future<Exception?> stRelapse(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
+            Future<Exception?> stRelapse(
+                FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
               try {
-                _relapse = await dbs.byKey(pCtrl, DgnAchievement, pKey: pArgs.first);
+                _relapse =
+                    await dbs.byKey(pCtrl, DgnAchievement, pKey: pArgs.first);
 
                 // Carrega createdBy i updatedBy.
-                super.core.completeStandard(pCtrl, pMap);
+                super.completeStandard(pCtrl, pMap);
               } on Exception catch (pExc) {
                 exc = pExc;
               }
@@ -120,7 +141,7 @@ class DgnAchievement extends ModelEntity {
     }
     var old = _goal;
     _goal = pGoal;
-    core.isUpdated = (!core.isNew) && (old != _goal);
+    super.isUpdated = (!super.isNew) && (old != _goal);
   }
 
   DgnDiagnosisPhase? get phase => _phase;
@@ -130,28 +151,28 @@ class DgnAchievement extends ModelEntity {
     }
     var old = _phase;
     _phase = pPhase;
-    core.isUpdated = (!core.isNew) && (old != _phase);
+    super.isUpdated = (!super.isNew) && (old != _phase);
   }
 
   DgnAchievement? get relapse => _relapse;
   void setRelapse(DgnAchievement? pRelapse) {
     var old = _relapse;
     _relapse = pRelapse;
-    core.isUpdated = (!core.isNew) && (old != _relapse);
+    super.isUpdated = (!super.isNew) && (old != _relapse);
   }
 
   AchievementState get state => _state;
   void setState(AchievementState pState) {
     var old = _state;
     _state = pState;
-    core.isUpdated = (!core.isNew) && (old != _state);
+    super.isUpdated = (!super.isNew) && (old != _state);
   }
 
   String? get annotations => _annotations;
   void setAnnotation(String? pAnnotations) {
     var old = _annotations;
     _annotations = pAnnotations;
-    core.isUpdated = (!core.isNew) && (old != _annotations);
+    super.isUpdated = (!super.isNew) && (old != _annotations);
   }
 
   // CONVERSION TO MAPs ---------------
@@ -168,9 +189,9 @@ class DgnAchievement extends ModelEntity {
   @override
   Map<String, dynamic> toSQLMap() => super.toSQLMap()
     ..addAll({
-      fldGoal: _goal!.serverId,
-      fldDiagnosisPhase: _phase!.serverId,
-      fldRelapse: _relapse?.serverId,
+      fldGoal: _goal!.id,
+      fldDiagnosisPhase: _phase!.id,
+      fldRelapse: _relapse?.id,
       fldAchievementState: _state.id,
       fldAnnotations: _annotations,
     });
@@ -240,8 +261,7 @@ class DgnAchievement extends ModelEntity {
   // OVERRIDES ------------------------
   @override
   bool isCompleted() {
-    return (isNotNull(super.core.createdBy) &&
-        isNotNull(super.core.createdAt) &&
+    return (super.isCompleted() &&
         isNotNull(_goal) &&
         isNotNull(_phase) &&
         isNotNull(_state));
@@ -298,6 +318,7 @@ AchievementState dyn2AchievementState(dynamic pState) {
     case int value:
       return achievementById(value);
     default:
-      throw errorUnknownType("$enDgnAchievement.set", fldAchievementState, pState.runtimeType);
+      throw errorUnknownType(
+          "$enDgnAchievement.set", fldAchievementState, pState.runtimeType);
   }
 }

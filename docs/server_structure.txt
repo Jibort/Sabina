@@ -1,0 +1,14 @@
+El projecte Sabina conté un subsistema que anomenem 'servidor' que s'encarrega donar servei a l'aplicació multiplataforma (Android i iOS).
+
+El directori del subprojecte neix a l'arrel de Sabina amb la carpeta server, amb la següent estructura:
+
+- sabina/server:
+  - /: fitxers de suport del projecte Golang i funció main (main.go).
+  - /scripts: scripts SQL per a la generació de la base de dades del servidor (MariaDB).
+  - /proto: directori on el compilador de Proto3 genera els fitxers d'adaptació del servidor a gRPC.
+  - /drivers: drivers per a interactuar amb els serveis gRPC definits a /proto.
+  - /base: 
+    - /defs: Definicions pel tipus base d'entitat i tipus auxiliars.
+    - /tools: Eines globals de servei pel codi.
+    - /services: Interfície d'accés als serveis gRPC, MariaDB, seguretat i altres.
+    - /domain: Definició de les entitats del domini Sabina.

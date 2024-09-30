@@ -22,37 +22,49 @@ class LstOptionEntry extends ModelEntity {
   String? _option;
   String? _descKey;
   String? _desc;
-  bool _isAlpha = false;
 
   // CONSTRUCTORS ---------------------
   LstOptionEntry(
-      {required super.pCore,
+      {required super.pLocalId,
+      required super.pId,
+      required super.pCreatedBy,
+      required super.pCreatedAt,
+      required super.pUpdatedBy,
+      required super.pUpdatedAt,
+      super.pIsNew,
+      super.pIsUpdated,
+      super.pIsDeleted,
       LstOptionList? pList,
       int? pIdx,
       String? pOptionKey,
       String? pOption,
       String? pDescKey,
-      String? pDesc,
-      bool pIsAlpha = false}) {
+      String? pDesc}) {
     _list = pList;
     _idx = pIdx;
     _optionKey = pOptionKey;
     _option = pOption;
     _descKey = pDescKey;
     _desc = pDesc;
-    _isAlpha = pIsAlpha;
   }
 
   LstOptionEntry.empty()
       : this(
-            pCore: CoreEntity.empty(),
+            pLocalId: null,
+            pId: null,
+            pCreatedBy: null,
+            pCreatedAt: null,
+            pUpdatedBy: null,
+            pUpdatedAt: null,
+            pIsNew: true,
+            pIsUpdated: false,
+            pIsDeleted: false,
             pList: null,
             pIdx: null,
             pOptionKey: null,
             pOption: null,
             pDescKey: null,
-            pDesc: null,
-            pIsAlpha: false);
+            pDesc: null);
 
   LstOptionEntry.byMap(Map<String, dynamic> pMap) : super.byMap(pMap) {
     _list = pMap[fldList];
@@ -62,36 +74,39 @@ class LstOptionEntry extends ModelEntity {
     _descKey = pMap[fldDescKey];
     _desc = pMap[fldDesc];
     _descKey = pMap[fldDescKey];
-    _isAlpha = pMap[fldIsAlpha];
   }
 
-  LstOptionEntry.bySQLMap(BaseController<DeepDo> pCtrl, Map<String, dynamic> pMap)
+  LstOptionEntry.bySQLMap(
+      BaseController<DeepDo> pCtrl, Map<String, dynamic> pMap)
       : super.bySQLMap(LstOptionEntry, pMap) {
     var dbs = DatabaseService.to;
     Exception? exc;
 
     _idx = pMap[fldIdx];
-    _isAlpha = pMap[fldIsAlpha];
 
     // Traduïm la descripció de l'opció, si existeix.
-    Future<Exception?> stepDesc(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
+    Future<Exception?> stepDesc(
+        FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
       try {
         _descKey = pArgs.first as String?;
         _desc = await dbs.trans(pCtrl, pTKey: _descKey);
 
         // Traduïm l'opció.
-        Future<Exception?> stOption(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
+        Future<Exception?> stOption(
+            FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
           try {
             _optionKey = pArgs.first as String?;
             _option = await dbs.trans(pCtrl, pTKey: _optionKey);
 
             // Carreguem l'opció.
-            Future<Exception?> stList(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
+            Future<Exception?> stList(
+                FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
               try {
-                _list = await dbs.byKey(pCtrl, LstOptionList, pKey: pArgs.first);
+                _list =
+                    await dbs.byKey(pCtrl, LstOptionList, pKey: pArgs.first);
 
                 // Carrega createdBy i updatedBy.
-                super.core.completeStandard(pCtrl, pMap);
+                super.completeStandard(pCtrl, pMap);
               } on Exception catch (pExc) {
                 exc = pExc;
               }
@@ -123,7 +138,7 @@ class LstOptionEntry extends ModelEntity {
     }
     var old = _list;
     _list = pList;
-    core.isUpdated = (!core.isNew) && (old != _list);
+    super.isUpdated = (!super.isNew) && (old != _list);
   }
 
   int? get idx => _idx;
@@ -133,7 +148,7 @@ class LstOptionEntry extends ModelEntity {
     }
     var old = _idx;
     _idx = pIdx;
-    core.isUpdated = (!core.isNew) && (old != _idx);
+    super.isUpdated = (!super.isNew) && (old != _idx);
   }
 
   String? get optionKey => _optionKey;
@@ -145,7 +160,7 @@ class LstOptionEntry extends ModelEntity {
     var old = _optionKey;
     _optionKey = pOptionKey;
     _option = pOption;
-    core.isUpdated = (!core.isNew) && (old != _optionKey);
+    super.isUpdated = (!super.isNew) && (old != _optionKey);
   }
 
   String? get descKey => _descKey;
@@ -157,14 +172,7 @@ class LstOptionEntry extends ModelEntity {
     var old = _descKey;
     _descKey = pDescKey;
     _desc = pDesc;
-    core.isUpdated = (!core.isNew) && (old != _descKey);
-  }
-
-  bool get isAlpha => _isAlpha;
-  void setIsAlpha(bool pIsAlpha) {
-    var old = _isAlpha;
-    _isAlpha = pIsAlpha;
-    core.isUpdated = (!core.isNew) && (old != _isAlpha);
+    super.isUpdated = (!super.isNew) && (old != _descKey);
   }
 
   // CONVERSION TO MAPs ---------------
@@ -176,8 +184,7 @@ class LstOptionEntry extends ModelEntity {
       fldOptionKey: _optionKey,
       fldOption: _option,
       fldDescKey: _descKey,
-      fldDesc: _desc,
-      fldIsAlpha: _isAlpha
+      fldDesc: _desc
     });
 
   @override
@@ -186,13 +193,12 @@ class LstOptionEntry extends ModelEntity {
       fldList: _list,
       fldIdx: _idx,
       fldOptionKey: _optionKey,
-      fldDescKey: _descKey,
-      fldIsAlpha: _isAlpha
+      fldDescKey: _descKey
     });
 
   // STATICS --------------------------
-  static final List<String> tableFields =
-      EntityKeyType.standard.mainFields + [fldList, fldIdx, fldOptionKey, fldDescKey, fldIsAlpha];
+  static final List<String> tableFields = EntityKeyType.standard.mainFields +
+      [fldList, fldIdx, fldOptionKey, fldDescKey, fldIsAlpha];
 
   static String get stmtCreateTable => '''
     CREATE TABLE $tnLstOptionEntry (
@@ -201,8 +207,7 @@ class LstOptionEntry extends ModelEntity {
       $fldList      $dbtIntNotNull REFERENCES $tnLstOptionList, 
       $fldIdx       $dbtIntNotNull DEFAULT 0, 
       $fldOptionKey $dbtTextNotNull, 
-      $fldDescKey   $dbtTextNotNull, 
-      $fldIsAlpha   $dbtBooleanNotNull DEFAULT 0
+      $fldDescKey   $dbtTextNotNull
     );
   ''';
 
@@ -212,8 +217,8 @@ class LstOptionEntry extends ModelEntity {
     SELECT $fldIdLocal, $fldId, $fldCreatedBy, $fldCreatedAt, 
            $fldUpdatedBy, $fldUpdatedAt,
 
-           $fldList, $fldIdx, $fldOptionKey, 
-           $fldDescKey, $fldIsAlpha
+           $fldList, $fldIdx, 
+           $fldOptionKey, $fldDescKey
     FROM   $tnLstOptionEntry
     WHERE  $fldId = ?;
   ''';
@@ -227,9 +232,9 @@ class LstOptionEntry extends ModelEntity {
     INSERT INTO $tnLstOptionEntry (
       $fldId, $fldCreatedBy, $fldCreatedAt, $fldUpdatedBy, $fldUpdatedAt,
 
-      $fldList, $fldIdx, $fldOptionKey, 
-      $fldDescKey, $fldIsAlpha)
-    VALUES (?, ?, ?, ?, ?,   ?, ?, ?,   ?, ?);
+      $fldList, $fldIdx,
+      $fldOptionKey, $fldDescKey)
+    VALUES (?, ?, ?, ?, ?,   ?, ?,   ?, ?);
   ''';
 
   static String get stmtUpdate => '''
@@ -241,16 +246,14 @@ class LstOptionEntry extends ModelEntity {
         $fldList = ?,
         $fldIdx = ?,
         $fldOptionKey = ?,
-        $fldDescKey = ?,
-        $fldIsAlpha = ?
+        $fldDescKey = ?
     WHERE $fldIdLocal = ?;  
   ''';
 
   // OVERRIDES ------------------------
   @override
   bool isCompleted() {
-    return (isNotNull(super.core.createdBy) &&
-        isNotNull(super.core.createdAt) &&
+    return (super.isCompleted() &&
         isNotNull(_list) &&
         isNotNull(_idx) &&
         isNotNull(_optionKey) &&

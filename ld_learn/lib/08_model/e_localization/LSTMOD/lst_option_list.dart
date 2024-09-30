@@ -1,4 +1,4 @@
-// Representació d'una entrada en el DsmV.
+// Representació d'una llista d'opcions.
 // createdAt: 24/08/13 dt. JIQ
 
 // ignore_for_file: unnecessary_getters_setters
@@ -25,7 +25,15 @@ class LstOptionList extends ModelEntity {
 
   // CONSTRUCTORS ---------------------
   LstOptionList(
-      {required super.pCore,
+      {required super.pLocalId,
+      required super.pId,
+      required super.pCreatedBy,
+      required super.pCreatedAt,
+      required super.pUpdatedBy,
+      required super.pUpdatedAt,
+      super.pIsNew,
+      super.pIsUpdated,
+      super.pIsDeleted,
       String? pNameKey,
       String? pName,
       String? pDescKey,
@@ -42,7 +50,16 @@ class LstOptionList extends ModelEntity {
 
   LstOptionList.empty()
       : this(
-            pCore: CoreEntity.empty(),
+            
+            pLocalId: null,
+            pId: null,
+            pCreatedBy: null,
+            pCreatedAt: null,
+            pUpdatedBy: null,
+            pUpdatedAt: null,
+            pIsNew: true,
+            pIsUpdated: false,
+            pIsDeleted: false,
             pNameKey: null,
             pName: null,
             pDescKey: null,
@@ -84,7 +101,7 @@ class LstOptionList extends ModelEntity {
                 _category = await dbs.byKey(pCtrl, LstListCategory, pKey: pArgs.first);
 
                 // Carrega createdBy i updatedBy.
-                super.core.completeStandard(pCtrl, pMap);
+                super.completeStandard(pCtrl, pMap);
               } on Exception catch (pExc) {
                 exc = pExc;
               }
@@ -118,7 +135,7 @@ class LstOptionList extends ModelEntity {
     var old = _nameKey;
     _nameKey = pNameKey;
     _name = pName;
-    core.isUpdated = (!core.isNew) && (old != _nameKey);
+    super.isUpdated = (!super.isNew) && (old != _nameKey);
   }
 
   String? get descKey => _descKey;
@@ -130,7 +147,7 @@ class LstOptionList extends ModelEntity {
     var old = _descKey;
     _descKey = pDescKey;
     _desc = pDesc;
-    core.isUpdated = (!core.isNew) && (old != _descKey);
+    super.isUpdated = (!super.isNew) && (old != _descKey);
   }
 
   LstListCategory? get category => _category;
@@ -140,14 +157,14 @@ class LstOptionList extends ModelEntity {
     }
     var old = _category;
     _category = pCategory;
-    core.isUpdated = (!core.isNew) && (old != _category);
+    super.isUpdated = (!super.isNew) && (old != _category);
   }
 
   bool get isAlpha => _isAlpha;
   void setIsAlpha(bool pIsAlpha) {
     var old = _isAlpha;
     _isAlpha = pIsAlpha;
-    core.isUpdated = (!core.isNew) && (old != _isAlpha);
+    super.isUpdated = (!super.isNew) && (old != _isAlpha);
   }
 
   // CONVERSION TO MAPs ---------------
@@ -167,7 +184,7 @@ class LstOptionList extends ModelEntity {
     ..addAll({
       fldNameKey: _nameKey,
       fldDescKey: _descKey,
-      fldListCategory: _category!.serverId,
+      fldListCategory: _category!.id,
       fldIsAlpha: (_isAlpha ? 1 : 0),
     });
 
@@ -234,8 +251,7 @@ class LstOptionList extends ModelEntity {
   // OVERRIDES ------------------------
   @override
   bool isCompleted() {
-    return (isNotNull(super.core.createdBy) &&
-        isNotNull(super.core.createdAt) &&
+    return (super.isCompleted() &&
         isNotNull(_nameKey));
   }
 }

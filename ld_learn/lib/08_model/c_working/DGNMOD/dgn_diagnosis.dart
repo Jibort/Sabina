@@ -32,7 +32,15 @@ class DgnDiagnosis extends ModelEntity {
 
   // CONSTRUCTORS ---------------------
   DgnDiagnosis(
-      {required super.pCore,
+      {required super.pLocalId,
+      required super.pId,
+      required super.pCreatedBy,
+      required super.pCreatedAt,
+      required super.pUpdatedBy,
+      required super.pUpdatedAt,
+      super.pIsNew,
+      super.pIsUpdated,
+      super.pIsDeleted,
       DisDisease? pDisease,
       UsrUser? pTherapist,
       DiagnosisState pState = DiagnosisState.unspecified,
@@ -45,7 +53,16 @@ class DgnDiagnosis extends ModelEntity {
 
   DgnDiagnosis.empty()
       : this(
-            pCore: CoreEntity.empty(),
+            
+            pLocalId: null,
+            pId: null,
+            pCreatedBy: null,
+            pCreatedAt: null,
+            pUpdatedBy: null,
+            pUpdatedAt: null,
+            pIsNew: true,
+            pIsUpdated: false,
+            pIsDeleted: false,
             pDisease: null,
             pTherapist: null,
             pState: DiagnosisState.unspecified,
@@ -77,7 +94,7 @@ class DgnDiagnosis extends ModelEntity {
             _therapist = await dbs.byKey(pCtrl, UsrUser, pKey: pArgs.first);
 
             // Carrega createdBy i updatedBy.
-            super.core.completeStandard(pCtrl, pMap);
+            super.completeStandard(pCtrl, pMap);
           } on Exception catch (pExc) {
             exc = pExc;
           }
@@ -102,7 +119,7 @@ class DgnDiagnosis extends ModelEntity {
     }
     var old = _disease;
     _disease = pDisease;
-    core.isUpdated = (!core.isNew) && (old != _disease);
+    super.isUpdated = (!super.isNew) && (old != _disease);
   }
 
   UsrUser? get therapist => _therapist;
@@ -112,7 +129,7 @@ class DgnDiagnosis extends ModelEntity {
     }
     var old = _therapist;
     _therapist = pTherapist;
-    core.isUpdated = (!core.isNew) && (old != _therapist);
+    super.isUpdated = (!super.isNew) && (old != _therapist);
   }
 
   DiagnosisState get state => _state;
@@ -122,14 +139,14 @@ class DgnDiagnosis extends ModelEntity {
     }
     var old = _state;
     _state = pState;
-    core.isUpdated = (!core.isNew) && (old != _state);
+    super.isUpdated = (!super.isNew) && (old != _state);
   }
 
   String? get annotations => _annotations;
   void setAnnotation(String? pAnnotations) {
     var old = _annotations;
     _annotations = pAnnotations;
-    core.isUpdated = (!core.isNew) && (old != _annotations);
+    super.isUpdated = (!super.isNew) && (old != _annotations);
   }
 
   // CONVERSION TO MAPs ---------------
@@ -145,8 +162,8 @@ class DgnDiagnosis extends ModelEntity {
   @override
   Map<String, dynamic> toSQLMap() => super.toSQLMap()
     ..addAll({
-      fldDisease: _disease!.serverId,
-      fldTherapist: _therapist!.serverId,
+      fldDisease: _disease!.id,
+      fldTherapist: _therapist!.id,
       fldDiagnosisState: _state.id,
       fldAnnotations: _annotations,
     });
@@ -211,8 +228,7 @@ class DgnDiagnosis extends ModelEntity {
   // OVERRIDES ------------------------
   @override
   bool isCompleted() {
-    return (isNotNull(super.core.createdBy) &&
-        isNotNull(super.core.createdAt) &&
+    return (super.isCompleted() &&
         isNotNull(_disease) &&
         isNotNull(_therapist) &&
         isNotNull(_state));

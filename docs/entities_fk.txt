@@ -1,0 +1,175 @@
+Projecte Sabina
+---------------
+
+Aquest fitxer conté una definició natural de totes les entitats identificades dins el fitxer models_entities.txt i identifica les claus foranes que les relacionen. 
+
+Les propietats de les entitats amb un nom que comença amb un símbol '_' són propietats obligatòries.
+Les propietats de les entitats que comencen amb un símbol '__' són propietats opcionals.
+
+Si nó s'especifica el contrari, totes les entitats disposen de les propietats _createdBy i _updatedBy que són referències a la mateixa entitat User.
+La propietat _createdBy identifica l'usuari a partir del qual s'ha creat la instància de l'entitat.
+La propietat __updatedBy identifica l'usuari a partir del qual s'ha produit l'última modificació. És una propietat nul·lable que només s'informe quan es modifica una instància prèviament creada.
+
+1. Entitat 'User': 
+    1.1. Aquesta entitat emmagatzema tots els usuaris del projecte (siguin root, administrador, pacient o terapeuta).
+    1.2. Foreign Keys:
+        1.2.1.  _device: Relaciona l'usuari amb l'últim dispositiu on ha executat l'aplicació Flutter.
+        1.2.2.  __therapist: Relaciona una instància d'usuari pacient amb la instància d'usuari del terapeuta responsable del seu tractament.
+
+2. Entitat 'Device':
+    2.1. Aquesta entitat emmagatzema els dispositius on els usuaris han executat l'aplicació Flutter.
+    2.2. Foreign Keys:
+        2.2.1. _owner: Identifica l'usuari a qui pertany el dispositiu.
+
+3. Entitat 'FcmHistory':
+    3.1. Aquesta entitat emmagatzema tots els identificadors token de Firebase que s'han assignat a cada dispositiu.
+    3.2. Foreign Keys:
+        3.3.1. _device: Identifica el dispositiu al qual està associat el Token Firebase.
+
+4. Entitat 'Dsm-V':
+    4.1. Aquesta entitat emmagatzema les dades estàtiques de la relació de malalties mentals que es descriuen al llibre 'DSM V'.
+    4.2. Sense Foreign Keys.
+
+5. Entitat 'Disease':
+    5.1. Aquesta entitat conté les malalties mentals segons les necessitats de cada terapeuta.
+    5.2. Foreign Keys:
+        5.2.1. _dsm_v: Identifica a quina definició estàndard del 'DSM V' es relaciona la patologia de la instància.
+        5.2.2. _therapist: Identifica al terapeuta que ha creat aquesta definició específica de les malalties de 'DSM V'.
+
+6. Entitat 'Phase':
+    6.1. Aquesta entitat defineix les fases del tractament d'una malaltia específica.
+    6.2. Foreign Keys:
+        6.2.1. _disease: Identifica la patologia associada a la fase.
+
+7. Entitat 'Goal':
+    7.1. Aquesta entitat defineix els objectius a complir per a donar per finalitzada una fase del tractament.
+    7.2. Foreign Keys:
+        7.2.1. _phase: Identifica a quina fase de malaltia s'associa l'objectiu.
+
+8. Entitat 'Resource':
+    8.1. Aquesta entitat és responsable de mantenir el repositori dels recursos auxiliars que poden oferir-se als pacients, segons l'estat del seu tractament.
+    8.2. Foreign Keys:
+        8.2.1. __root: Les instàncies de cada resource fa referència a la primera versió del recurs. En la primera versió aquesta propietat és nul.
+
+9. Entitat 'Phase Resource':
+    9.1. Aquesta entitat estableix la relació que existeix entre un recurs i la fase del tractament on s'associa per defecte.
+    9.2. Foreign Keys:
+        9.2.1. _disease: Identifica la patologia per a la qual el recurs s'associa per defecte.
+        9.2.2. __phase: Identifica, si s'escau, la fase de la malaltia per a la qual el recurs s'associa per defecte.
+        9.2.3. _resource: Identifica el recurs associat amb les malalties i les seves fases.
+
+10. Entitat 'Tracking':
+    10.1. Aquesta entitat emmagatzema els models de taula de seguiment a disposició dels pacient.
+    10.2. Foreign Keys:
+        10.2.1. _therapist: Identificador de l'usuari terapeuta que crea la taula de seguiment.
+        10.2.2. __root: Identifica la primera versió de la taula de seguiment, si s'escau.
+
+11. Entitat 'Tracking Column':
+    11.1. Aquesta entitat defineix les columnes de cada model de taula se seguiment.
+    11.2. Foreign Keys:
+        11.2.1. _tracking: Identifica la taula de seguiment on pertany la definició de la columna.
+        11.2.2. __list: En cas que el tipus de columna demani escollir entre els elements d'una llista, aquesta propietat identifica a aquesta llista.
+
+12. Entitat 'Phase Tracking':
+    12.1. Aquesta entitat estableix la relació per defecte entre la taula de seguiment i la definició d'una malaltia o una fase de malaltia.
+    12.2. Foreign Keys:
+        12.2.1. _disease: Identifica la definició de malaltia a la que es relaciona per defecte la taula de seguiment.
+        12.2.2. __phase: Identifica, si s'escau, la fase de la malaltia a la que es relaciona per defeecte la tala de seguiment.
+        12.2.3. _tracking: Identifica la taula  de seguiment per a la qual s'estableix la relació.
+
+13. Entitat 'Test Category':
+    13.1. Aquesta entitat estableix un arbre de categories on associar els test que es defineixin dins el projecte.
+    13.2. Foreign Keys
+        13.2.1. __parent: Identifica la categoria pare on pertany la categoria definida, si existeix.
+
+14. Entitat 'Test':
+    14.1. Aquesta entitat emmagatzema els tests creats per terapeutes disponibles en el projecte Sabina.
+    14.2. Foreign Keys:
+        14.2.1. _category: Categoria on pertany el test.
+        14.2.2. __root: Identifica la primera versió del test, si s'escau.
+        14.2.3. _therapist: Terapeuta que crea aquesta versió del test.
+
+15. Entitat 'Question':
+    15.1. Aquesta entitat defineix les preguntes que conformen un test.
+    15.2. Foreign Keys:
+        15.2.1. _test: Test on pertany la pregunta.
+        15.2.2. _block: Identifica en quina pregunta de tipus bloc es troba la pregunta.
+
+16. Entitat 'Mood':
+    16.1. Aquesta entitat estableix els estats d'ànim disponibles per a respondre tests o trackings dins el projecte.
+    16.2. Sense Foreign Keys.
+
+17. Entitat 'Emotion': 
+    17.1. Aquesta entitat representa l'arbre d'emocions disponibles per a respondre tests o trackings dins el projecte.
+    17.2. Foreign Keys:
+        17.2.1. __parent: Identifica l'emoció pare on pertany l'emoció, si s'escau.
+
+18. Entitat 'Diagnosis':
+    18.1. Aquesta entitat emmagatzema els diagnòstics identificats pels terapeutes sobre els seus pacients.
+    18.2. Foreing Keys:
+        18.2.1. _disease: Identifica la malaltia associada al diagnòstic.
+        18.2.2. _current_phase: Identifica la fase del tractament on es troba el diagnòstic.
+        18.2.3. _therapist: Terapeuta que estableix el diagnòstic.
+        18.2.4. _patient: Pacient al qual diagnostiquen la patologia.
+
+19. Entitat 'Phase Diagnosis':
+    19.1. Aquesta entitat registre l'històric de fases per on travessa el tractament de les malalties dels pacients.
+    19.2. Foreign Keys:
+        19.2.1. _diagnosis: Identifica el diagnòstic a la qual s'associa la definició d'una fase de malaltia.
+        19.2.2. _phase: Identifica la fase de la definició de la malaltia que representa la fase del diagnòstic.
+        19.2.3. _visit: Identifica la visita on s'estableix la fase del diagnòstic.
+        19.2.4. _relapse: En cas de recaiguda, identifica en quina fase del diagnòstic ha succeït la recaiguda.
+
+20. Entitat 'Achievement':
+    20.1. Aquesta entitat registra els objectius assolits pel pacient segons la definició dels objectius per a cada definició de malaltia.
+    20.2. Foreign Keys:
+        20.2.1. _goal: Objectiu que ha estat assolit.
+        20.2.2. _diagnosis_phase: Identifica la fase del diagnòstic on s'assoleix l'objectiu.
+        20.2.3. __relapse: Identifica, quan existeix una recaiguda, quin objectiu assolit s'ha perdut.
+
+21. Entitat 'Material':
+    21.1. Aquesta entitat registra aquells recursos assignats a cada pacient.
+    21.2. Foreign Keys:
+        21.2.1. _patient: Pacient a qui s'assigna el recurs.
+        21.2.2. _resource: Identifica el recurs assignat al pacient.
+
+22. Entitat 'Phase Material':
+    22.1. Aquesta entitat la relació entre la fase del recurs, el pacient i el material.
+    22.2. Foreign Keys:
+        22.2.1. _patient: Identifica el pacient al qual assignem el recurs.
+        22.2.2. _phase_resource: Referencia al recurs de la fase de la patologia on s'associa el material.
+
+23. Entitat 'Register':
+    Pendent de completar.
+
+24. Entitat 'Register Column'
+    Pendent de completar.
+
+25. Entitat 'Patient Test'
+    Pendent de completar.
+
+26. Entitat 'Answer'
+    Pendent de completar.
+
+27. Entitat 'Task'.
+    Pendent de completar.
+
+28. Entitat 'Visit'
+    Pendent de completar.
+
+29. Entitat 'Notification'
+    Pendent de completar.
+
+30. Entitat 'List Category'
+    Pendent de completar.
+
+31. Entitat 'Option List'
+    Pendent de completar.
+
+32. Entitat 'Option Entry'
+    Pendent de completar.
+
+33. Entitat 'Translation'
+    Pendent de completar.
+
+    

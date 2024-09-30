@@ -11,7 +11,7 @@ import 'package:ld_learn/08_model/b_definitions/index.dart';
 import 'package:ld_learn/09_tools/index.dart';
 
 // Representació d'una entrada en el DsmV.
-class MatPhaseMaterial extends ModelEntity {
+class MatMaterialPhase extends ModelEntity {
   static final _version = Version.parse("0.7.2");
   static Version get version => _version;
 
@@ -20,35 +20,62 @@ class MatPhaseMaterial extends ModelEntity {
   RscPhaseResource? _phase;
 
   // CONSTRUCTORS ---------------------
-  MatPhaseMaterial({required super.pCore, UsrUser? pPatient, RscPhaseResource? pPhase}) {
+  MatMaterialPhase(
+      {required super.pLocalId,
+      required super.pId,
+      required super.pCreatedBy,
+      required super.pCreatedAt,
+      required super.pUpdatedBy,
+      required super.pUpdatedAt,
+      super.pIsNew,
+      super.pIsUpdated,
+      super.pIsDeleted,
+      UsrUser? pPatient,
+      RscPhaseResource? pPhase}) {
     _patient = pPatient;
     _phase = pPhase;
   }
 
-  MatPhaseMaterial.empty() : this(pCore: CoreEntity.empty(), pPatient: null, pPhase: null);
+  MatMaterialPhase.empty()
+      : this(
+            pLocalId: null,
+            pId: null,
+            pCreatedBy: null,
+            pCreatedAt: null,
+            pUpdatedBy: null,
+            pUpdatedAt: null,
+            pIsNew: true,
+            pIsUpdated: false,
+            pIsDeleted: false,
+            pPatient: null,
+            pPhase: null);
 
-  MatPhaseMaterial.byMap(Map<String, dynamic> pMap) : super.byMap(pMap) {
+  MatMaterialPhase.byMap(Map<String, dynamic> pMap) : super.byMap(pMap) {
     _patient = pMap[fldPatient];
     _phase = pMap[fldPhaseResource];
   }
 
-  MatPhaseMaterial.bySQLMap(BaseController<DeepDo> pCtrl, Map<String, dynamic> pMap)
-      : super.bySQLMap(MatPhaseMaterial, pMap) {
+  MatMaterialPhase.bySQLMap(
+      BaseController<DeepDo> pCtrl, Map<String, dynamic> pMap)
+      : super.bySQLMap(MatMaterialPhase, pMap) {
     var dbs = DatabaseService.to;
     Exception? exc;
 
     // Càrrega del pacient.
-    Future<Exception?> stPatient(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
+    Future<Exception?> stPatient(
+        FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
       try {
         _patient = await dbs.byKey(pCtrl, UsrUser, pKey: pArgs.first);
 
         // Càrrega del recurs de la fase.
-        Future<Exception?> stPhase(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
+        Future<Exception?> stPhase(
+            FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
           try {
-            _phase = await dbs.byKey(pCtrl, RscPhaseResource, pKey: pArgs.first);
+            _phase =
+                await dbs.byKey(pCtrl, RscPhaseResource, pKey: pArgs.first);
 
             // Carrega createdBy i updatedBy.
-            super.core.completeStandard(pCtrl, pMap);
+            super.completeStandard(pCtrl, pMap);
           } on Exception catch (pExc) {
             exc = pExc;
           }
@@ -73,7 +100,7 @@ class MatPhaseMaterial extends ModelEntity {
     }
     var old = _patient;
     _patient = pPatient;
-    core.isUpdated = (!core.isNew) && (old != _patient);
+    super.isUpdated = (!super.isNew) && (old != _patient);
   }
 
   RscPhaseResource? get phase => _phase;
@@ -83,7 +110,7 @@ class MatPhaseMaterial extends ModelEntity {
     }
     var old = _phase;
     _phase = pPhase;
-    core.isUpdated = (!core.isNew) && (old != _phase);
+    super.isUpdated = (!super.isNew) && (old != _phase);
   }
 
   // CONVERSION TO MAPs ---------------
@@ -97,8 +124,8 @@ class MatPhaseMaterial extends ModelEntity {
   @override
   Map<String, dynamic> toSQLMap() => super.toSQLMap()
     ..addAll({
-      fldPatient: _patient!.serverId,
-      fldPhaseResource: _phase!.serverId,
+      fldPatient: _patient!.id,
+      fldPhaseResource: _phase!.id,
     });
 
   // STATICS --------------------------
@@ -156,8 +183,7 @@ class MatPhaseMaterial extends ModelEntity {
   // OVERRIDES ------------------------
   @override
   bool isCompleted() {
-    return (isNotNull(super.core.createdBy) &&
-        isNotNull(super.core.createdAt) &&
+    return (super.isCompleted() &&
         isNotNull(_patient) &&
         isNotNull(_phase));
   }

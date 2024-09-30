@@ -22,7 +22,15 @@ class EmoMood extends ModelEntity {
 
   // CONSTRUCTORS ---------------------
   EmoMood(
-      {required super.pCore,
+      {required super.pLocalId,
+      required super.pId,
+      required super.pCreatedBy,
+      required super.pCreatedAt,
+      required super.pUpdatedBy,
+      required super.pUpdatedAt,
+      super.pIsNew,
+      super.pIsUpdated,
+      super.pIsDeleted,
       String? pNameKey,
       String? pName,
       String? pDescKey,
@@ -37,7 +45,15 @@ class EmoMood extends ModelEntity {
 
   EmoMood.empty()
       : this(
-            pCore: CoreEntity.empty(),
+            pLocalId: null,
+            pId: null,
+            pCreatedBy: null,
+            pCreatedAt: null,
+            pUpdatedBy: null,
+            pUpdatedAt: null,
+            pIsNew: true,
+            pIsUpdated: false,
+            pIsDeleted: false,
             pNameKey: null,
             pName: null,
             pDescKey: null,
@@ -72,7 +88,7 @@ class EmoMood extends ModelEntity {
             _desc = await dbs.trans(pCtrl, pTKey: _descKey);
 
             // Carrega createdBy i updatedBy.
-            super.core.completeStandard(pCtrl, pMap);
+            super.completeStandard(pCtrl, pMap);
           } on Exception catch (pExc) {
             exc = pExc;
           }
@@ -95,21 +111,21 @@ class EmoMood extends ModelEntity {
     if (isNull(pName)) throw errorFieldNotNullable("$enEmoMood.set", fldName);
     var old = _name;
     _name = pName;
-    core.isUpdated = (!core.isNew) && (old != _name);
+    super.isUpdated = (!super.isNew) && (old != _name);
   }
 
   String? get description => _desc;
   set description(String? pDesc) {
     var old = _desc;
     _desc = pDesc;
-    core.isUpdated = (!core.isNew) && (old != _desc);
+    super.isUpdated = (!super.isNew) && (old != _desc);
   }
 
   int? get value => _value;
   set value(int? pValue) {
     var old = _value;
     _value = pValue;
-    core.isUpdated = (!core.isNew) && (old != _value);
+    super.isUpdated = (!super.isNew) && (old != _value);
   }
 
   // CONVERSION TO MAPs ---------------
@@ -144,7 +160,7 @@ class EmoMood extends ModelEntity {
       $standardHeader,
 
       $fldNameKey $dbtTextNotNull,
-      $fldDescKey $dbtTextNotNull,
+      $fldDescKey $dbtText,
       $fldValue   $dbtIntNotNull DEFAULT 0);
   ''';
 
@@ -186,8 +202,7 @@ class EmoMood extends ModelEntity {
   // OVERRIDES ------------------------
   @override
   bool isCompleted() {
-    return (isNotNull(super.core.createdBy) &&
-        isNotNull(super.core.createdAt) &&
+    return (super.isCompleted() &&
         isNotNull(_nameKey) &&
         isNotNull(_value));
   }

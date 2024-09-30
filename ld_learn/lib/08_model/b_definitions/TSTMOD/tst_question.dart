@@ -29,17 +29,25 @@ class TstQuestion extends ModelEntity {
   // MEMBRES --------------------------
   TstTest? _test;
   QuestionType _type = QuestionType.unspecified;
-  TstQuestion? _block;
+  TstQuestion? __block;
   String? _questionKey;
   String? _question;
-  String? _helpKey;
-  String? _help;
-  bool _mandatory = false;
+  String? __helpKey;
+  String? __help;
+  bool _mandatory = true;
   bool _custom = false;
 
   // CONSTRUCTORS ---------------------
   TstQuestion(
-      {required super.pCore,
+      {required super.pLocalId,
+      required super.pId,
+      required super.pCreatedBy,
+      required super.pCreatedAt,
+      required super.pUpdatedBy,
+      required super.pUpdatedAt,
+      super.pIsNew,
+      super.pIsUpdated,
+      super.pIsDeleted,
       TstTest? pTest,
       QuestionType pType = QuestionType.unspecified,
       TstQuestion? pBlock,
@@ -51,18 +59,26 @@ class TstQuestion extends ModelEntity {
       bool pCustom = false}) {
     _test = pTest;
     _type = pType;
-    _block = pBlock;
+    __block = pBlock;
     _questionKey = pQuestionKey;
     _question = pQuestion;
-    _helpKey = pHelpKey;
-    _help = pHelp;
+    __helpKey = pHelpKey;
+    __help = pHelp;
     _mandatory = pMandatory;
     _custom = pCustom;
   }
 
   TstQuestion.empty()
       : this(
-          pCore: CoreEntity.empty(),
+            pLocalId: null,
+            pId: null,
+            pCreatedBy: null,
+            pCreatedAt: null,
+            pUpdatedBy: null,
+            pUpdatedAt: null,
+            pIsNew: true,
+            pIsUpdated: false,
+            pIsDeleted: false,
           pTest: null,
           pType: QuestionType.unspecified,
           pBlock: null,
@@ -77,11 +93,11 @@ class TstQuestion extends ModelEntity {
   TstQuestion.byMap(Map<String, dynamic> pMap) : super.byMap(pMap) {
     _test = pMap[fldTest];
     _type = pMap[fldQuestionType];
-    _block = pMap[fldBlock];
+    __block = pMap[fldBlock];
     _questionKey = pMap[fldQuestionKey];
     _question = pMap[fldQuestion];
-    _helpKey = pMap[fldHelpKey];
-    _help = pMap[fldHelp];
+    __helpKey = pMap[fldHelpKey];
+    __help = pMap[fldHelp];
     _mandatory = pMap[fldMandatory];
     _custom = pMap[fldCustom];
   }
@@ -103,8 +119,8 @@ class TstQuestion extends ModelEntity {
         // Traduïm el help key.
         Future<Exception?> stHelp(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
           try {
-            _helpKey = pArgs.first;
-            _help = await dbs.trans(pCtrl, pTKey: _helpKey);
+            __helpKey = pArgs.first;
+            __help = await dbs.trans(pCtrl, pTKey: __helpKey);
 
             // Carreguem el test.
             Future<Exception?> stTest(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
@@ -114,10 +130,10 @@ class TstQuestion extends ModelEntity {
                 // Carreguem el question block.
                 Future<Exception?> stBlock(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
                   try {
-                    _block = await dbs.byKey(pCtrl, TstQuestion, pKey: pArgs.first);
+                    __block = await dbs.byKey(pCtrl, TstQuestion, pKey: pArgs.first);
 
                     // Carrega createdBy i updatedBy.
-                    super.core.completeStandard(pCtrl, pMap);
+                    super.completeStandard(pCtrl, pMap);
                   } on Exception catch (pExc) {
                     exc = pExc;
                   }
@@ -156,7 +172,7 @@ class TstQuestion extends ModelEntity {
     }
     var old = _test;
     _test = pTest;
-    core.isUpdated = (!core.isNew) && (old != _test);
+    super.isUpdated = (!super.isNew) && (old != _test);
   }
 
   QuestionType get type => _type;
@@ -166,14 +182,14 @@ class TstQuestion extends ModelEntity {
     }
     var old = _type;
     _type = pType;
-    core.isUpdated = (!core.isNew) && (old != _type);
+    super.isUpdated = (!super.isNew) && (old != _type);
   }
 
-  TstQuestion? get block => _block;
+  TstQuestion? get block => __block;
   void setBlock(TstQuestion? pBlock) {
-    var old = _block;
-    _block = pBlock;
-    core.isUpdated = (!core.isNew) && (old != _block);
+    var old = __block;
+    __block = pBlock;
+    super.isUpdated = (!super.isNew) && (old != __block);
   }
 
   String? get questionKey => _questionKey;
@@ -185,30 +201,30 @@ class TstQuestion extends ModelEntity {
     var old = _questionKey;
     _questionKey = pQuestionKey;
     _question = pQuestion;
-    core.isUpdated = (!core.isNew) && (old != _questionKey);
+    super.isUpdated = (!super.isNew) && (old != _questionKey);
   }
 
-  String? get helpKey => _helpKey;
-  String? get help => _help;
+  String? get helpKey => __helpKey;
+  String? get help => __help;
   void setHelp(String? pHelpKey, String? pHelp) {
-    var old = _helpKey;
-    _helpKey = pHelpKey;
-    _help = pHelp;
-    core.isUpdated = (!core.isNew) && (old != _helpKey);
+    var old = __helpKey;
+    __helpKey = pHelpKey;
+    __help = pHelp;
+    super.isUpdated = (!super.isNew) && (old != __helpKey);
   }
 
   bool get mandatory => _mandatory;
   void setMandatory(bool pMandatory) {
     var old = _mandatory;
     _mandatory = pMandatory;
-    core.isUpdated = (!core.isNew) && (old != _mandatory);
+    super.isUpdated = (!super.isNew) && (old != _mandatory);
   }
 
   bool get custom => _custom;
   void setCustom(bool pCustom) {
     var old = _custom;
     _custom = pCustom;
-    core.isUpdated = (!core.isNew) && (old != _custom);
+    super.isUpdated = (!super.isNew) && (old != _custom);
   }
 
   // CONVERSION TO MAPs ---------------
@@ -217,11 +233,11 @@ class TstQuestion extends ModelEntity {
     ..addAll({
       fldTest: _test,
       fldQuestionType: _type,
-      fldBlock: _block,
+      fldBlock: __block,
       fldQuestionKey: _questionKey,
       fldQuestion: _question,
-      fldHelpKey: _helpKey,
-      fldHelp: _help,
+      fldHelpKey: __helpKey,
+      fldHelp: __help,
       fldMandatory: _mandatory,
       fldCustom: _custom,
     });
@@ -229,11 +245,11 @@ class TstQuestion extends ModelEntity {
   @override
   Map<String, dynamic> toSQLMap() => super.toSQLMap()
     ..addAll({
-      fldTest: _test!.serverId,
+      fldTest: _test!.id,
       fldQuestionType: _type.id,
-      fldBlock: _block?.serverId,
+      fldBlock: __block?.id,
       fldQuestionKey: _questionKey,
-      fldHelpKey: _helpKey,
+      fldHelpKey: __helpKey,
       fldMandatory: _mandatory ? 1 : 0,
       fldCustom: _custom ? 1 : 0,
     });
@@ -259,7 +275,7 @@ class TstQuestion extends ModelEntity {
       $fldBlock        $dbtInt REFERENCES $tnTstTest($fldId),
       $fldQuestionKey  $dbtTextNotNull,
       $fldHelpKey      $dbtText,
-      $fldMandatory    $dbtBooleanNotNull DEFAULT FALSE,
+      $fldMandatory    $dbtBooleanNotNull DEFAULT TRUE,
       $fldCustom       $dbtBooleanNotNull DEFAULT FALSE
       );
   ''';
@@ -309,8 +325,7 @@ class TstQuestion extends ModelEntity {
   // OVERRIDES ------------------------
   @override
   bool isCompleted() {
-    return (isNotNull(super.core.createdBy) &&
-        isNotNull(super.core.createdAt) &&
+    return (super.isCompleted() &&
         isNotNull(_test) &&
         isNotNull(questionKey) &&
         isNotNull(question));

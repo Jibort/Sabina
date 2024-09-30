@@ -1,0 +1,24 @@
+// Fitxer de definició proto d'un test d'avaluació.
+// createdAt: 24/09/26 dj. JIQ
+
+syntax = "proto3";
+
+package proto;
+
+import "loc_entities.proto";
+import "tst_category.proto";
+import "usr_user.proto";
+
+option go_package = "./";
+
+// Definició d'un test d'avaluació.
+message TstTest {
+  BaseEntity       base_entity = 1;
+  TstTestCategory  category = 2;
+  string           name_key = 3;
+  optional string  desc_key = 4;
+  optional string  instr_key = 5;
+  int32            version = 6;
+  optional TstTest root = 7;
+  UsrUser          therapist = 8;
+}

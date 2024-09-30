@@ -40,7 +40,15 @@ class RscResource extends ModelEntity {
 
   // CONSTRUCTORS ---------------------
   RscResource(
-      {required super.pCore,
+      {required super.pLocalId,
+      required super.pId,
+      required super.pCreatedBy,
+      required super.pCreatedAt,
+      required super.pUpdatedBy,
+      required super.pUpdatedAt,
+      super.pIsNew,
+      super.pIsUpdated,
+      super.pIsDeleted,
       String? pNameKey,
       String? pName,
       String? pDescKey,
@@ -65,7 +73,15 @@ class RscResource extends ModelEntity {
 
   RscResource.empty()
       : this(
-            pCore: CoreEntity.empty(),
+            pLocalId: null,
+            pId: null,
+            pCreatedBy: null,
+            pCreatedAt: null,
+            pUpdatedBy: null,
+            pUpdatedAt: null,
+            pIsNew: true,
+            pIsUpdated: false,
+            pIsDeleted: false,
             pNameKey: null,
             pName: null,
             pDescKey: null,
@@ -109,17 +125,19 @@ class RscResource extends ModelEntity {
         _name = await dbs.trans(pCtrl, pTKey: pArgs.first);
 
         // Traduïm el desc key.
-        Future<Exception?> stDesc(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
+        Future<Exception?> stDesc(
+            FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
           try {
             _desc = await dbs.trans(pCtrl, pTKey: pArgs.first);
 
             // Obtenim el recurs arrel.
-            Future<Exception?> stRoot(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
+            Future<Exception?> stRoot(
+                FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
               try {
                 _root = await dbs.byKey(pCtrl, RscResource, pKey: pArgs.first);
 
                 // Carrega createdBy i updatedBy.
-                super.core.completeStandard(pCtrl, pMap);
+                super.completeStandard(pCtrl, pMap);
               } on Exception catch (pExc) {
                 exc = pExc;
               }
@@ -153,7 +171,7 @@ class RscResource extends ModelEntity {
     var oldKey = _nameKey;
     _nameKey = pKey;
     _name = pName;
-    core.isUpdated = (!core.isNew) && (oldKey != _nameKey);
+    super.isUpdated = (!super.isNew) && (oldKey != _nameKey);
   }
 
   String? get descKey => _descKey;
@@ -162,14 +180,14 @@ class RscResource extends ModelEntity {
     var oldKey = _descKey;
     _descKey = pKey;
     _desc = pDesc;
-    core.isUpdated = (!core.isNew) && (oldKey != _descKey);
+    super.isUpdated = (!super.isNew) && (oldKey != _descKey);
   }
 
   int get vers => _vers;
   void setVers(int pVers) {
     var oldVers = _vers;
     _vers = pVers;
-    core.isUpdated = (!core.isNew) && (oldVers != _vers);
+    super.isUpdated = (!super.isNew) && (oldVers != _vers);
   }
 
   RscResource? get root => _root;
@@ -179,7 +197,7 @@ class RscResource extends ModelEntity {
     }
     var oldDisease = _root;
     _root = pRoot;
-    core.isUpdated = (!core.isNew) && (oldDisease != _root);
+    super.isUpdated = (!super.isNew) && (oldDisease != _root);
   }
 
   Locale get locale => _locale;
@@ -189,7 +207,7 @@ class RscResource extends ModelEntity {
     }
     var oldLocale = _locale;
     _locale = pLocale;
-    core.isUpdated = (!core.isNew) && (oldLocale != _locale);
+    super.isUpdated = (!super.isNew) && (oldLocale != _locale);
   }
 
   ResourceType get type => _type;
@@ -206,23 +224,24 @@ class RscResource extends ModelEntity {
         _type = resourceTypeById(value);
         break;
       default:
-        throw errorUnknownType("$enRscResource.set", fldResourceType, pType.runtimeType);
+        throw errorUnknownType(
+            "$enRscResource.set", fldResourceType, pType.runtimeType);
     }
-    core.isUpdated = (!core.isNew) && (oldType != _type);
+    super.isUpdated = (!super.isNew) && (oldType != _type);
   }
 
   String? get inlineText => _inlineText;
   void setInlineText(String? pText) {
     var oldText = _inlineText;
     _inlineText = pText;
-    core.isUpdated = (!core.isNew) && (oldText != _inlineText);
+    super.isUpdated = (!super.isNew) && (oldText != _inlineText);
   }
 
   String? get link => _link;
   void setLink(String? pLink) {
     var oldLink = _link;
     _link = pLink;
-    core.isUpdated = (!core.isNew) && (oldLink != _link);
+    super.isUpdated = (!super.isNew) && (oldLink != _link);
   }
 
   // CONVERSION TO MAPs ---------------
@@ -247,7 +266,7 @@ class RscResource extends ModelEntity {
       fldNameKey: _nameKey,
       fldDescKey: _descKey,
       fldVersion: _vers,
-      fldRoot: _root?.serverId,
+      fldRoot: _root?.id,
       fldLocaleCode: _locale.languageCode,
       fldResourceType: _type.id,
       fldInlineText: _inlineText,
@@ -328,8 +347,7 @@ class RscResource extends ModelEntity {
   // OVERRIDES ------------------------
   @override
   bool isCompleted() {
-    return (isNotNull(super.core.createdBy) &&
-        isNotNull(super.core.createdAt) &&
+    return (super.isCompleted() &&
         isNotNull(_nameKey) &&
         isNotNull(_type));
   }
@@ -383,6 +401,7 @@ ResourceType dyn2ResourceType(dynamic pType) {
     case int value:
       return resourceTypeById(value);
     default:
-      throw errorUnknownType("$enRscResource.set", fldResourceType, pType.runtimeType);
+      throw errorUnknownType(
+          "$enRscResource.set", fldResourceType, pType.runtimeType);
   }
 }

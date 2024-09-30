@@ -39,7 +39,15 @@ class TckTrackingColumn extends ModelEntity {
 
   // CONSTRUCTORS ---------------------
   TckTrackingColumn(
-      {required super.pCore,
+      {required super.pLocalId,
+      required super.pId,
+      required super.pCreatedBy,
+      required super.pCreatedAt,
+      required super.pUpdatedBy,
+      required super.pUpdatedAt,
+      super.pIsNew,
+      super.pIsUpdated,
+      super.pIsDeleted,
       TckTracking? pTracking,
       LstOptionList? pList,
       String? pTitleKey,
@@ -57,7 +65,15 @@ class TckTrackingColumn extends ModelEntity {
 
   TckTrackingColumn.empty()
       : this(
-            pCore: CoreEntity.empty(),
+            pLocalId: null,
+            pId: null,
+            pCreatedBy: null,
+            pCreatedAt: null,
+            pUpdatedBy: null,
+            pUpdatedAt: null,
+            pIsNew: true,
+            pIsUpdated: false,
+            pIsDeleted: false,
             pTracking: null,
             pList: null,
             pTitleKey: null,
@@ -102,7 +118,7 @@ class TckTrackingColumn extends ModelEntity {
                 _list = await dbs.byKey(pCtrl, LstOptionList, pKey: pArgs.first);
 
                 // Carrega createdBy i updatedBy.
-                super.core.completeStandard(pCtrl, pMap);
+                super.completeStandard(pCtrl, pMap);
               } on Exception catch (pExc) {
                 exc = pExc;
               }
@@ -134,14 +150,14 @@ class TckTrackingColumn extends ModelEntity {
     }
     var old = _tracking;
     _tracking = pTracking;
-    core.isUpdated = (!core.isNew) && (old != _tracking);
+    super.isUpdated = (!super.isNew) && (old != _tracking);
   }
 
   LstOptionList? get list => _list;
   void setList(LstOptionList? pList) {
     var old = _list;
     _list = pList;
-    core.isUpdated = (!core.isNew) && (old != _list);
+    super.isUpdated = (!super.isNew) && (old != _list);
   }
 
   String? get titleKey => _titleKey;
@@ -153,14 +169,14 @@ class TckTrackingColumn extends ModelEntity {
     var oldKey = _titleKey;
     _titleKey = pKey;
     _title = pTitle;
-    core.isUpdated = (!core.isNew) && (oldKey != _titleKey);
+    super.isUpdated = (!super.isNew) && (oldKey != _titleKey);
   }
 
   TrackingColumnType get type => _type;
   void setType(TrackingColumnType pType) {
     var old = _type;
     _type = pType;
-    core.isUpdated = (!core.isNew) && (old != _type);
+    super.isUpdated = (!super.isNew) && (old != _type);
   }
 
   bool get isMandatory => _mandatory;
@@ -185,8 +201,8 @@ class TckTrackingColumn extends ModelEntity {
   @override
   Map<String, dynamic> toSQLMap() => super.toSQLMap()
     ..addAll({
-      fldTracking: _tracking!.serverId,
-      fldList: _list?.serverId,
+      fldTracking: _tracking!.id,
+      fldList: _list?.id,
       fldTitleKey: _titleKey,
       fldTrackingColumnType: _type.id,
       fldMandatory: _mandatory,
@@ -261,8 +277,7 @@ class TckTrackingColumn extends ModelEntity {
   // OVERRIDES ------------------------
   @override
   bool isCompleted() {
-    return (isNotNull(super.core.createdBy) &&
-        isNotNull(super.core.createdAt) &&
+    return (super.isCompleted() &&
         isNotNull(_tracking) &&
         isNotNull(_titleKey) &&
         isNotNull(_type));

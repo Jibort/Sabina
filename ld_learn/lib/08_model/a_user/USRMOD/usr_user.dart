@@ -54,7 +54,15 @@ class UsrUser extends ModelEntity {
 
   // CONSTRUCTORS ---------------------
   UsrUser(
-      {required super.pCore,
+      {required super.pLocalId,
+      required super.pId,
+      required super.pCreatedBy,
+      required super.pCreatedAt,
+      required super.pUpdatedBy,
+      required super.pUpdatedAt,
+      super.pIsNew,
+      super.pIsUpdated,
+      super.pIsDeleted,
       UserType pUsrType = UserType.unspecified,
       UserState pUsrState = UserState.unspecified,
       Uint64? pPermissions,
@@ -81,8 +89,16 @@ class UsrUser extends ModelEntity {
 
   UsrUser.empty()
       : this(
-          pCore: CoreEntity.empty(),
-          pUsrType: UserType.unspecified,
+            pLocalId: null,
+            pId: null,
+            pCreatedBy: null,
+            pCreatedAt: null,
+            pUpdatedBy: null,
+            pUpdatedAt: null,
+            pIsNew: true,
+            pIsUpdated: false,
+            pIsDeleted: false,
+            pUsrType: UserType.unspecified,
           pUsrState: UserState.unspecified,
           pPermissions: 0 as Uint64?,
           pAlias: null,
@@ -135,7 +151,7 @@ class UsrUser extends ModelEntity {
             __device = await dbs.byKey(pCtrl, UsrDevice, pKey: pArgs.first);
 
             // Carrega createdBy i updatedBy.
-            super.core.completeStandard(pCtrl, pMap);
+            super.completeStandard(pCtrl, pMap);
           } on Exception catch (pExc) {
             exc = pExc;
           }
@@ -160,7 +176,7 @@ class UsrUser extends ModelEntity {
     }
     var old = _usrType;
     _usrType = dyn2UserType(pType);
-    core.isUpdated = !core.isNew && old != _usrType;
+    isUpdated = !isNew && old != _usrType;
   }
 
   UserState get usrState => _usrState;
@@ -170,14 +186,14 @@ class UsrUser extends ModelEntity {
     }
     var old = _usrState;
     _usrState = dyn2UserState(pState);
-    core.isUpdated = (!core.isNew) && (old != _usrState);
+    isUpdated = (!isNew) && (old != _usrState);
   }
 
   Uint64 get permissions => _permissions;
   set permissions(Uint64 pPermissions) {
     var old = _permissions;
     _permissions = pPermissions;
-    core.isUpdated = (!core.isNew) && (old != _permissions);
+    isUpdated = (!isNew) && (old != _permissions);
   }
 
   String? get alias => _alias;
@@ -187,14 +203,14 @@ class UsrUser extends ModelEntity {
     }
     var old = _alias;
     _alias = pAlias;
-    core.isUpdated = (!core.isNew) && (old != _alias);
+    isUpdated = (!isNew) && (old != _alias);
   }
 
   Uint8List? get certificate => __certificate;
   set certificate(Uint8List? pCertificate) {
     var old = __certificate;
     __certificate = pCertificate;
-    core.isUpdated = (!core.isNew) && (old != __certificate);
+    isUpdated = (!isNew) && (old != __certificate);
   }
 
   DateTime? get birthDate => __birthDate;
@@ -210,14 +226,14 @@ class UsrUser extends ModelEntity {
       default:
         throw 'Invalid UsrUser.birthDate.${pBirthDate.runtimeType}';
     }
-    core.isUpdated = (!core.isNew) && (old != __birthDate);
+    isUpdated = (!isNew) && (old != __birthDate);
   }
 
   Uint64? get firstConnKey => __firstConnKey;
   set firstConnKey(Uint64? pFirstConnKey) {
     var old = __firstConnKey;
     __firstConnKey = pFirstConnKey;
-    core.isUpdated = (!core.isNew) && (old != __firstConnKey);
+    isUpdated = (!isNew) && (old != __firstConnKey);
   }
 
   DateTime? get firstConnAt => __firstConnAt;
@@ -234,21 +250,21 @@ class UsrUser extends ModelEntity {
       default:
         throw 'Invalid UsrUser.firstConnAt.${pFirstConnAt.runtimeType}';
     }
-    core.isUpdated = (!core.isNew) && (old != __firstConnAt);
+    isUpdated = (!isNew) && (old != __firstConnAt);
   }
 
   UsrDevice? get device => __device;
   set device(UsrDevice? pDevice) {
     var old = __device;
     __device = pDevice;
-    core.isUpdated = (!core.isNew) && (old != __device);
+    isUpdated = (!isNew) && (old != __device);
   }
 
   UsrUser? get therapist => __therapist;
   set therapist(UsrUser? pTherapist) {
     var old = __therapist;
     __therapist = pTherapist;
-    core.isUpdated = (!core.isNew) && (old != __therapist);
+    isUpdated = (!isNew) && (old != __therapist);
   }
 
   Locale get locale => _locale;
@@ -268,7 +284,7 @@ class UsrUser extends ModelEntity {
       default:
         throw 'Invalid UsrUser.locale.${pLocale.runtimeType}';
     }
-    core.isUpdated = (!core.isNew) && (old != _locale);
+    isUpdated = (!isNew) && (old != _locale);
   }
 
   // CONVERSION TO MAPs ---------------
@@ -298,8 +314,8 @@ class UsrUser extends ModelEntity {
       fldBirthDate: dTimeToSql(__birthDate),
       fldFirstConnKey: __firstConnKey,
       fldFirstConnAt: __firstConnAt,
-      fldDevice: __device?.serverId,
-      fldTherapist: __therapist?.serverId,
+      fldDevice: __device?.id,
+      fldTherapist: __therapist?.id,
       fldLocaleCode: _locale.languageCode,
     });
 
@@ -383,8 +399,8 @@ class UsrUser extends ModelEntity {
   // OVERRIDES ------------------------
   @override
   bool isCompleted() {
-    return (isNotNull(super.core.createdBy) &&
-        isNotNull(super.core.createdAt) &&
+    return (isNotNull(super.createdBy) &&
+        isNotNull(super.createdAt) &&
         isNotNull(_usrType) &&
         isNotNull(_usrState) &&
         isNotNull(_alias));

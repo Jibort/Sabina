@@ -19,35 +19,61 @@ class TckPhaseTracking extends ModelEntity {
   TckTracking? _tracking;
 
   // CONSTRUCTORS ---------------------
-  TckPhaseTracking({required super.pCore, DisPhase? pPhase, TckTracking? pTracking}) {
+  TckPhaseTracking(
+      {required super.pLocalId,
+      required super.pId,
+      required super.pCreatedBy,
+      required super.pCreatedAt,
+      required super.pUpdatedBy,
+      required super.pUpdatedAt,
+      super.pIsNew,
+      super.pIsUpdated,
+      super.pIsDeleted,
+      DisPhase? pPhase,
+      TckTracking? pTracking}) {
     _phase = pPhase;
     _tracking = pTracking;
   }
 
-  TckPhaseTracking.empty() : this(pCore: CoreEntity.empty(), pPhase: null, pTracking: null);
+  TckPhaseTracking.empty()
+      : this(
+            pLocalId: null,
+            pId: null,
+            pCreatedBy: null,
+            pCreatedAt: null,
+            pUpdatedBy: null,
+            pUpdatedAt: null,
+            pIsNew: true,
+            pIsUpdated: false,
+            pIsDeleted: false,
+            pPhase: null,
+            pTracking: null);
 
   TckPhaseTracking.byMap(Map<String, dynamic> pMap) : super.byMap(pMap) {
     _phase = pMap[fldDiseasePhase];
     _tracking = pMap[fldTracking];
   }
 
-  TckPhaseTracking.bySQLMap(BaseController<DeepDo> pCtrl, Map<String, dynamic> pMap)
+  TckPhaseTracking.bySQLMap(
+      BaseController<DeepDo> pCtrl, Map<String, dynamic> pMap)
       : super.bySQLMap(TckPhaseTracking, pMap) {
     var dbs = DatabaseService.to;
     Exception? exc;
 
     // Obtenim el tracking.
-    Future<Exception?> stTracking(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
+    Future<Exception?> stTracking(
+        FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
       try {
         _tracking = await dbs.byKey(pCtrl, TckTracking, pKey: pArgs.first);
 
         // Obtenim la fase de la malaltia.
-        Future<Exception?> stPhase(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
+        Future<Exception?> stPhase(
+            FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
           try {
             _phase = await dbs.byKey(pCtrl, DisPhase, pKey: pArgs.first);
 
             // Carrega createdBy i updatedBy.
-            super.core.completeStandard(pCtrl, pMap);
+            super.completeStandard(pCtrl, pMap);
           } on Exception catch (pExc) {
             exc = pExc;
           }
@@ -72,7 +98,7 @@ class TckPhaseTracking extends ModelEntity {
     }
     var old = _phase;
     _phase = pPhase;
-    core.isUpdated = (!core.isNew) && (old != _phase);
+    super.isUpdated = (!super.isNew) && (old != _phase);
   }
 
   TckTracking? get tracking => _tracking;
@@ -82,7 +108,7 @@ class TckPhaseTracking extends ModelEntity {
     }
     var old = _tracking;
     _tracking = pTracking;
-    core.isUpdated = (!core.isNew) && (old != _tracking);
+    super.isUpdated = (!super.isNew) && (old != _tracking);
   }
 
   // CONVERSION TO MAPs ---------------
@@ -96,8 +122,8 @@ class TckPhaseTracking extends ModelEntity {
   @override
   Map<String, dynamic> toSQLMap() => super.toSQLMap()
     ..addAll({
-      fldDiseasePhase: _phase!.serverId,
-      fldTracking: _tracking!.serverId,
+      fldDiseasePhase: _phase!.id,
+      fldTracking: _tracking!.id,
     });
 
   // STATICS --------------------------
@@ -154,8 +180,7 @@ class TckPhaseTracking extends ModelEntity {
   // OVERRIDES ------------------------
   @override
   bool isCompleted() {
-    return (isNotNull(super.core.createdBy) &&
-        isNotNull(super.core.createdAt) &&
+    return (super.isCompleted() &&
         isNotNull(_tracking) &&
         isNotNull(_phase));
   }

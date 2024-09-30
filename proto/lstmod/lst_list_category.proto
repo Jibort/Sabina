@@ -1,0 +1,16 @@
+// Fitxer de definició proto pels serveis del mòdul LSTMOD.
+syntax = "proto3";
+
+package proto;
+
+import "usr_entities.proto";
+
+option go_package = "./";
+
+// Categoria de llistes
+message LstListCategory {
+  BaseEntity               base_entity = 1;
+  string                   name_key = 2;
+  optional string          desc_key = 3;
+  optional LstListCategory parent = 4;
+}

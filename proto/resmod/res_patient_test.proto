@@ -1,0 +1,26 @@
+// Fitxer de definició proto per a les entitats del Mòdul RESMOD.
+syntax = "proto3";
+
+package proto;
+
+import "emo_entities.proto";
+import "lst_entities.proto";
+import "timestamp.proto";
+import "tst_entities.proto";
+import "usr_entities.proto";
+
+option go_package = "./";
+
+// Registre de compliment del test. 
+message ResPatientTest {
+  BaseEntity         base_entity = 1;
+  TstTest            test = 2;
+  UsrUser            therapist = 3;
+  UsrUser            patient = 4;
+  Timestamp          assigned_at = 5;
+  optional Timestamp completed_at = 6;
+  optional UsrUser   evaluated_by = 7;
+  optional Timestamp evaluated_at = 8;
+  optional string    evaluation = 9;
+}
+

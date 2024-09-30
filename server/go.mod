@@ -10,7 +10,10 @@ require (
 	google.golang.org/protobuf v1.30.0
 )
 
-require gorm.io/driver/mysql v1.4.7 // indirect
+require (
+	github.com/766b/go-outliner v0.0.0-20180511142203-fc6edecdadd7 // indirect
+	gorm.io/driver/mysql v1.4.7 // indirect
+)
 
 require (
 	github.com/golang/protobuf v1.5.3 // indirect

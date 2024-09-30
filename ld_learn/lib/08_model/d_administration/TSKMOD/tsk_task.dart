@@ -48,7 +48,15 @@ class TskTask extends ModelEntity {
 
   // CONSTRUCTORS ---------------------
   TskTask({
-    required super.pCore,
+    required super.pLocalId,
+    required super.pId,
+    required super.pCreatedBy,
+    required super.pCreatedAt,
+    required super.pUpdatedBy,
+    required super.pUpdatedAt,
+    super.pIsNew,
+    super.pIsUpdated,
+    super.pIsDeleted,
     UsrUser? pTherapist,
     UsrUser? pPatient,
     TaskType pTaskType = TaskType.unspecified,
@@ -76,7 +84,15 @@ class TskTask extends ModelEntity {
 
   TskTask.empty()
       : this(
-          pCore: CoreEntity.empty(),
+          pLocalId: null,
+            pId: null,
+            pCreatedBy: null,
+            pCreatedAt: null,
+            pUpdatedBy: null,
+            pUpdatedAt: null,
+            pIsNew: true,
+            pIsUpdated: false,
+            pIsDeleted: false,
           pTherapist: null,
           pPatient: null,
           pTaskType: TaskType.unspecified,
@@ -121,40 +137,47 @@ class TskTask extends ModelEntity {
         _desc = await dbs.trans(pCtrl, pTKey: _descKey);
 
         // Carreguem el terapeuta.
-        Future<Exception?> stTherapist(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
+        Future<Exception?> stTherapist(
+            FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
           try {
             _patient = await dbs.byKey(pCtrl, UsrUser, pKey: pArgs.first);
 
             // Carreguem el pacient.
-            Future<Exception?> stPatient(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
+            Future<Exception?> stPatient(
+                FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
               try {
                 _patient = await dbs.byKey(pCtrl, UsrUser, pKey: pArgs.first);
 
                 // Carreguem el test.
-                Future<Exception?> stTest(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
+                Future<Exception?> stTest(
+                    FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
                   try {
                     _test = await dbs.byKey(pCtrl, TstTest, pKey: pArgs.first);
 
                     // Carreguem el registre, si existeix.
-                    Future<Exception?> stRegister(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
+                    Future<Exception?> stRegister(
+                        FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
                       try {
-                        _resource = await dbs.byKey(pCtrl, RscResource, pKey: pArgs.first);
+                        _resource = await dbs.byKey(pCtrl, RscResource,
+                            pKey: pArgs.first);
 
                         // Carreguem el resource, si existeix.
                         Future<Exception?> stResource(
                             FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
                           try {
-                            _resource = await dbs.byKey(pCtrl, RscResource, pKey: pArgs.first);
+                            _resource = await dbs.byKey(pCtrl, RscResource,
+                                pKey: pArgs.first);
 
                             // Carrega createdBy i updatedBy.
-                            super.core.completeStandard(pCtrl, pMap);
+                            super.completeStandard(pCtrl, pMap);
                           } on Exception catch (pExc) {
                             exc = pExc;
                           }
                           return exc;
                         }
 
-                        pCtrl.state.sneakFn(stResource, pArgs: [pMap[fldResource]]);
+                        pCtrl.state
+                            .sneakFn(stResource, pArgs: [pMap[fldResource]]);
                       } on Exception catch (pExc) {
                         exc = pExc;
                       }
@@ -200,7 +223,7 @@ class TskTask extends ModelEntity {
     }
     var old = _therapist;
     _therapist = pTherapist;
-    core.isUpdated = (!core.isNew) && (old != _therapist);
+    super.isUpdated = (!super.isNew) && (old != _therapist);
   }
 
   UsrUser? get patient => _patient;
@@ -210,21 +233,21 @@ class TskTask extends ModelEntity {
     }
     var old = _patient;
     _patient = pPatient;
-    core.isUpdated = (!core.isNew) && (old != _patient);
+    super.isUpdated = (!super.isNew) && (old != _patient);
   }
 
   TaskType get taskType => _type;
   set taskType(TaskType pType) {
     var old = _type;
     _type = pType;
-    core.isUpdated = (!core.isNew) && (old != _type);
+    super.isUpdated = (!super.isNew) && (old != _type);
   }
 
   TaskState get taskState => _state;
   set taskState(TaskState pState) {
     var old = _state;
     _state = pState;
-    core.isUpdated = (!core.isNew) && (old != _state);
+    super.isUpdated = (!super.isNew) && (old != _state);
   }
 
   String? get descKey => _descKey;
@@ -236,7 +259,7 @@ class TskTask extends ModelEntity {
     var oldKey = _descKey;
     _descKey = pKey;
     _desc = pDesc;
-    core.isUpdated = (!core.isNew) && (oldKey != _descKey);
+    super.isUpdated = (!super.isNew) && (oldKey != _descKey);
   }
 
   TstTest? get test => _test;
@@ -246,35 +269,35 @@ class TskTask extends ModelEntity {
     }
     var old = _test;
     _test = pTest;
-    core.isUpdated = (!core.isNew) && (old != _test);
+    super.isUpdated = (!super.isNew) && (old != _test);
   }
 
   RegRegister? get register => _register;
   void setRegister(RegRegister? pRegister) {
     var old = _register;
     _register = pRegister;
-    core.isUpdated = (!core.isNew) && (old != _register);
+    super.isUpdated = (!super.isNew) && (old != _register);
   }
 
   RscResource? get resource => _resource;
   void setResource(RscResource? pResource) {
     var old = _resource;
     _resource = pResource;
-    core.isUpdated = (!core.isNew) && (old != _resource);
+    super.isUpdated = (!super.isNew) && (old != _resource);
   }
 
   DateTime? get startDate => _startDate;
   void setStartDate(DateTime? pStartDate) {
     var old = _startDate;
     _startDate = pStartDate;
-    core.isUpdated = (!core.isNew) && (old != _startDate);
+    super.isUpdated = (!super.isNew) && (old != _startDate);
   }
 
   DateTime? get endDate => _endDate;
   void setEndDate(DateTime? pEndDate) {
     var old = _endDate;
     _endDate = pEndDate;
-    core.isUpdated = (!core.isNew) && (old != _endDate);
+    super.isUpdated = (!super.isNew) && (old != _endDate);
   }
 
   // CONVERSION TO MAPs ---------------
@@ -297,14 +320,14 @@ class TskTask extends ModelEntity {
   @override
   Map<String, dynamic> toSQLMap() => super.toSQLMap()
     ..addAll({
-      fldTherapist: _therapist!.serverId,
-      fldPatient: _patient!.serverId,
+      fldTherapist: _therapist!.id,
+      fldPatient: _patient!.id,
       fldTaskType: _type.id,
       fldTaskState: _state.id,
       fldDescKey: _descKey,
-      fldTest: _test?.serverId,
-      fldRegister: _register?.serverId,
-      fldResource: _resource?.serverId,
+      fldTest: _test?.id,
+      fldRegister: _register?.id,
+      fldResource: _resource?.id,
       fldStartDate: dTimeToSql(_startDate),
       fldEndDate: dTimeToSql(_endDate),
     });
@@ -398,8 +421,7 @@ class TskTask extends ModelEntity {
   // OVERRIDES ------------------------
   @override
   bool isCompleted() {
-    return (isNotNull(super.core.createdBy) &&
-        isNotNull(super.core.createdAt) &&
+    return (super.isCompleted() &&
         isNotNull(_therapist) &&
         isNotNull(_patient) &&
         isNotNull(_type) &&
