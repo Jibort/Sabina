@@ -3,13 +3,14 @@ syntax = "proto3";
 
 package proto;
 
-import "usr_entities.proto";
+import "model_entity.proto";
+import "lstmod/lst_option_list.proto";
 
 option go_package = "./";
 
 // Definició dels elements de les llistes d'opcions.
 message LstOptionEntry {
-  BaseEntity      base_entity = 1;
+  ModelEntity      base_entity = 1;
   LstOptionList   list = 2;
   int32           index = 3;
   string          option_key = 4;

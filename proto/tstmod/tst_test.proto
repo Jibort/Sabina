@@ -5,15 +5,15 @@ syntax = "proto3";
 
 package proto;
 
-import "loc_entities.proto";
-import "tst_category.proto";
-import "usr_user.proto";
+import "model_entity.proto";
+import "tstmod/tst_test_category.proto";
+import "usrmod/usr_user.proto";
 
 option go_package = "./";
 
 // Definició d'un test d'avaluació.
 message TstTest {
-  BaseEntity       base_entity = 1;
+  ModelEntity       base_entity = 1;
   TstTestCategory  category = 2;
   string           name_key = 3;
   optional string  desc_key = 4;

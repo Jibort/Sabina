@@ -1,0 +1,14 @@
+// Fitxer de definició proto per a les entitats del Mòdul DISMOD.
+syntax = "proto3";
+
+package proto;
+
+option go_package = "./";
+
+// Codis de les patologies segons el DSM-V.
+message DisDsmV {
+  int32  id = 1;
+  string name = 2;
+  string icd10 = 3;
+}
+

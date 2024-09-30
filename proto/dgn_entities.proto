@@ -12,7 +12,7 @@ option go_package = "./";
 
 // Definició del diagnosis per a un pacient.
 message DgnDiagnosis {
-  a_user.usrmod.BaseEntity           base_entity = 1;
+  a_user.usrmod.ModelEntity           base_entity = 1;
   b_definitions.dismod.DisDisease    disease = 2;
   a_user.usrmod.UsrUser              therapist = 3;
   c_working.dgnmod.DgnDiagnosisState diagnosis_state = 4;
@@ -21,7 +21,7 @@ message DgnDiagnosis {
 
 // Definició d'una fase d'una patologia.
 message DgnDiagnosisPhase {
-  a_user.usrmod.BaseEntity                base_entity = 1;
+  a_user.usrmod.ModelEntity                base_entity = 1;
   DgnDiagnosis                            diagnosis = 2;
   b_definitions.dismod.DisPhase           disease_phase = 3;
   d_admin.vismod.VisVisit                 visit = 4;
@@ -32,7 +32,7 @@ message DgnDiagnosisPhase {
 
 // Definició d'un objectiu d'una fase d'una patologia.
 message DgnAchievement {
-  a_user.usrmod.BaseEntity                base_entity = 1;
+  a_user.usrmod.ModelEntity                base_entity = 1;
   b_definitions.dismod.DisGoal            goal = 2;
   DgnDiagnosisPhase                       phase = 3;
   c_working.dgnmod.DgnDiagnosisPhaseState state = 4;

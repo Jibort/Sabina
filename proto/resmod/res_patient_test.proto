@@ -3,17 +3,16 @@ syntax = "proto3";
 
 package proto;
 
-import "emo_entities.proto";
-import "lst_entities.proto";
-import "timestamp.proto";
-import "tst_entities.proto";
-import "usr_entities.proto";
+import "model_entity.proto";
+import "gbl_timestamp.proto";
+import "tstmod/tst_test.proto";
+import "usrmod/usr_user.proto";
 
 option go_package = "./";
 
 // Registre de compliment del test. 
 message ResPatientTest {
-  BaseEntity         base_entity = 1;
+  ModelEntity         base_entity = 1;
   TstTest            test = 2;
   UsrUser            therapist = 3;
   UsrUser            patient = 4;

@@ -1,0 +1,19 @@
+// Fitxer de definició proto per a les entitats del Mòdul DISMOD.
+syntax = "proto3";
+
+package proto;
+
+import "model_entity.proto";
+import "dismod/dis_dsm_v.proto";
+import "usrmod/usr_user.proto";
+
+option go_package = "./";
+
+// Definició d'una patologia segons un terapeuta.
+message DisDisease {
+  ModelEntity     base_entity = 1;
+  string          name_key = 2;
+  optional string desc_key = 3;
+  DisDsmV         dsmv = 4;
+  UsrUser         theraphist = 5;
+}

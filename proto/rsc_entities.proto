@@ -13,7 +13,7 @@ option go_package = "./";
 
 // Definició d'un recurs auxliar.enum
 message ResResource {
-  a_user.usrmod.BaseEntity             base_entity = 1;
+  a_user.usrmod.ModelEntity             base_entity = 1;
   string                               name_key = 2;
   optional string                      desc_key = 3;
   int32                                version = 4;
@@ -26,7 +26,7 @@ message ResResource {
 
 // Definició d'un recurs per a una fase.
 message ResPhaseResource {
-  a_user.usrmod.BaseEntity               base_entity = 1;
+  a_user.usrmod.ModelEntity               base_entity = 1;
   b_definitions.dismod.DisDisease        disease = 2;
   optional b_definitions.dismod.DisPhase phase = 3;
   ResResource                            resource = 4;

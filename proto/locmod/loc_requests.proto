@@ -3,7 +3,7 @@ syntax = "proto3";
 
 package proto;
 
-import "loc_entities.proto";
+// import "locmod/loc_translation.proto";
 
 option go_package = "./";
 
@@ -11,7 +11,7 @@ option go_package = "./";
 message LocReqtTranslate {
   string   language = 1;
   string   text_key = 2;
-  optional int iteration = 3;
+  optional int32 iteration = 3;
 }
 
 // Resposta a la petició de traducció.

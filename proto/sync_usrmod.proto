@@ -3,9 +3,10 @@ syntax = "proto3";
 
 package proto;
 
-import "timestamp.proto";
+import "gbl_timestamp.proto";
 
 option go_package = "./";
+
 // Emprempta digital d'UsrUser.
 message GbUserFingerPrint {
   int32     last_user_id = 1;

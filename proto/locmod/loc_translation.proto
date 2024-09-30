@@ -13,7 +13,7 @@ message LocTranslation {
   string locale_id = 2;   // Idioma de la traducció.
   string text_key = 3;    // Clau a traduir.
   string literal = 4;     // Text traduït.
-  int    iteration = 5;   // Iteració de la traducció.
+  int32  iteration = 5;   // Iteració de la traducció.
   bool   is_new = 6;      // Indica si la traducció és nova.
   bool   is_updated = 7;  // Indica si la traducció ha estat actualitzada.
   bool   is_deleted = 8;  // Indica si la traducció ha estat eliminada.

@@ -1,0 +1,18 @@
+// Fitxer de definició proto per a les entitats del Mòdul DISMOD.
+syntax = "proto3";
+
+package proto;
+
+import "model_entity.proto";
+import "dismod/dis_disease.proto";
+
+option go_package = "./";
+
+// Definició d'una fase d'una patologia.
+message DisPhase {
+  ModelEntity     base_entity = 1;
+  int32           idx = 2;
+  string          name_key = 3;
+  optional string desc_key = 5;
+  DisDisease      disease = 4;
+}

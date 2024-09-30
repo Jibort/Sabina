@@ -3,11 +3,10 @@ syntax = "proto3";
 
 package proto;
 
-
-import "loc_entities.proto";
-import "timestamp.proto";
-import "usr_entities.proto";
-import "usr_enumerations.proto";
+import "gbl_timestamp.proto";
+// import "locmod/loc_translation.proto";
+import "usrmod/usr_user.proto";
+import "usrmod/usr_device.proto";
 
 option go_package = "./";
 

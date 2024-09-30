@@ -12,7 +12,7 @@ import "d_admin/ntfmod/ntf_enumerations.proto";
 option go_package = "./";
 // Definició de les notificacions pels pacients.
 message NtfNotification {
-  a_user.usrmod.BaseEntity                 base_entity = 1;
+  a_user.usrmod.ModelEntity                 base_entity = 1;
   a_user.usrmod.UsrUser                    user = 2;
   string                                   notification = 3;
   d_admin.ntfmod.NtfNotificationType       notification_type = 4;

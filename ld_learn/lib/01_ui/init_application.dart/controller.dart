@@ -10,7 +10,7 @@ import 'package:internet_connection_checker_plus/internet_connection_checker_plu
 import 'package:ld_learn/01_ui/init_application.dart/index.dart';
 import 'package:ld_learn/01_ui/load_steps.dart';
 import 'package:ld_learn/01_ui/routes.dart';
-import 'package:ld_learn/04_Connections/conn_control.dart';
+import 'package:ld_learn/04_connections/conn_control.dart';
 import 'package:ld_learn/07_services/database_service.dart';
 import 'package:ld_learn/07_services/firebase_service.dart';
 

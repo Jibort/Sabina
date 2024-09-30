@@ -3,7 +3,7 @@ syntax = "proto3";
 
 package proto;
 
-import "timestamp.proto";
+import "gbl_timestamp.proto";
 
 option go_package = "./";
 // Emprempta digital de RscPatientTest.

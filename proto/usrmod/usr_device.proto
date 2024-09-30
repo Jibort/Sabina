@@ -5,7 +5,7 @@ syntax = "proto3";
 
 package proto;
 
-import "base_entity.proto";
+import "model_entity.proto";
 
 option go_package = "./";
 
@@ -30,7 +30,7 @@ enum UsrDeviceState {
 
 // Representació dels dispositius d'usuari.
 message UsrDevice {
-  BaseEntity      base_entity = 1;
+  ModelEntity      base_entity = 1;
   UsrDeviceType   type = 2;
   UsrDeviceState  state = 3;
   optional string desc_key = 4;

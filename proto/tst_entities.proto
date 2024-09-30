@@ -11,7 +11,7 @@ option go_package = "./";
 
 // Definició de les catergories de tests.
 message TstTestCategory {
-  BaseEntity               base_entity = 1;
+  ModelEntity               base_entity = 1;
   string                   title_key = 2;
   optional string          desc_key = 3;
   optional TstTestCategory parent = 4;
@@ -19,7 +19,7 @@ message TstTestCategory {
 
 // Definició d'una taula de seguiment.
 message TstTest {
-  BaseEntity       base_entity = 1;
+  ModelEntity       base_entity = 1;
   TstTestCategory  category = 2;
   string           name_key = 3;
   optional string  desc_key = 4;
@@ -31,7 +31,7 @@ message TstTest {
 
 // Definició d'una pregunta de Test.
 message TstQuestion {
-  BaseEntity           base_entity = 1;
+  ModelEntity           base_entity = 1;
   TstTest              test = 2;
   TstTestQuestionType  test_question_type = 3;
   optional TstQuestion block = 4;

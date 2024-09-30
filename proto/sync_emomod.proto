@@ -3,24 +3,25 @@ syntax = "proto3";
 
 package proto;
 
-import "timestamp.proto";
+import "gbl_timestamp.proto";
 
 option go_package = "./";
+
 // Emprempta digital de EmoMood.
 message GbMoodFingerPrint {
- int32    last_mood_id = 1;
+  int32     last_mood_id = 1;
   Timestamp last_mood_update = 2;
 }
 
 // Emprempta digital de EmoEmotion.
 message GbEmotionFingerPrint {
- int32    last_emotion_id = 1;
+  int32     last_emotion_id = 1;
   Timestamp last_emotion_update = 2;
 }
 
 // Emprempta digital del mòdul EMOMOD.
 message GbSyncEmoMod {
- int32                        user_id = 1;
+  int32                         user_id = 1;
   string                        user_lang = 2;
   optional GbMoodFingerPrint    emo_mood = 3;
   optional GbEmotionFingerPrint emo_emotion = 4;

@@ -13,7 +13,7 @@ option go_package = "./";
 
 // Definició d'una taula de seguiment.
 message TckTracking {
-  BaseEntity           base_entity = 1;
+  ModelEntity           base_entity = 1;
   string               name_key = 2;
   optional string      desc_key = 3;
   int32                version = 4;
@@ -23,14 +23,14 @@ message TckTracking {
 
 // Relació entre una taula de seguiment i una fase.
 message TckPhaseTracking {
-  BaseEntity  base_entity = 1;
+  ModelEntity  base_entity = 1;
   DisPhase    phase = 2;
   TckTracking tracking = 3;
 }
 
 // Definició d'una columna de taula de seguiment.
 message TckTrackingColumn {
-  BaseEntity             base_entity = 1;
+  ModelEntity             base_entity = 1;
   TckTracking            tracking = 2;
   optional LstOptionList list = 3;
   string                 title_key = 4;

@@ -3,13 +3,14 @@ syntax = "proto3";
 
 package proto;
 
-import "usr_entities.proto";
+import "lstmod/lst_list_category.proto";
+import "model_entity.proto";
 
 option go_package = "./";
 
 // Definició d'una llista d'opcions.
 message LstOptionList {
-  BaseEntity      base_entity = 1;
+  ModelEntity     base_entity = 1;
   string          name_key = 2;
   optional string desc_key = 3;
   LstListCategory category = 4;

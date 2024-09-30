@@ -5,13 +5,13 @@ package proto;
 
 import "a_user/usrmod/usr_entities.proto";
 import "d_admin/vismod/vis_enumerations.proto";
-import "timestamp.proto";
+import "gbl_timestamp.proto";
 
 option go_package = "./";
 
 // Definició d'una visita de pacient.
 message VisVisit {
-  a_user.usrmod.BaseEntity base_entity = 1;
+  a_user.usrmod.ModelEntity base_entity = 1;
   a_user.usrmod.UsrUser therapist = 2;
   a_user.usrmod.UsrUser patient = 3;
   bool first_visit = 4;

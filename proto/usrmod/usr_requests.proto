@@ -3,9 +3,9 @@ syntax = "proto3";
 
 package proto;
 
-import "enumerations.proto";
-import "global.proto";
-import "usr_entities.proto";
+import "gbl_enumerations.proto";
+import "gbl_global.proto";
+import "usrmod/usr_user.proto";
 
 option go_package = "./";
 

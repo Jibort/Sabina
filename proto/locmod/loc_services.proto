@@ -3,11 +3,48 @@ syntax = "proto3";
 
 package proto;
 
-import "loc_requests.proto";
-
+import "locmod/loc_requests.proto";
+import "locmod/loc_translation.proto";
 option go_package = "./";
 
 service LanguageService {
   rpc Translate(LocReqtTranslate)
     returns (LocRespTranslate) {} 
+}
+
+// Emprempta digital de string.
+message GbTextKeyFingerPrint {
+  int32 last_text_key_id = 1;
+}
+
+// Emprempta digital de LocLocale.
+message GbLocaleFingerPrint {
+  int32 last_location_id = 1;
+}
+
+// Emprempta digital de LocTranslation.
+message GbTranslationFingerPrint {
+  int32 last_translation_id = 1;
+}
+
+// Emprempta digital del mòdul LOCMOD.
+message GbSyncLocMod {
+  int32                             finger_id = 1;
+  optional GbTextKeyFingerPrint     loc_text_key = 2;
+  optional GbLocaleFingerPrint      loc_locale = 3;
+  optional GbTranslationFingerPrint loc_translation = 4;
+}
+
+// Petició d'una traducció.
+message PrtDownloadTranslation {
+  int32     user_id = 1;
+  string    lang_id = 2;
+  string    tkey_id = 3;
+}
+
+// Resposta a una petició d'una traducció.
+message PrtTranslation {
+  optional string locale = 1;
+  optional string text_key = 2;
+  optional LocTranslation translation = 3;
 }

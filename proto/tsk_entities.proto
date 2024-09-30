@@ -8,12 +8,12 @@ import "c_working/matmod/mat_entities.proto";
 import "c_working/regmod/reg_entities.proto";
 import "c_working/resmod/res_entities.proto";
 import "d_admin/tskmod/tsk_enumerations.proto";
-import "timestamp.proto";
+import "gbl_timestamp.proto";
 
 option go_package = "./";
 // Definició de les tasques pels pacients.
 message TskTask {
-  a_user.usrmod.BaseEntity                 base_entity = 1;
+  a_user.usrmod.ModelEntity                 base_entity = 1;
   a_user.usrmod.UsrUser                    therapist = 2;
   a_user.usrmod.UsrUser                    patient = 3;
   d_admin.tskmod.TskTaskType               task_type = 4;

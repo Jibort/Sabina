@@ -11,7 +11,7 @@ import "e_localization/locmod/loc_entities.proto";
 option go_package = "./";
 // Definició de material auxiliar.
 message MatMaterial {
-  a_user.usrmod.BaseEntity              base_entity = 1;
+  a_user.usrmod.ModelEntity              base_entity = 1;
   e_localization.locmod.string          name = 2;
   optional e_localization.locmod.string desc_key = 3;
   b_definitions.resmod.ResResource      resource = 4;
@@ -22,7 +22,7 @@ message MatMaterial {
 
 // Relació entre el material auxiliar i les fases de les malalties.
 message MatPhaseMaterial {
-  a_user.usrmod.BaseEntity              base_entity = 1;
+  a_user.usrmod.ModelEntity              base_entity = 1;
   b_definitions.resmod.ResPhaseResource phase = 2;
   a_user.usrmod.UsrUser                 patient = 3;
 }

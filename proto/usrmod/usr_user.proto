@@ -5,8 +5,8 @@ syntax = "proto3";
 
 package proto;
 
-import "base_entity.proto";
-import "timestamp.proto";
+import "model_entity.proto";
+import "gbl_timestamp.proto";
 
 option go_package = "./";
 
@@ -29,7 +29,7 @@ enum UsrUserState {
 
 // Representació d'un usuari.
 message UsrUser {
-  BaseEntity         base_entity = 1;
+  ModelEntity         base_entity = 1;
   UsrUserType        user_type = 2;
   UsrUserState       state = 3;
   uint64             permissions = 4;
