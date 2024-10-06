@@ -59,12 +59,12 @@ const UsrDevice$json = {
     {'1': 'base_entity', '3': 1, '4': 1, '5': 11, '6': '.proto.ModelEntity', '10': 'baseEntity'},
     {'1': 'type', '3': 2, '4': 1, '5': 14, '6': '.proto.UsrDeviceType', '10': 'type'},
     {'1': 'state', '3': 3, '4': 1, '5': 14, '6': '.proto.UsrDeviceState', '10': 'state'},
-    {'1': 'desc_key', '3': 4, '4': 1, '5': 9, '9': 0, '10': 'descKey', '17': true},
+    {'1': 'desc', '3': 4, '4': 1, '5': 9, '9': 0, '10': 'desc', '17': true},
     {'1': 'token', '3': 5, '4': 1, '5': 9, '10': 'token'},
     {'1': 'owner', '3': 6, '4': 1, '5': 13, '10': 'owner'},
   ],
   '8': [
-    {'1': '_desc_key'},
+    {'1': '_desc'},
   ],
 };
 
@@ -72,9 +72,9 @@ const UsrDevice$json = {
 final $typed_data.Uint8List usrDeviceDescriptor = $convert.base64Decode(
     'CglVc3JEZXZpY2USMwoLYmFzZV9lbnRpdHkYASABKAsyEi5wcm90by5Nb2RlbEVudGl0eVIKYm'
     'FzZUVudGl0eRIoCgR0eXBlGAIgASgOMhQucHJvdG8uVXNyRGV2aWNlVHlwZVIEdHlwZRIrCgVz'
-    'dGF0ZRgDIAEoDjIVLnByb3RvLlVzckRldmljZVN0YXRlUgVzdGF0ZRIeCghkZXNjX2tleRgEIA'
-    'EoCUgAUgdkZXNjS2V5iAEBEhQKBXRva2VuGAUgASgJUgV0b2tlbhIUCgVvd25lchgGIAEoDVIF'
-    'b3duZXJCCwoJX2Rlc2Nfa2V5');
+    'dGF0ZRgDIAEoDjIVLnByb3RvLlVzckRldmljZVN0YXRlUgVzdGF0ZRIXCgRkZXNjGAQgASgJSA'
+    'BSBGRlc2OIAQESFAoFdG9rZW4YBSABKAlSBXRva2VuEhQKBW93bmVyGAYgASgNUgVvd25lckIH'
+    'CgVfZGVzYw==');
 
 @$core.Deprecated('Use usrDevicesListDescriptor instead')
 const UsrDevicesList$json = {

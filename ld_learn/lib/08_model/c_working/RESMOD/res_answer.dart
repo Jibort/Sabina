@@ -40,7 +40,7 @@ class ResAnswer extends ModelEntity {
       super.pIsNew,
       super.pIsUpdated,
       super.pIsDeleted,
-      TstTest? pTest,
+      ResPatientTest? pTest,
       TstQuestion? pQuestion,
       String? pAnswer,
       LstOptionList? pList,

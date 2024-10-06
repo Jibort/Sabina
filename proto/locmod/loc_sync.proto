@@ -1,0 +1,11 @@
+// Fitxer d'estructures per a sincronitxar el mòdul LOCMOD.
+// CreatedAt: 24-10-06 dg. JIQ
+
+syntax = "proto3";
+
+package proto;
+
+import "locmod/loc_translation.proto";
+
+option go_package = "./";
+

@@ -11,8 +11,8 @@ option go_package = "./";
 
 // Camps clau i de seguiment.
 message ModelEntity {
-  optional string    local_id = 1;
-  optional string    id = 2;
+  optional uint32    local_id = 1;
+  optional uint32    id = 2;
   uint32             created_by = 3;
   Timestamp          created_at = 4;
   optional uint32    updated_by = 5;

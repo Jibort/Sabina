@@ -1,0 +1,20 @@
+// Fitxer per a la definició de la relació entre recursos i fases de malaltia.
+syntax = "proto3";
+
+package proto;
+
+import "model_entity.proto";
+import "dismod/dis_entities.proto";
+import "resmod/res_enumerations.proto";
+import "../resmod/e_localization/locmod/loc_entities.proto";
+import "usrmod/usr_user.proto";
+
+option go_package = "./";
+
+// Definició d'un recurs per a una fase.
+message RscResourcePhase {
+  ModelEntity              base_entity = 1;
+  b_definitions.dismod.DisDisease        disease = 2;
+  optional b_definitions.dismod.DisPhase phase = 3;
+  ResResource                            resource = 4;
+}

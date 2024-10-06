@@ -73,6 +73,8 @@ echo Compiling emo_entities.proto
 protoc --proto_path=. --go_out=%emomodout% --go-grpc_out=%emomodout% emomod/emo_entities.proto
 echo Compiling emo_services.proto
 protoc --proto_path=. --go_out=%emomodout% --go-grpc_out=%emomodout% emomod/emo_services.proto
+echo Compiling emo_sync.proto
+protoc --proto_path=. --go_out=%emomodout% --go-grpc_out=%emomodout% emomod/emo_sync.proto
 
 echo .
 echo DISMOD: %dismodout%

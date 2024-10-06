@@ -1,9 +1,12 @@
 // Fitxer de definició proto per a les entitats del Mòdul RESMOD.
+// createdAt: 24-10-06 dg 
+
 syntax = "proto3";
 
 package proto;
 
-import "../resmod/a_user/usrmod/usr_entities.proto";
+import "model_entity.proto";
+import "resmod/res_resource.proto";
 import "../resmod/b_definitions/dismod/dis_entities.proto";
 import "../resmod/b_definitions/resmod/res_enumerations.proto";
 import "../resmod/e_localization/locmod/loc_entities.proto";
@@ -12,22 +15,14 @@ import "../resmod/e_localization/locmod/loc_entities.proto";
 option go_package = "./";
 
 // Definició d'un recurs auxliar.enum
-message ResResource {
-  a_user.usrmod.ModelEntity             base_entity = 1;
+message RscResource {
+  ModelEntity                          base_entity = 1;
   string                               name_key = 2;
   optional string                      desc_key = 3;
   int32                                version = 4;
-  ResResource                          root_id = 5;
+  RscResource                          root_id = 5;
   string                               locale_code = 6;
-  b_definitions.resmod.ResResourceType resource_type = 7;
+  ResResourceType                      resource_type = 7;
   optional string                      inline_text = 8;
   optional string                      link = 9;
-}
-
-// Definició d'un recurs per a una fase.
-message ResPhaseResource {
-  a_user.usrmod.ModelEntity               base_entity = 1;
-  b_definitions.dismod.DisDisease        disease = 2;
-  optional b_definitions.dismod.DisPhase phase = 3;
-  ResResource                            resource = 4;
 }

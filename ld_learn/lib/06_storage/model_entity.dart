@@ -3,7 +3,6 @@
 
 // ignore_for_file: unnecessary_getters_setters
 
-// Classe abstracta 'ModelEntity' -----
 import 'package:ld_learn/01_ui/widgets/base_controller.dart';
 import 'package:ld_learn/01_ui/widgets/deep_do.dart';
 import 'package:ld_learn/06_storage/index.dart';
@@ -15,6 +14,9 @@ import 'package:ld_learn/08_model/d_administration/index.dart';
 import 'package:ld_learn/08_model/e_localization/index.dart';
 import 'package:ld_learn/09_tools/index.dart';
 
+import 'package:ld_learn/05_proto/model_entity.pb.dart' as $pb_me;
+import 'package:ld_learn/05_proto/usrmod/usr_user.pb.dart' as $pb_usr;
+
 enum  EntityKeyType {
   unknown,
   standard,
@@ -22,6 +24,7 @@ enum  EntityKeyType {
   stringAB,
 }
 
+// Classe abstracta 'ModelEntity'
 abstract class ModelEntity {
   // MEMBERS --------------------------
   late int? __localId;
@@ -77,6 +80,16 @@ abstract class ModelEntity {
     _isNew = pMap[fldIsNew] ?? false;
     _isUpdated = pMap[fldIsUpdated] ?? false;
     _isDeleted = pMap[fldIsDeleted] ?? false;
+  }
+
+  ModelEntity.byGRPC(Type pType, $pb_me.ModelEntity pGRPC) {
+    __localId = pGRPC.localId;
+    __id =  pGRPC.id;
+    _createdAt = tStampToDTime(pGRPC.createdAt);
+    __updatedAt =  tStampToDTime(pGRPC.updatedAt);
+    _isNew = pGRPC.isNew;
+    _isUpdated = pGRPC.isUpdated;
+    _isDeleted = pGRPC.isDeleted;
   }
 
   static T? entityFromSqlMap<T extends ModelEntity>(

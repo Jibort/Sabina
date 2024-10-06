@@ -5,14 +5,16 @@ cls
 echo Variables...
 set "out_dir=../ld_learn/lib/05_proto"
 set "globalout=%out_dir%"
-set "usrmodout=%out_dir%/usrmod"
-set "locmodout=%out_dir%/locmod"
-set "lstmodout=%out_dir%/lstmod"
-set "dismodout=%out_dir%/dismod"
-set "emomodout=%out_dir%/emomod"
-set "tstmodout=%out_dir%/tstmod"
-set "resmodout=%out_dir%/resmod"
-set "tckmodout=%out_dir%/tckmod"
+set "usrmodout=%out_dir%"
+set "locmodout=%out_dir%"
+set "lstmodout=%out_dir%"
+set "dismodout=%out_dir%"
+set "emomodout=%out_dir%"
+set "tstmodout=%out_dir%"
+set "resmodout=%out_dir%"
+set "tckmodout=%out_dir%"
+set "syncmodout=%out_dir%"
+
 
 set in_global=.
 
@@ -29,10 +31,11 @@ set in_resmod=%in_global%/resmod
 set in_locmod=%in_global%/locmod
 set in_lstmod=%in_global%/lstmod
 
-set in_g_synch=%in_global%/g_sync
+set in_g_synch=%in_global%/syncmod
 
 echo Compil.lant fitxers proto en codi Flutter (complet)...
 
+echo .
 echo Global Module...
 echo F_GLOBAL: %globalout%
 echo Compiling gbl_timestamp.proto
@@ -41,6 +44,8 @@ echo Compiling gbl_enumerations.proto
 protoc -I=. --dart_out=grpc:%globalout% %in_global%/gbl_enumerations.proto
 echo Compiling gbl_global.proto
 protoc -I=. --dart_out=grpc:%globalout% %in_global%/gbl_global.proto
+echo Compiling model_entity.proto
+protoc -I=. --dart_out=grpc:%globalout% %in_global%/model_entity.proto
 
 echo .
 echo a_user...
@@ -67,7 +72,10 @@ echo Compiling loc_requests.proto
 protoc -I=. --dart_out=grpc:%locmodout% %in_locmod%/loc_requests.proto
 echo Compiling loc_services.proto
 protoc -I=. --dart_out=grpc:%locmodout% %in_locmod%/loc_services.proto
+echo Compiling loc_sync.proto
+protoc -I=. --dart_out=grpc:%locmodout% %in_locmod%/loc_sync.proto
 
+echo .
 echo LSTMOD: %lstmodout%
 echo Compiling lst_list_category.proto
 protoc -I=. --dart_out=grpc:%lstmodout% %in_lstmod%/lst_list_category.proto
@@ -83,7 +91,10 @@ echo Compiling emo_entities.proto
 protoc -I=. --dart_out=grpc:%emomodout% %in_emomod%/emo_entities.proto
 echo Compiling emo_services.proto
 protoc -I=. --dart_out=grpc:%emomodout% %in_emomod%/emo_services.proto
+echo Compiling emo_sync.proto
+protoc -I=. --dart_out=grpc:%emomodout% %in_emomod%/emo_sync.proto
 
+echo .
 echo DISMOD
 echo Compiling dis_dsm_v.proto
 protoc -I=. --dart_out=grpc:%dismodout% %in_dismod%/dis_dsm_v.proto
@@ -94,6 +105,7 @@ protoc -I=. --dart_out=grpc:%dismodout% %in_dismod%/dis_phase.proto
 echo Compiling dis_goal.proto
 protoc -I=. --dart_out=grpc:%dismodout% %in_dismod%/dis_goal.proto
 
+echo .
 echo TSTMOD
 echo Compiling tst_test_category.proto
 protoc -I=. --dart_out=grpc:%tstmodout% %in_tstmod%/tst_test_category.proto
@@ -110,6 +122,12 @@ protoc -I=. --dart_out=grpc:%resmodout% %in_resmod%/res_patient_test.proto
 echo Compiling res_answer.proto
 protoc -I=. --dart_out=grpc:%resmodout% %in_resmod%/res_answer.proto
 
+@REM echo .
+@REM echo RSCMOD
+@REM echo Compiling rsc_resource.proto
+@REM protoc -I=. --dart_out=grpc:%rscmodout% %in_rscmod%/rsc_resource.proto
+@REM echo Compiling tst_resource_phase.proto
+@REM protoc -I=. --dart_out=grpc:%rscmodout% %in_rscmod%/rsc_resource_phase.proto
 
 @REM rem echo RSCMOD
 @REM rem protoc --proto_path=./b_definitions/rscmod -I=. --dart_out=grpc:%out_dir%/b_definitions/rscmod %in_tstmod%/rsc_enumerations.proto

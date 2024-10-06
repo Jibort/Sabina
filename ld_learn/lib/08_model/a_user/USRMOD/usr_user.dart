@@ -3,7 +3,7 @@
 
 // ignore_for_file: unnecessary_getters_setters
 
-import 'dart:ffi';
+import 'package:fixnum/fixnum.dart' as $fixn;
 import 'dart:typed_data';
 import 'dart:ui';
 
@@ -14,6 +14,8 @@ import 'package:ld_learn/06_storage/index.dart';
 import 'package:ld_learn/07_services/database_service.dart';
 import 'package:ld_learn/09_tools/index.dart';
 import 'package:ld_learn/consts.dart';
+import 'package:ld_learn/05_proto/model_entity.pb.dart' as $pb_glb;
+import 'package:ld_learn/05_proto/usrmod/usr_user.pb.dart' as $pb_usr;
 
 import '../index.dart';
 
@@ -26,7 +28,7 @@ enum UserType {
   therapist,
 }
 
-// Enumeració de tipus d'usuari.
+// Enumeració de tipus d'estat d'un usuari.
 enum UserState {
   unspecified,
   building,
@@ -42,17 +44,18 @@ class UsrUser extends ModelEntity {
   // MEMBRES --------------------------
   UserType _usrType = UserType.unspecified;
   UserState _usrState = UserState.unspecified;
-  Uint64 _permissions = 0 as Uint64;
+  Flags64 _permissions = Flags64.empty();
   String? _alias;
   Uint8List? __certificate;
   DateTime? __birthDate;
-  Uint64? __firstConnKey;
+  $fixn.Int64? __firstConnKey;
   DateTime? __firstConnAt;
   Locale _locale = localeES;
   UsrUser? __therapist;
   UsrDevice? __device;
 
   // CONSTRUCTORS ---------------------
+  // Constructor per defecte.
   UsrUser(
       {required super.pLocalId,
       required super.pId,
@@ -65,18 +68,18 @@ class UsrUser extends ModelEntity {
       super.pIsDeleted,
       UserType pUsrType = UserType.unspecified,
       UserState pUsrState = UserState.unspecified,
-      Uint64? pPermissions,
+      Flags64? pPermissions,
       String? pAlias,
       Uint8List? pCertificate,
       DateTime? pBirthDate,
-      Uint64? pFirstConnKey,
+      $fixn.Int64? pFirstConnKey,
       DateTime? pFirstConnAt,
       Locale pLocale = localeES,
       UsrUser? pTherapist,
       UsrDevice? pDevice}) {
     _usrType = pUsrType;
     _usrState = pUsrState;
-    _permissions = pPermissions ?? 0 as Uint64;
+    _permissions = pPermissions ?? Flags64.empty();
     _alias = pAlias;
     __certificate = pCertificate;
     __birthDate = pBirthDate;
@@ -87,6 +90,7 @@ class UsrUser extends ModelEntity {
     __device = pDevice;
   }
 
+  // Constructor buït
   UsrUser.empty()
       : this(
             pLocalId: null,
@@ -100,7 +104,7 @@ class UsrUser extends ModelEntity {
             pIsDeleted: false,
             pUsrType: UserType.unspecified,
           pUsrState: UserState.unspecified,
-          pPermissions: 0 as Uint64?,
+          pPermissions: Flags64.empty(),
           pAlias: null,
           pCertificate: null,
           pBirthDate: null,
@@ -111,6 +115,7 @@ class UsrUser extends ModelEntity {
           pDevice: null,
         );
 
+  // Constructor a partir d'un mapa JSON.
   UsrUser.byMap(Map<String, dynamic> pMap) : super.byMap(pMap) {
     _usrType = userTypeById(pMap[fldUserType]);
     _usrState = userStateById(pMap[fldUserState]);
@@ -125,14 +130,12 @@ class UsrUser extends ModelEntity {
     __device = pMap[fldDevice];
   }
 
+  // Constructor a partir d'una consulta SQL
   UsrUser.bySQLMap(BaseController<DeepDo> pCtrl, Map<String, dynamic> pMap)
       : super.bySQLMap(UsrUser, pMap) {
-    var dbs = DatabaseService.to;
-    Exception? exc;
-
     _usrType = userTypeById(pMap[fldUserType]);
     _usrState = userStateById(pMap[fldUserState]);
-    _permissions = pMap[fldPermissions];
+    _permissions = Flags64.fromFixNum(pMap[fldPermissions]);
     _alias = pMap[fldAlias];
     __certificate = pMap[fldCertificate];
     __birthDate = dTimeFromSql(pMap[fldBirthDate]);
@@ -140,6 +143,35 @@ class UsrUser extends ModelEntity {
     __firstConnAt = dTimeFromSql(pMap[fldFirstConnAt]);
     _locale = Locale(pMap[fldLocaleCode] ?? localeES);
 
+    _foreignKeys(pCtrl, pMap);
+  }
+
+  // Constructor a partir d'una instància gRPC
+  UsrUser.byGrpc(BaseController<DeepDo> pCtrl, $pb_usr.UsrUser pGRPC)
+      : super.byGRPC(UsrUser, pGRPC.baseEntity) {
+    _usrType = dyn2UserType(pGRPC.userType);
+    _usrState = dyn2UserState(pGRPC.state);
+    _permissions = Flags64.fromFixNum(pGRPC.permissions);
+    _alias = pGRPC.alias;
+    __certificate = Uint8List.fromList(pGRPC.certificate);
+    __birthDate = tStampToDTime(pGRPC.birthDate);
+    __firstConnKey = pGRPC.firstKey;
+    __firstConnAt = tStampToDTime(pGRPC.firstConnAt);
+    _locale = Locale(pGRPC.locale);
+
+    _foreignKeys(pCtrl, {
+      fldCreatedBy: pGRPC.baseEntity.createdBy,
+      fldUpdatedBy: pGRPC.baseEntity.updatedBy,
+      fldTherapist: pGRPC.therapistId,
+      fldDevice: pGRPC.deviceId,
+    });
+  }
+
+  // Càrrega controlada dels registres d'entitats referides.
+  void _foreignKeys(BaseController<DeepDo> pCtrl, Map<String, dynamic> pMap) {
+    var dbs = DatabaseService.to;
+    Exception? exc;
+    
     // Carreguem el terapeuta.
     Future<Exception?> stTherapist(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
       try {
@@ -168,6 +200,32 @@ class UsrUser extends ModelEntity {
     pCtrl.state.sneakFn(stTherapist, pArgs: [pMap[fldTherapist]]);
   }
 
+  // GRPC -----------------------------
+  // Funció per convertir l'objecte a format gRPC
+  $pb_usr.UsrUser toGrpc() {
+    return $pb_usr.UsrUser(
+      baseEntity: $pb_glb.ModelEntity(
+        id: id,
+        localId: localId,
+        createdBy: createdBy?.id,
+        createdAt: dTtimeToTStamp(createdAt),
+        updatedBy: updatedBy?.id,
+        updatedAt: dTtimeToTStamp(updatedAt),
+      ),
+      userType: $pb_usr.UsrUserType.valueOf(_usrType.id),
+      state: $pb_usr.UsrUserState.valueOf(_usrState.id),
+      permissions: _permissions.int64,
+      alias: _alias ?? "",
+      certificate: __certificate?.toList(growable:  false),
+      birthDate: dTtimeToTStamp(__birthDate),
+      firstKey: __firstConnKey,
+      firstConnAt: dTtimeToTStamp(__firstConnAt),
+      locale: _locale.languageCode,
+      therapistId: __therapist?.id,
+      deviceId: __device?.id,
+    );
+  }
+
   // GETTERS i SETTERS ----------------
   UserType get usrType => _usrType;
   set usrType(dynamic pType) {
@@ -189,8 +247,8 @@ class UsrUser extends ModelEntity {
     isUpdated = (!isNew) && (old != _usrState);
   }
 
-  Uint64 get permissions => _permissions;
-  set permissions(Uint64 pPermissions) {
+  Flags64 get permissions => _permissions;
+  set permissions(Flags64 pPermissions) {
     var old = _permissions;
     _permissions = pPermissions;
     isUpdated = (!isNew) && (old != _permissions);
@@ -229,8 +287,8 @@ class UsrUser extends ModelEntity {
     isUpdated = (!isNew) && (old != __birthDate);
   }
 
-  Uint64? get firstConnKey => __firstConnKey;
-  set firstConnKey(Uint64? pFirstConnKey) {
+  $fixn.Int64? get firstConnKey => __firstConnKey;
+  set firstConnKey($fixn.Int64? pFirstConnKey) {
     var old = __firstConnKey;
     __firstConnKey = pFirstConnKey;
     isUpdated = (!isNew) && (old != __firstConnKey);
@@ -355,7 +413,7 @@ class UsrUser extends ModelEntity {
   static List<String> get stmtAuxCreate => [];
 
   static String get stmtSelect => '''
-    SELECT $fldIdLocal, $fldId, $fldCreatedBy, $fldCreatedAt, 
+    SELECT $fldIdLocal, $fldId, $fldCreatedBy, $fldCreatedAt,
            $fldUpdatedBy, $fldUpdatedAt,
 
            $fldUserType, $fldUserState, $fldPermissions,
@@ -393,7 +451,7 @@ class UsrUser extends ModelEntity {
         $fldFirstConnKey = ?, $fldFirstConnAt = ?,
         $fldDevice = ?,       $fldTherapist = ?,
         $fldLocaleCode = ?
-    WHERE $fldIdLocal = ?;  
+    WHERE $fldIdLocal = ?;
   ''';
 
   // OVERRIDES ------------------------
@@ -501,3 +559,4 @@ UserState dyn2UserState(dynamic pState) {
       throw errorUnknownType("UserState.set", fldUserState, pState.runtimeType);
   }
 }
+

@@ -8,6 +8,9 @@ import 'package:ld_learn/06_storage/index.dart';
 import 'package:ld_learn/07_services/index.dart';
 import 'package:ld_learn/09_tools/index.dart';
 
+import 'package:ld_learn/05_proto/model_entity.pb.dart' as $pb_glb;
+import 'package:ld_learn/05_proto/usrmod/usr_device.pb.dart' as $pb_dev;
+
 import '../index.dart';
 
 // Enumeració dels tipus de dispositius.
@@ -42,6 +45,7 @@ class UsrDevice extends ModelEntity {
   UsrUser? _owner;
 
   // CONSTRUCTORS ---------------------
+  // Constructor per defecte.
   UsrDevice(
       {required super.pLocalId,
       required super.pId,
@@ -64,6 +68,7 @@ class UsrDevice extends ModelEntity {
     _owner = pOwner;
   }
 
+  // Constructor buït
   UsrDevice.empty()
       : this(
             pLocalId: null,
@@ -81,6 +86,7 @@ class UsrDevice extends ModelEntity {
             pToken: null,
             pOwner: null);
 
+  // Constructor a partir d'un mapa JSON.
   UsrDevice.byMap(Map<String, dynamic> pMap) : super.byMap(pMap) {
     _devType = deviceTypeById(pMap[fldDeviceType]);
     _devState = deviceStateById(pMap[fldDeviceState]);
@@ -89,16 +95,37 @@ class UsrDevice extends ModelEntity {
     _owner = pMap[fldOwner];
   }
 
+  // Constructor a partir d'una consulta SQL
   UsrDevice.bySQLMap(BaseController<DeepDo> pCtrl, Map<String, dynamic> pMap)
       : super.bySQLMap(UsrUser, pMap) {
-    var dbs = DatabaseService.to;
-    Exception? exc;
-
     _devType = deviceTypeById(pMap[fldDeviceType]);
     _devState = deviceStateById(pMap[fldDeviceState]);
     __desc = pMap[fldDesc];
     _token = pMap[fldToken];
 
+    _foreignKeys(pCtrl, pMap);
+  }
+
+  // Constructor a partir d'una instància gRPC
+  UsrDevice.byGrpc(BaseController<DeepDo> pCtrl, $pb_dev.UsrDevice pGRPC)
+      : super.byGRPC(UsrDevice, pGRPC.baseEntity) {
+    _devType = dyn2DeviceType(pGRPC.type);
+    _devState = dyn2DeviceState(pGRPC.state);
+    __desc = pGRPC.desc;
+    _token = pGRPC.token;
+
+    _foreignKeys(pCtrl, {
+      fldCreatedBy: pGRPC.baseEntity.createdBy,
+      fldUpdatedBy: pGRPC.baseEntity.updatedBy,
+      fldOwner: pGRPC.owner,
+    });
+  }
+
+  // Càrrega controlada dels registres d'entitats referides.
+  void _foreignKeys(BaseController<DeepDo> pCtrl, Map<String, dynamic> pMap) {
+    var dbs = DatabaseService.to;
+    Exception? exc;
+    
     // Carreguem el propietari del dispositiu.
     Future<Exception?> stepOwner(
         FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
@@ -114,6 +141,26 @@ class UsrDevice extends ModelEntity {
     }
 
     pCtrl.state.sneakFn(stepOwner, pArgs: [pMap[fldOwner]]);
+  }
+
+  // GRPC -----------------------------
+  // Funció per convertir l'objecte a format gRPC
+  $pb_dev.UsrDevice toGrpc() {
+    return $pb_dev.UsrDevice(
+      baseEntity: $pb_glb.ModelEntity(
+        id: id,
+        localId: localId,
+        createdBy: createdBy?.id,
+        createdAt: dTtimeToTStamp(createdAt),
+        updatedBy: updatedBy?.id,
+        updatedAt: dTtimeToTStamp(updatedAt),
+      ),
+      desc: __desc,
+      type: $pb_dev.UsrDeviceType.valueOf(_devType.id),
+      state: $pb_dev.UsrDeviceState.valueOf(_devState.id),
+      token: _token,
+      owner: _owner?.id,
+    );
   }
 
   // GETTERS i SETTERS ----------------

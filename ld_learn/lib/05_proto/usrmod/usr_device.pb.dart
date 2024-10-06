@@ -24,7 +24,7 @@ class UsrDevice extends $pb.GeneratedMessage {
     $0.ModelEntity? baseEntity,
     UsrDeviceType? type,
     UsrDeviceState? state,
-    $core.String? descKey,
+    $core.String? desc,
     $core.String? token,
     $core.int? owner,
   }) {
@@ -38,8 +38,8 @@ class UsrDevice extends $pb.GeneratedMessage {
     if (state != null) {
       $result.state = state;
     }
-    if (descKey != null) {
-      $result.descKey = descKey;
+    if (desc != null) {
+      $result.desc = desc;
     }
     if (token != null) {
       $result.token = token;
@@ -57,7 +57,7 @@ class UsrDevice extends $pb.GeneratedMessage {
     ..aOM<$0.ModelEntity>(1, _omitFieldNames ? '' : 'baseEntity', subBuilder: $0.ModelEntity.create)
     ..e<UsrDeviceType>(2, _omitFieldNames ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: UsrDeviceType.USR_DEVICE_TYPE_DEVICE_TYPE_UNSPECIFIED, valueOf: UsrDeviceType.valueOf, enumValues: UsrDeviceType.values)
     ..e<UsrDeviceState>(3, _omitFieldNames ? '' : 'state', $pb.PbFieldType.OE, defaultOrMaker: UsrDeviceState.USR_DEVICE_STATE_UNSPECIFIED, valueOf: UsrDeviceState.valueOf, enumValues: UsrDeviceState.values)
-    ..aOS(4, _omitFieldNames ? '' : 'descKey')
+    ..aOS(4, _omitFieldNames ? '' : 'desc')
     ..aOS(5, _omitFieldNames ? '' : 'token')
     ..a<$core.int>(6, _omitFieldNames ? '' : 'owner', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
@@ -114,13 +114,13 @@ class UsrDevice extends $pb.GeneratedMessage {
   void clearState() => clearField(3);
 
   @$pb.TagNumber(4)
-  $core.String get descKey => $_getSZ(3);
+  $core.String get desc => $_getSZ(3);
   @$pb.TagNumber(4)
-  set descKey($core.String v) { $_setString(3, v); }
+  set desc($core.String v) { $_setString(3, v); }
   @$pb.TagNumber(4)
-  $core.bool hasDescKey() => $_has(3);
+  $core.bool hasDesc() => $_has(3);
   @$pb.TagNumber(4)
-  void clearDescKey() => clearField(4);
+  void clearDesc() => clearField(4);
 
   @$pb.TagNumber(5)
   $core.String get token => $_getSZ(4);
