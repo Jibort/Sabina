@@ -2,11 +2,11 @@
 // createdAt: 24/07/18 dj. JIQ
 
 import 'package:get/get.dart';
-import 'package:ld_learn/01_ui/login_page/index.dart';
+import 'package:ld_learn/01_ui/crash_page/index.dart';
 
-class LoginPageBindings extends Bindings {
+class CrashPageBindings extends Bindings {
   @override
   void dependencies() {
-    Get.put(LoginPageCtrl());
+    Get.put(CrashPageCtrl());
   }
 }

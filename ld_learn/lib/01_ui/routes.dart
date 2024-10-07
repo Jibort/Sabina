@@ -19,7 +19,7 @@ List<GetPage<dynamic>> appPages = [
   // Login Page ------------------
   GetPage(
     name: rtLoginPage,
-    binding: LoginPageBindings(),
+    binding: CrashPageBindings(),
     page: () => const LoginPage(),
   ),
   // Crash Lock Page ---------------

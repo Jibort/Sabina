@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ld_learn/01_ui/login_page/index.dart';
 
-class LoginPage extends GetView<LoginPageCtrl> {
+class LoginPage extends GetView<CrashPageCtrl> {
   const LoginPage({super.key});
 
   @override

@@ -7,9 +7,9 @@ import 'package:ld_learn/01_ui/widgets/index.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ld_learn/09_tools/index.dart';
 
-class LoginPageCtrl extends BaseController {
+class CrashPageCtrl extends BaseController {
   // CONSTRUCTORS ---------------------
-  LoginPageCtrl() : super(pState: LoginPageData.fromArgs());
+  CrashPageCtrl() : super(pState: LoginPageData.fromArgs());
 
   // CICLE DE VIDA --------------------
   @override
