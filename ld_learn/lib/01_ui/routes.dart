@@ -12,9 +12,16 @@ const String rtSecurityLockPage = "/securityLock";
 const String rtCrashPage = "/crash";
 const String rtInitApplication = '/initApplication';
 const String rtHomePage = '/home';
+const String rtLoginPage = '/login';
 
 // Llistat de totes les rutes.
 List<GetPage<dynamic>> appPages = [
+  // Login Page ------------------
+  GetPage(
+    name: rtLoginPage,
+    binding: LoginPageBindings(),
+    page: () => const LoginPage(),
+  ),
   // Crash Lock Page ---------------
   GetPage(
     name: rtCrashPage,

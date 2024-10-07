@@ -1,4 +1,4 @@
-// Càrrega dels bindings de la pàgina arrel.
+// Càrrega dels bindings de la pàgina de Login.
 // createdAt: 24/07/18 dj. JIQ
 
 import 'package:get/get.dart';

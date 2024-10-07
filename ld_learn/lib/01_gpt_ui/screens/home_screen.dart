@@ -14,16 +14,16 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Home"),
+        title: const Text("Home"),
       ),
       body: Obx(() {
         // Mostra el contingut segons el tipus d'usuari
         if (userController.currentUser.userType == UserType.therapist) {
-          return Center(child: Text("Benvingut Terapeuta!"));
+          return const Center(child: Text("Benvingut Terapeuta!"));
         } else if (userController.currentUser.userType == UserType.patient) {
-          return Center(child: Text("Benvingut Pacient!"));
+          return const Center(child: Text("Benvingut Pacient!"));
         } else {
-          return Center(child: Text("Error: Tipus d'usuari desconegut"));
+          return const Center(child: Text("Error: Tipus d'usuari desconegut"));
         }
       }),
     );

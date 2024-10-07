@@ -15,7 +15,6 @@ import 'package:ld_learn/08_model/e_localization/index.dart';
 import 'package:ld_learn/09_tools/index.dart';
 
 import 'package:ld_learn/05_proto/model_entity.pb.dart' as $pb_me;
-import 'package:ld_learn/05_proto/usrmod/usr_user.pb.dart' as $pb_usr;
 
 enum  EntityKeyType {
   unknown,

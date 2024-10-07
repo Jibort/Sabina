@@ -1,12 +1,12 @@
-// Definició de la pàgina per a situacions de Crash.
+// Definició de la pàgina Login
 // createdAt: 24/07/18 dj. JIQ
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ld_learn/01_ui/crash_page/index.dart';
+import 'package:ld_learn/01_ui/login_page/index.dart';
 
-class CrashPage extends GetView<CrashPageCtrl> {
-  const CrashPage({super.key});
+class LoginPage extends GetView<LoginPageCtrl> {
+  const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {

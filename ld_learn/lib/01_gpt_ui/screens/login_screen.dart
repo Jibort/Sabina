@@ -9,30 +9,32 @@ import 'home_screen.dart';
 class LoginScreen extends StatelessWidget {
   final UserController userController = Get.put(UserController());
 
+  const LoginScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Login")),
+      appBar: AppBar(title: const Text("Login")),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text("Seleccioneu el tipus d'usuari", style: TextStyle(fontSize: 18), textAlign: TextAlign.center),
-            SizedBox(height: 20),
+            const Text("Seleccioneu el tipus d'usuari", style: TextStyle(fontSize: 18), textAlign: TextAlign.center),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 userController.loginAsTherapist();
                 Get.off(HomeScreen());
               },
-              child: Text("Sóc Terapeuta"),
+              child: const Text("Sóc Terapeuta"),
             ),
             ElevatedButton(
               onPressed: () {
                 userController.loginAsPatient();
                 Get.off(HomeScreen());
               },
-              child: Text("Sóc Pacient"),
+              child: const Text("Sóc Pacient"),
             ),
           ],
         ),

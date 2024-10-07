@@ -2,13 +2,15 @@
 // createdAt: 24/07/18 dj. JIQ
 
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:ld_learn/09_tools/index.dart';
 
 import 'application.dart';
 
 // Programa principal.
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  var widgetBins = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetBins);
 
   // Carrega totes les traduccions de l'aplicació.
   loadUiTexts();
@@ -23,4 +25,6 @@ void main() async {
   // await SynchronizationService.initialize();
 
   runApp(const Application());
+  
+  FlutterNativeSplash.remove();
 }
