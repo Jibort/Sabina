@@ -9,6 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_native_splash: ^2.4.1
   flutter_localization: ^0.2.0
   jailbreak_root_detection: ^1.1.5
   local_auth: ^2.2.0
