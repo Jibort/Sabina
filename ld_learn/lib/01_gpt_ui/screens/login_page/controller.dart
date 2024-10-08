@@ -4,6 +4,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ld_learn/01_gpt_ui/screens/login_page/index.dart';
+import 'package:ld_learn/01_ui/load_steps.dart';
 import 'package:ld_learn/01_ui/widgets/index.dart';
 import 'package:ld_learn/01_ui/routes.dart';
 import 'package:ld_learn/09_tools/index.dart';
@@ -47,16 +48,25 @@ class LoginPageCtrl extends BaseController {
 
     LoadStep step;
 
-    // Simulació de la lectura de dades des de l'emmagatzematge segur
-    await SecureStorage.to.read(ssUsernameKey).then((val) {
-      pageData.username = val ?? '';  // Fem servir la constant ssUsernameKey
-    });
+    // Pas per carregar el nom d'usuari des de SecureStorage
+    step = LoadStep(pIdx: "01.01", pTitle: "Carregant nom d'usuari");
+    pageData.addFn((FiFo pQueue, List<dynamic> pArgs) async {
+      try {
+        var username = await SecureStorage.to.read(ssUsernameKey);
+        pageData.username = username ?? '';
+        notify();  // Actualitzem la UI amb les dades carregades
+      } catch (e) {
+        return Exception('Error carregant nom d\'usuari: $e');
+      }
+      return null;  // Indiquem que no hi ha hagut cap error
+    }, pLoadStep: step);
 
+    // Un cop hem afegit el pas, correm els passos seqüencials
     setLoading();
     await pageData.runSteps().then((pLEx) {
       List<dynamic> args = pLEx.$1;
       Exception? exc = pLEx.$2;
-      setLoaded(exc ?? null);  // Passem explícitament 'null' si no hi ha excepció
+      setLoaded(exc ?? null);  // Passem 'null' si no hi ha excepció
     });
   }
 
