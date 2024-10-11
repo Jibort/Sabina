@@ -7,6 +7,6 @@ import 'package:ld_learn/01_ui/init_application.dart/index.dart';
 class InitApplicationBindings extends Bindings {
   @override
   void dependencies() {
-    Get.put(InitApplicationCtrl());
+    Get.put(InitApplicationController());
   }
 }

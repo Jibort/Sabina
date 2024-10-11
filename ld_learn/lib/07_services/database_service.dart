@@ -134,7 +134,7 @@ class DatabaseService {
 
   // CICLE DE VIDA --------------------
   // Iniciació de la connexió a la base de dades
-  Future<void> init(InitApplicationCtrl pCtrl) async {
+  Future<void> init(InitApplicationController pCtrl) async {
     LoadStep lstp = LoadStep(pIdx: "04.01", pTitle: "Iniciant Servei 'DatabaseService' ...");
     pCtrl.state.sneakFn((pQueue, pArgs, {int? initConnection}) async {
       var dbPass = await SecureStorage.to.dbPass;

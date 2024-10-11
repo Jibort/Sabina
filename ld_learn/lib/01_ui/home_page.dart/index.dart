@@ -2,7 +2,7 @@
 
 library home_page;
 
-export 'bindinds.dart';
+export 'bindings.dart';
 export 'data.dart';
 export 'controller.dart';
 export 'page.dart';

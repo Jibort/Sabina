@@ -16,13 +16,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ld_learn/09_tools/index.dart';
 import 'package:ld_learn/consts.dart';
 
-class HomePageCtrl extends BaseController {
+class HomePageController extends BaseController {
   // CONSTANTS ------------------------
   static final int wgtCounter = WidgetKey.custom.idx + 1;
   static final int wgtListView = wgtCounter + 1;
 
   // CONSTRUCTORS ---------------------
-  HomePageCtrl() : super(pState: HomePageData());
+  HomePageController() : super(pState: HomePageData());
 
   // CICLE DE VIDA --------------------
   @override
@@ -125,14 +125,14 @@ class HomePageCtrl extends BaseController {
         pPageCtrl: this,
         pBody: SingleChildScrollView(
             clipBehavior: Clip.hardEdge,
-            child: GetBuilder<HomePageCtrl>(
-                id: wgtCounter, init: this, builder: (HomePageCtrl pCtrl) => _wgtCounter(pCtrl))));
+            child: GetBuilder<HomePageController>(
+                id: wgtCounter, init: this, builder: (HomePageController pCtrl) => _wgtCounter(pCtrl))));
 
     return baseScaffold!;
   }
 
   Widget? _widgetWgtCounter;
-  Widget _wgtCounter(HomePageCtrl pCtrl) {
+  Widget _wgtCounter(HomePageController pCtrl) {
     _widgetWgtCounter = (pCtrl.isNew)
         ? Padding(
             padding: const EdgeInsets.only(top: 15),
@@ -164,10 +164,10 @@ class HomePageCtrl extends BaseController {
                       VerticalSpacer(pHeight: 20.h),
                       Text("Comptador actual: ${pageData.counter}"),
                       VerticalSpacer(pHeight: 20.h),
-                      GetBuilder<HomePageCtrl>(
+                      GetBuilder<HomePageController>(
                           id: wgtListView,
                           init: this,
-                          builder: (HomePageCtrl pCtrl) => _wgtListView(pCtrl))
+                          builder: (HomePageController pCtrl) => _wgtListView(pCtrl))
                     ]))
                 : throw Exception("Estat no vàlid!");
 
@@ -175,7 +175,7 @@ class HomePageCtrl extends BaseController {
   }
 
   Widget? _widgetListView;
-  Widget _wgtListView(HomePageCtrl pCtrl) {
+  Widget _wgtListView(HomePageController pCtrl) {
     _widgetListView = Column(children: [
       ListView.builder(
         itemCount: pCtrl.pageData.albums.length,

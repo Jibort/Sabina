@@ -7,6 +7,6 @@ import 'package:ld_learn/01_ui/home_page.dart/index.dart';
 class HomePageBindings extends Bindings {
   @override
   void dependencies() {
-    Get.put(HomePageCtrl());
+    Get.put(HomePageController());
   }
 }

@@ -18,12 +18,12 @@ import 'package:ld_learn/01_ui/widgets/index.dart';
 import 'package:ld_learn/09_tools/index.dart';
 import 'package:ld_learn/10_localization/index.dart';
 
-class InitApplicationCtrl extends BaseController {
+class InitApplicationController extends BaseController {
   // CONSTANTS ------------------------
   static final int wgtFirebaseColumn = WidgetKey.custom.idx + 1;
 
   // CONSTRUCTORS ---------------------
-  InitApplicationCtrl() : super(pState: InitApplicationData());
+  InitApplicationController() : super(pState: InitApplicationData());
 
   // CICLE DE VIDA --------------------
   @override
@@ -167,7 +167,7 @@ class InitApplicationCtrl extends BaseController {
         pPageCtrl: this,
         pBody: SingleChildScrollView(
             clipBehavior: Clip.hardEdge,
-            child: GetBuilder<InitApplicationCtrl>(
+            child: GetBuilder<InitApplicationController>(
                 id: wgtFirebaseColumn,
                 init: this,
                 builder: (pCtrl) => Padding(

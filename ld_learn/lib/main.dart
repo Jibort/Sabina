@@ -1,16 +1,20 @@
 // Accés principal a l'aplicació.
-// createdAt: 24/07/18 dj. JIQ
+// createdAt: 24/10/11 dv. GPT(JIQ)
 
 import 'package:flutter/material.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:ld_learn/09_tools/index.dart';
-
+import 'package:jailbreak_root_detection/jailbreak_root_detection.dart';
 import 'application.dart';
 
-// Programa principal.
 void main() async {
-  var widgetBins = WidgetsFlutterBinding.ensureInitialized();
-  FlutterNativeSplash.preserve(widgetsBinding: widgetBins);
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Comprovació de Jailbreak o Root
+  bool isJailbrokenOrRooted = await JailbreakRootDetection.jailbrokenOrRooted;
+  if (isJailbrokenOrRooted) {
+    runApp(JailbrokenScreen());
+    return;
+  }
 
   // Carrega totes les traduccions de l'aplicació.
   loadUiTexts();
@@ -18,13 +22,23 @@ void main() async {
   // Inicialitza el Magatzem segur del dispositiu.
   SecureStorage();
 
-  // // Initialize GRPC service
-  // await GrpcService.initialize();
-
-  // // Initialize synchronization service
-  // await SynchronizationService.initialize();
-
   runApp(const Application());
-  
-  FlutterNativeSplash.remove();
+}
+
+// Pantalla en cas de dispositiu Rootat o amb Jailbreak
+class JailbrokenScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: const Text("Error")),
+        body: const Center(
+          child: Text(
+            "L'aplicació no es pot executar en dispositius rootats o amb jailbreak.",
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ),
+    );
+  }
 }

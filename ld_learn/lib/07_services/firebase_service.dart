@@ -40,7 +40,7 @@ class FirebaseService {
 
   // CICLE DE VIDA --------------------
   // Iniciació de la connexió a Firebase i a FirebaseMessaging.
-  Future<void> init(InitApplicationCtrl pCtrl) async {
+  Future<void> init(InitApplicationController pCtrl) async {
     LoadStep lstp = LoadStep(pIdx: "03.01", pTitle: "Iniciant Servei 'FirebaseService' ...");
     pCtrl.state.sneakFn((pQueue, pArgs, {int? initConnection}) async {
       ConnControl.to.fbApp =

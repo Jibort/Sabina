@@ -1,9 +1,9 @@
-// Definició de la pàgina Home.
-// createdAt: 24/07/18 dj. JIQ
+// Definició de la pàgina Home
+// createdAt: 24/10/08 dt. GPT(JIQ)
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ld_learn/01_ui/home_page.dart/index.dart';
+import 'controller.dart';
 
 class HomePage extends GetView<HomePageController> {
   const HomePage({super.key});

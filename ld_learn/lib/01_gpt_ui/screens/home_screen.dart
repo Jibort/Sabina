@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import '../controllers/user_controller.dart';
 
 class HomeScreen extends StatelessWidget {
-  final UserController userController = Get.find<UserController>();
+  final UserController userCtrl = Get.find<UserController>();
 
   HomeScreen({super.key});
 
@@ -18,9 +18,9 @@ class HomeScreen extends StatelessWidget {
       ),
       body: Obx(() {
         // Mostra el contingut segons el tipus d'usuari
-        if (userController.currentUser.userType == UserType.therapist) {
+        if (userCtrl.currentUser.userType == UserType.therapist) {
           return const Center(child: Text("Benvingut Terapeuta!"));
-        } else if (userController.currentUser.userType == UserType.patient) {
+        } else if (userCtrl.currentUser.userType == UserType.patient) {
           return const Center(child: Text("Benvingut Pacient!"));
         } else {
           return const Center(child: Text("Error: Tipus d'usuari desconegut"));

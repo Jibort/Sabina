@@ -7,7 +7,7 @@ import '../controllers/user_controller.dart';
 import 'home_screen.dart';
 
 class LoginScreen extends StatelessWidget {
-  final UserController userController = Get.put(UserController());
+  final UserController userCtrl = Get.put(UserController());
 
   const LoginScreen({super.key});
 
@@ -24,14 +24,14 @@ class LoginScreen extends StatelessWidget {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                userController.loginAsTherapist();
+                userCtrl.loginAsTherapist();
                 Get.off(HomeScreen());
               },
               child: const Text("Sóc Terapeuta"),
             ),
             ElevatedButton(
               onPressed: () {
-                userController.loginAsPatient();
+                userCtrl.loginAsPatient();
                 Get.off(HomeScreen());
               },
               child: const Text("Sóc Pacient"),

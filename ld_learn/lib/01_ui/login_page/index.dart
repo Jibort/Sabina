@@ -2,7 +2,7 @@
 
 library crash_page;
 
-export 'bindinds.dart';
+export 'bindings.dart';
 export 'controller.dart';
 export 'data.dart';
 export 'page.dart';

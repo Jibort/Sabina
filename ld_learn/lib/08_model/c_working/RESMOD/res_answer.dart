@@ -43,7 +43,7 @@ class ResAnswer extends ModelEntity {
       ResPatientTest? pTest,
       TstQuestion? pQuestion,
       String? pAnswer,
-      LstOptionList? pList,
+      LstOptionEntry? pOption,
       EmoEmotion? pEmotion,
       EmoMood? pMood,
       DateTime? pCompletedAt,
@@ -53,7 +53,7 @@ class ResAnswer extends ModelEntity {
     _test = pTest;
     _question = pQuestion;
     __answer = pAnswer;
-    __option = pList;
+    __option = pOption;
     __emotion = pEmotion;
     __mood = pMood;
     __completedAt = pCompletedAt;
@@ -76,7 +76,7 @@ class ResAnswer extends ModelEntity {
             pTest: null,
             pQuestion: null,
             pAnswer: null,
-            pList: null,
+            pOption: null,
             pEmotion: null,
             pMood: null,
             pCompletedAt: null,
